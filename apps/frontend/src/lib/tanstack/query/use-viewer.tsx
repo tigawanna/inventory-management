@@ -1,0 +1,135 @@
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import {
+  AnyContext,
+  BeforeLoadContextOptions,
+  Navigate,
+  redirect,
+  RootRoute,
+  useNavigate,
+} from "@tanstack/react-router";
+
+export type ViewerType = {
+  record:{
+    id: string;
+    name: string;
+    email: string;
+    username: string;
+    role:"user"|"admin";
+  };
+  token: string;
+};
+
+export function viewerqueryOptions() {
+  return {
+    queryKey: ["viewer"],
+    queryFn: async () => {
+      return new Promise<ViewerType>((res, rej) => {
+        setTimeout(() => {
+          res({
+            record: { 
+                id: "id_1",
+                name: "name_1",
+                email: "email1@email.com",
+                username: "username_1",
+                role: "user",
+             },
+            token: "token_1",
+          });
+        }, 1000);
+      });
+    },
+  };
+}
+
+
+export function useViewer() {
+  const qc = useQueryClient();
+  const navigate = useNavigate()
+  const logoutMutation = useMutation({
+    mutationFn: async () => {;
+      qc.invalidateQueries(viewerqueryOptions());
+      navigate({ to: "/auth", search: { returnTo: "/" } });
+    },
+  });
+  const viewerQuery = useSuspenseQuery(viewerqueryOptions());
+  const viewer = viewerQuery.data?.record;
+
+  return {
+    viewerQuery,
+    viewer,
+    role:viewer?.role,
+    logoutMutation,
+  } as const;
+}
+
+export type PocketbaseViewerType = ViewerType | { record: null; token: null };
+
+type AuthBeforeloadContext = BeforeLoadContextOptions<
+  RootRoute<
+    undefined,
+    {
+      queryClient: QueryClient;
+      viewer?: PocketbaseViewerType;
+    },
+    AnyContext,
+    AnyContext,
+    {},
+    undefined,
+    unknown,
+    unknown
+  >,
+  any,
+  Record<never, string>,
+  AnyContext,
+  AnyContext
+>;
+
+interface AuthGuardProps {
+  ctx: AuthBeforeloadContext;
+  role?: "admin" | "user";
+  reverse?: boolean;
+}
+/**
+ * Beforeload hook that checks if the user is authenticated and
+ * redirects to /auth if not. If the user is authenticated, it
+ * checks if the user has the required role and redirects to ".."
+ * if not. If the user has the required role, it does nothing.
+ *
+ * If the `reverse` prop is true, the behavior is reversed.
+ *
+ * @param ctx - The BeforeLoadContextOptions object
+ * @param role - The role to check
+ * @param reverse - If true, the behavior is reversed
+ */
+export async function authGuard({ ctx, role, reverse }: AuthGuardProps) {
+  const returnTo = ctx.search?.returnTo ?? "/";
+  const user = ctx.context?.viewer;
+    if (!user?.record) {
+      throw redirect({
+        to: "/auth",
+        search: {
+          returnTo: ctx.location.pathname,
+        },
+      });
+    }
+  if (!(role && user?.record && user?.record?.role !== role)
+  ) {
+    throw redirect({
+      to: "..",
+      search: {
+        returnTo: ctx.location.pathname,
+      },
+    });
+  }
+
+  if (reverse) {
+    throw redirect({
+      to: returnTo ?? "/",
+    });
+  }
+}
