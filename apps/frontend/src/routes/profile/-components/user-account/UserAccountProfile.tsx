@@ -7,9 +7,7 @@ import {
   CardTitle,
 } from "@/components/shadcn/ui/card";
 import { Badge } from "@/components/shadcn/ui/badge";
-import { PropertyUserResponse } from "@/lib/pb/pb-types";
 import { Navigate, useNavigate } from "@tanstack/react-router";
-import { getFileURL } from "@/lib/pb/client";
 import { UserAccountProfileForm } from "./UserAccountProfileForm";
 import { Mail, Phone } from "lucide-react";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";

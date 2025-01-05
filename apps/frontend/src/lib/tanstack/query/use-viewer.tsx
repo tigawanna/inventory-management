@@ -10,6 +10,7 @@ import {
   Navigate,
   redirect,
   RootRoute,
+  Route,
   useNavigate,
 } from "@tanstack/react-router";
 
@@ -68,6 +69,44 @@ export function useViewer() {
 }
 
 export type PocketbaseViewerType = ViewerType | { record: null; token: null };
+
+
+type BeforeLoadCTX = BeforeLoadContextOptions<
+    Route<
+      RootRoute<
+        undefined,
+        {
+          queryClient: QueryClient;
+          viewer?: PocketbaseViewerType;
+        },
+        AnyContext,
+        AnyContext,
+        {},
+        undefined,
+        unknown,
+        unknown
+      >,
+      "/profile",
+      "/profile",
+      "/profile",
+      "/profile",
+      undefined,
+      Record<never, string>,
+      AnyContext,
+      AnyContext,
+      AnyContext,
+      {},
+      undefined,
+      unknown
+    >,
+    (search: Record<string, unknown>) => {
+      returnTo?: string | undefined;
+    },
+    Record<never, string>,
+    AnyContext,
+    AnyContext
+  >;
+
 
 type AuthBeforeloadContext = BeforeLoadContextOptions<
   RootRoute<

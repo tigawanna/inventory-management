@@ -1,19 +1,27 @@
-import { PropertyUserCreate } from "@/lib/pb/pb-types";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { pb } from "@/lib/pb/client";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { useState } from "react";
-import { viewerqueryOptions } from "@/lib/tanstack/query/query-options/viewer-query-options";
 import { makeHotToast } from "@/components/toasters";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 
 interface SignupComponentProps {}
 
-const formOpts = formOptions<PropertyUserCreate>({
+interface CreateuserFields{
+  username: string;
+  email: string;
+  emailVisibility: boolean;
+  password: string;
+  passwordConfirm: string;
+  phone: string;
+  avatar: File | null;
+}
+
+const formOpts = formOptions<CreateuserFields>({
   defaultValues: {
     username: "",
     email: "",
@@ -33,9 +41,29 @@ export function SignupComponent({}: SignupComponentProps) {
   const qc = useQueryClient();
   const navigate = useNavigate({ from: "/auth/signup" });
   const mutation = useMutation({
-    mutationFn: (data: PropertyUserCreate) => {
-      return pb.from("property_user").create(data);
-    },
+    mutationFn: (data: CreateuserFields) => {
+      return new Promise<{
+        username: string;
+        email: string;
+        emailVisibility: boolean;
+        password: string;
+        passwordConfirm: string;
+        phone: string;
+        avatar: File | null;
+      }>((resolve) => {
+        setTimeout(() => {
+          resolve({
+            username: data.username,
+            email: data.email,
+            emailVisibility: data.emailVisibility,
+            password: data.password,
+            passwordConfirm: data.passwordConfirm,
+            phone: data.phone,
+            avatar: data.avatar,
+          });
+        }, 2000);
+      });
+      },
     onSuccess(data) {
       makeHotToast({
         title: "signed up",
@@ -43,12 +71,8 @@ export function SignupComponent({}: SignupComponentProps) {
         duration: 2000,
         variant: "success",
       });
-      qc.invalidateQueries(viewerqueryOptions);
-      // qc.setQueryData(["viewer"], () => data);
+      qc.invalidateQueries(viewerqueryOptions());
       navigate({ to: "/auth", search: { returnTo: "/profile" } });
-      // if (typeof window !== "undefined") {
-      //   location.reload();
-      // }
     },
     onError(error) {
       console.log(error.name);
@@ -92,7 +116,7 @@ export function SignupComponent({}: SignupComponentProps) {
             }}
             children={(field) => {
               return (
-                <TextFormField<PropertyUserCreate>
+                <TextFormField<CreateuserFields>
                   field={field}
                   fieldKey="username"
                   inputOptions={{
@@ -113,7 +137,7 @@ export function SignupComponent({}: SignupComponentProps) {
             }}
             children={(field) => {
               return (
-                <TextFormField<PropertyUserCreate>
+                <TextFormField<CreateuserFields>
                   field={field}
                   fieldKey="email"
                   inputOptions={{
@@ -133,7 +157,7 @@ export function SignupComponent({}: SignupComponentProps) {
             }}
             children={(field) => {
               return (
-                <TextFormField<PropertyUserCreate>
+                <TextFormField<CreateuserFields>
                   field={field}
                   fieldKey="password"
                   inputOptions={{
@@ -153,7 +177,7 @@ export function SignupComponent({}: SignupComponentProps) {
             }}
             children={(field) => {
               return (
-                <TextFormField<PropertyUserCreate>
+                <TextFormField<CreateuserFields>
                   field={field}
                   fieldKey="passwordConfirm"
                   fieldlabel="Confirm password"

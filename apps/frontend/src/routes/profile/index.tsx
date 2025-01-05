@@ -11,7 +11,6 @@ export const Route = createFileRoute("/profile/")({
   validateSearch: (search) => searchparams.parse(search),
   component: ProfilePage,
   async beforeLoad(ctx) {
-    // @ts-expect-error
     await authGuard({ ctx });
   },
 });
