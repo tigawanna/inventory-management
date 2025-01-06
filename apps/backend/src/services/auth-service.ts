@@ -4,7 +4,7 @@ import { sign, verify } from "jsonwebtoken";
 import { randomBytes } from "crypto";
 import { db } from "@/db/client.ts";
 import { passwordResets, usersTable } from "@/db/schema/users.ts";
-import { EmailService } from "./email.ts";
+import { EmailService } from "./email-service.ts";
 
 export class AuthService {
   private readonly JWT_SECRET = process.env.JWT_SECRET!;
@@ -114,7 +114,7 @@ export class AuthService {
     if (!user) throw new Error("User not found");
 
     const token = randomBytes(32).toString("hex");
-    const expiresAt = new Date(Date.now() + 3600000); // 1 hour
+    const expiresAt = new Date(Date.now() + 3_600_000); // 1 hour
 
     await db.insert(passwordResets).values({
       userId: user.id,

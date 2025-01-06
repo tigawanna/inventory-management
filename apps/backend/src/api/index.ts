@@ -1,6 +1,6 @@
 import express from "express";
-import authRoute from "./auth/index.ts";
-import inventoryRoute from "./inventory/index.ts";
+import authRoute from "./v1/auth/apis.ts";
+import inventoryRoute from "./v1/inventory/index.ts";
 
 const router = express.Router();
 router.get<{}, { message: string }>("/", (req, res) => {
