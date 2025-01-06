@@ -1,9 +1,9 @@
-import { pgTable, text, pgEnum, jsonb, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, pgEnum, jsonb, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 import { commonColumns } from "../helpers/columns.ts";
 
 export const roles = ["admin", "user"] as const;
 
-const userRole = pgEnum("role", roles);
+export const userRole = pgEnum("role", roles);
 export const usersTable = pgTable("users", {
   ...commonColumns,
   name: text().notNull(),
@@ -11,6 +11,7 @@ export const usersTable = pgTable("users", {
   password: text().notNull(),
   avatarUrl: text(),
   role: userRole().default("user"),
+  tokenVersion: integer().default(0),
   verificationToken: text(),
   isEmailVerified: boolean().default(false),
 });
