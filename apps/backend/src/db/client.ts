@@ -31,7 +31,7 @@ class MyLogger implements Logger {
 
 // Instantiate Drizzle client with pg driver and schema.
 export const db = drizzle({
-  client: neon(envVariables.dbUrl),
+  client: neon(envVariables.DATABASE_URL),
   schema: { ...inventorySchema, ...usersSchema },
   logger: envVariables.NODE_ENV === "development" ? new MyLogger() : false,
 });

@@ -1,5 +1,6 @@
+import type { MessageResponse } from '@/interfaces/Responses.ts';
 import express from 'express';
-import type MessageResponse from '../../interfaces/MessageResponse.ts';
+
 
 const router = express.Router();
 
