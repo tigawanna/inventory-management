@@ -27,7 +27,7 @@ importers:
         specifier: ^16.4.5
         version: 16.4.7
       express:
-        specifier: ^4.21.1
+        specifier: ^4.21.2
         version: 4.21.2
       helmet:
         specifier: ^8.0.0
