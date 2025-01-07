@@ -1,24 +1,13 @@
 import "dotenv/config";
-import express, { type Router } from "express";
+import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
-import { apiReference } from "@scalar/express-api-reference";
 import * as middlewares from "./middlewares.ts";
-import api from "./api/index.ts";
+import v1Api from "./api/v1/index.ts";
 import cookieParser from "cookie-parser";
-import swaggerJsdoc from "swagger-jsdoc";
 
-const swaggerJsdocOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Inventory API",
-      version: "1.0.0",
-    },
-  },
-  apis: ["./src/api/**/*.ts"], // files containing annotations as above
-};
+
 
 // declare module "express" {
 //   interface Request {
@@ -45,23 +34,12 @@ app.use(
 );
 
 app.use(cors({}));
-
 app.use(express.json());
-app.use("/api/v1", api);
-app.get("/docs", (req, res) => {
-  const openapiSpecification = swaggerJsdoc(swaggerJsdocOptions);
-  res.json(openapiSpecification);
-});
+app.use(express.static("openapi.json")); 
+app.use("/api/v1", v1Api);
 
-app.use(
-  "/ui",
-  apiReference({
-    spec: {
-      theme: "saturn",
-      url: "/docs",
-    },
-  }) as unknown as Router,
-);
+
+
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);

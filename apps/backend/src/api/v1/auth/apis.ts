@@ -1,15 +1,8 @@
-import type { MessageResponse } from '@/interfaces/Responses.ts';
 import express from 'express';
-
+import signupRoute from './signup.ts';
 
 const router = express.Router();
-
-router.get<{}, MessageResponse>('/', (req, res) => {
-  res.json({
-    message: "its auth time",
-  });
-});
-
+router.use("/signup", signupRoute);
 
 
 export default router;

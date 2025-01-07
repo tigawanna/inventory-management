@@ -16,6 +16,11 @@ export const userJWTSchema = userSelectSchema.omit({
   refreshToken: true,
 });
 
+export const createNewUserSchema = userInsertSchema.pick({
+  name: true,
+  email: true,
+  password: true,
+  verificationToken: true,
+});
+export type CreateNewUserSchema = z.infer<typeof createNewUserSchema>;
 export type UserJWTPayload = z.infer<typeof userJWTSchema>;
-
-

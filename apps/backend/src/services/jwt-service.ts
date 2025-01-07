@@ -3,7 +3,7 @@ import { sign, verify } from "jsonwebtoken";
 import type { CookieOptions, Response, Request } from "express";
 import { bumpUserTokenVersion, findUserByID } from "./user-servoce.ts";
 import { type UserJWTPayload } from "@/schemas/user-schema.ts";
-
+import { compare, hash } from "bcrypt";
 const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
@@ -160,4 +160,12 @@ export async function generateUserAuthTokens(
   const accessToken = await createAccessToken(userPayload);
   const refreshToken = await createRefreshToken(res, userPayload);
   return { accessToken, refreshToken };
+}
+
+export async function hashPassword(password: string) {
+  return hash(password, 10);
+}
+
+export async function verifyPassword(password: string, passwordHash: string) {
+  return compare(password, passwordHash);
 }

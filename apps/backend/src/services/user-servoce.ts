@@ -1,7 +1,7 @@
 import { db } from "@/db/client.ts";
 import { usersTable } from "@/db/schema/users.ts";
 import { eq } from "drizzle-orm";
-
+import { type CreateNewUserSchema } from "@/schemas/user-schema.ts";
 interface FindUsersProps {
   page?: number;
   perPage?: number;
@@ -43,6 +43,13 @@ export async function findUserByEmail(email: string) {
     where: eq(usersTable.email, email),
   });
   return user;
+}
+
+export async function createNewUser(newUser: CreateNewUserSchema) {
+  return await db
+    .insert(usersTable)
+    .values({ ...newUser })
+    .returning();
 }
 
 export async function getUserByRefreshToken(refreshToken: string) {
