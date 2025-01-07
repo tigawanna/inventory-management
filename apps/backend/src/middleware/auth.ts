@@ -2,13 +2,13 @@ import { verify } from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
 import { ZodSchema } from "zod";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user: any;
-    }
-  }
-}
+// declare global {
+//   namespace Express {
+//     interface Request {
+//       user: any;
+//     }
+//   }
+// }
 
 /**
  * Middleware to authenticate a user.
@@ -40,7 +40,7 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
   }
   try {
     const decoded = verify(token, process.env.JWT_SECRET!);
-    req.user = decoded;
+    req.user = decoded as any;
     next();
   } catch (error) {
     res.status(401).json({ message: "Invalid token" });

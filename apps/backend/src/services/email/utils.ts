@@ -47,7 +47,7 @@ export async function sendEmailwithBrevoSMTP({
   mail_to,
 }: SendEmailVersionProps) {
   const { BREVO_KEY, EMAIL_FROM } = envVariables;
-
+  console.log({EMAIL_FROM,mail_to});
   const transporter = createTransport({
     host: "smtp-relay.brevo.com",
     port: 587,

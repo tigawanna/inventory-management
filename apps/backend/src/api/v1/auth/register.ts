@@ -1,9 +1,9 @@
-import express from "express";
+import type { AuthService } from "@/services/auth-service.ts";
+import type { Router } from "express";
 import { z } from "zod";
-import { AuthService } from "@/services/auth-service.ts";
 
-const router = express.Router();
-const authService = new AuthService();
+
+export function registerUserRoute(router: Router, authService: AuthService) {
 const registerSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
@@ -33,5 +33,5 @@ router.post("/signup", async (req, res) => {
     });
   }
 });
-
-export default router;
+  return router;
+}

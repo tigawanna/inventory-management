@@ -1,10 +1,14 @@
-import express from "express";
-import { z } from "zod";
-import { AuthService } from "@/services/auth-service.ts";
+import { validate } from "@/middleware/auth.ts";
+import type { AuthService } from "@/services/auth-service.ts";
 import { generateUserAuthTokens } from "@/services/jwt-service.ts";
+import type { Router } from "express";
+import { z } from "zod";
 
-const router = express.Router();
-const authService = new AuthService();
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+export function loginUserRoute(router: Router, authService: AuthService) {
 const signinSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
@@ -55,5 +59,5 @@ router.post("/signin", async (req, res) => {
     });
   }
 });
-
-export default router;
+  return router;
+}

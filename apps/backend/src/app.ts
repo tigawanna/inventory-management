@@ -6,12 +6,17 @@ import cors from "cors";
 import * as middlewares from "./middlewares.ts";
 import v1Api from "./api/v1/index.ts";
 import cookieParser from "cookie-parser";
+import type { UserJWTPayload } from "./schemas/user-schema.ts";
 
-// declare module "express" {
-//   interface Request {
-//     cookies?: { [key: string]: string };
-//   }
-// }
+declare global {
+  namespace Express {
+    interface Request {
+      user: UserJWTPayload;
+    }
+  }
+}
+
+
 
 const app = express();
 

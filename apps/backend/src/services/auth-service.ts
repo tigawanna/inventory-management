@@ -22,11 +22,10 @@ export class AuthService {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.id, userId),
     });
-
     if (!user) throw new Error("User not found");
 
     // Exclude sensitive data
-    const { password, verificationToken, ...userProfile } = user;
+    const { password, verificationToken,refreshToken, ...userProfile } = user;
     return userProfile;
   }
 
