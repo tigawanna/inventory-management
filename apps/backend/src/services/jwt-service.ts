@@ -1,5 +1,6 @@
 import { envVariables } from "@/env.ts";
-import { sign, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+const { sign, verify } = jwt;
 import type { CookieOptions, Response, Request } from "express";
 import { bumpUserTokenVersion, findUserByID } from "./user-servoce.ts";
 import { type UserJWTPayload } from "@/schemas/user-schema.ts";
@@ -146,14 +147,12 @@ export async function invalidateRefreshToken(req: Request, res: Response) {
  * specified in the `userPayload`, and sets the refresh token as a cookie
  * on the response object `res`.
  *
- * @param req - Express response object (incorrectly typed as Response)
  * @param res - Express response object to set the refresh token cookie
  * @param userPayload - The payload containing user data for token generation
  * @returns An object containing the generated access token and refresh token
  */
 
 export async function generateUserAuthTokens(
-  req: Response,
   res: Response,
   userPayload: UserJWTPayload,
 ) {

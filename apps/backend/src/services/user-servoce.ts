@@ -46,7 +46,7 @@ export async function findUserByEmail(email: string) {
 }
 
 export async function createNewUser(newUser: CreateNewUserSchema) {
-  return await db
+  return db
     .insert(usersTable)
     .values({ ...newUser })
     .returning();

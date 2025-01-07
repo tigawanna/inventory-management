@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { compare, hash } from "bcrypt";
-import { sign, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+const { verify } = jwt;
 import { randomBytes } from "crypto";
 import { db } from "@/db/client.ts";
 import { passwordResets, usersTable } from "@/db/schema/users.ts";
@@ -44,26 +45,16 @@ export class AuthService {
     return newUser[0];
   }
 
-  async login(email: string, password: string) {
+  async login(data: { email: string; password: string }) {
     const user = await db.query.usersTable.findFirst({
-      where: eq(usersTable.email, email),
+      where: eq(usersTable.email, data.email),
     });
 
     if (!user) throw new Error("Invalid credentials");
-
-    const isValid = await compare(password, user.password);
+    const isValid = await compare(data.password, user.password);
     if (!isValid) throw new Error("Invalid credentials");
 
-    const token = sign(
-      {
-        userId: user.id,
-        role: user.role,
-      },
-      this.JWT_SECRET,
-      { expiresIn: "24h" },
-    );
-
-    return { user, token };
+    return user;
   }
 
   async verifyEmail(token: string) {
@@ -73,13 +64,14 @@ export class AuthService {
 
     if (!user) throw new Error("Invalid verification token");
 
-    await db
+    return db
       .update(usersTable)
       .set({
         verificationToken: null,
         isEmailVerified: true,
       })
-      .where(eq(usersTable.id, user.id));
+      .where(eq(usersTable.id, user.id))
+      .returning();
   }
 
   async validateToken(token: string) {

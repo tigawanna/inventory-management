@@ -7,8 +7,6 @@ import * as middlewares from "./middlewares.ts";
 import v1Api from "./api/v1/index.ts";
 import cookieParser from "cookie-parser";
 
-
-
 // declare module "express" {
 //   interface Request {
 //     cookies?: { [key: string]: string };
@@ -33,13 +31,10 @@ app.use(
   }),
 );
 
-app.use(cors({}));
+app.use(cors({ origin: ["*"] }));
 app.use(express.json());
-app.use(express.static("openapi.json")); 
+app.use(express.static("openapi.json"));
 app.use("/api/v1", v1Api);
-
-
-
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
