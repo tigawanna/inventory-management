@@ -4,7 +4,7 @@ import { sign, verify } from "jsonwebtoken";
 import { randomBytes } from "crypto";
 import { db } from "@/db/client.ts";
 import { passwordResets, usersTable } from "@/db/schema/users.ts";
-import { EmailService } from "./email-service.ts";
+import { EmailService } from "./email/email-service.ts";
 
 export class AuthService {
   private readonly JWT_SECRET = process.env.JWT_SECRET!;
@@ -26,22 +26,22 @@ export class AuthService {
   async register(data: { email: string; password: string; name: string }) {
     const hashedPassword = await hash(data.password, this.SALT_ROUNDS);
     const verificationToken = randomBytes(32).toString("hex");
-
-    await db.insert(usersTable).values({
-      ...data,
-      password: hashedPassword,
-      verificationToken,
-    });
+    const newUser = await db
+      .insert(usersTable)
+      .values({
+        ...data,
+        password: hashedPassword,
+        verificationToken,
+      })
+      .returning();
 
     await new EmailService().sendEmail({
-      to: data.email,
-      subject: "Verify your email",
-      body: `
-      reset your password
-
-       ${process.env.API_URL}/auth/verify/${verificationToken}
-      `,
+      mail_to: data.email,
+      token: verificationToken,
+      type: "verifyemail",
     });
+
+    return newUser[0];
   }
 
   async login(email: string, password: string) {
@@ -91,7 +91,11 @@ export class AuthService {
     }
   }
 
-  async changePassword(userId: string, currentPassword: string, newPassword: string) {
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string,
+  ) {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.id, userId),
     });
@@ -103,7 +107,10 @@ export class AuthService {
 
     const hashedPassword = await hash(newPassword, this.SALT_ROUNDS);
 
-    await db.update(usersTable).set({ password: hashedPassword }).where(eq(usersTable.id, userId));
+    await db
+      .update(usersTable)
+      .set({ password: hashedPassword })
+      .where(eq(usersTable.id, userId));
   }
 
   async requestReset(email: string) {
@@ -115,20 +122,15 @@ export class AuthService {
 
     const token = randomBytes(32).toString("hex");
     const expiresAt = new Date(Date.now() + 3_600_000); // 1 hour
-
     await db.insert(passwordResets).values({
       userId: user.id,
       token,
       expiresAt,
     });
-
     await new EmailService().sendEmail({
-      to: email,
-      subject: "Reset Password",
-      body: `
-      Reset your password:
-      ${process.env.FRONTEND_URL}/reset-password?token=${token}
-      `,
+      mail_to: email,
+      token,
+      type: "resetpassword",
     });
   }
 
