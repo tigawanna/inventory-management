@@ -7,7 +7,7 @@ export const categories = pgTable("categories", {
   description: text("description"),
 });
 
-export const inventoryTabl = pgTable("inventory", {
+export const inventoryTable = pgTable("inventory", {
   ...commonColumns,
   name: text("name").notNull(),
   description: text("description"),

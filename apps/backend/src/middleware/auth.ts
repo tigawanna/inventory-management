@@ -1,14 +1,11 @@
-import { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+const { verify } = jwt;
 import type { Request, Response, NextFunction } from "express";
-import { ZodSchema } from "zod";
+import { ZodError, ZodSchema } from "zod";
+import { envVariables } from "@/env.ts";
+import { isRefreshTokenCokkiePresent } from "@/services/jwt-service.ts";
+import type { UserJWTPayload } from "@/schemas/user-schema.ts";
 
-// declare global {
-//   namespace Express {
-//     interface Request {
-//       user: any;
-//     }
-//   }
-// }
 
 /**
  * Middleware to authenticate a user.
@@ -34,16 +31,44 @@ import { ZodSchema } from "zod";
  */
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(" ")[1];
-
+  const refreshTokenPresent = isRefreshTokenCokkiePresent(req);
   if (!token) {
-    return res.status(401).json({ message: "No token provided" });
+    if (refreshTokenPresent) {
+      return res.status(401).json({ message: "No token provided",action:"login" });
+    }
+    return res.status(401).json({ message: "No token provided",action:"refresh-token" });
   }
   try {
-    const decoded = verify(token, process.env.JWT_SECRET!);
+    const decoded = verify(token,envVariables.ACCESS_TOKEN_SECRET);
     req.user = decoded as any;
     next();
   } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
+    res.status(403).json({ message: "Invalid token",action:"refresh-token" });
+  }
+};
+
+
+export const authenticateAdminOnly = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const refreshTokenPresent = isRefreshTokenCokkiePresent(req);
+  if (!token) {
+    if (refreshTokenPresent) {
+      return res.status(401).json({ message: "No token provided",action:"login" });
+    }
+    return res.status(401).json({ message: "No token provided",action:"refresh-token" });
+  }
+  try {
+    const decoded = verify(
+      token,
+      envVariables.ACCESS_TOKEN_SECRET,
+    ) as UserJWTPayload;
+    if (decoded.role !== "admin") {
+      return res.status(403).json({ message: "Unauthorized",action:"admin" });
+    }
+    req.user = decoded ;
+    next();
+  } catch (error) {
+    res.status(403).json({ message: "Invalid token",action:"refresh-token" });
   }
 };
 
@@ -55,6 +80,12 @@ export const validate = (schema: ZodSchema) => {
       await schema.parseAsync(req.body);
       next();
     } catch (error) {
+      if(error instanceof ZodError){
+        res.status(400).json({ error: error.flatten() });
+      }
+      if(error instanceof Error){
+        return res.status(400).json({ error: error.message });
+      }
       res.status(400).json({ error });
     }
   };

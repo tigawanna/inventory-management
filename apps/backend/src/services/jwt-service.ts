@@ -74,7 +74,7 @@ export async function createRefreshToken(
  */
 export async function verifyRefreshToken(req: Request, res: Response) {
   const { REFRESH_TOKEN_SECRET } = envVariables;
-  const refreshTtoken = req.cookies.kjz;
+  const refreshTtoken = req.cookies?.[refreshTokebCookieKey];
   if (!refreshTtoken) {
     res.clearCookie(refreshTokebCookieKey, cookieOptions);
     res.status(401);
@@ -100,7 +100,9 @@ export async function verifyRefreshToken(req: Request, res: Response) {
       message: "Invalid credentials",
     });
   }
-  return refreshTokenPayload;
+  const { password, verificationToken, refreshToken, ...newuserPayload } =
+    matchingUser;
+  return newuserPayload;
 }
 
 export async function verifyAccessToken(accesToken: string) {
@@ -116,14 +118,10 @@ export async function verifyAccessToken(accesToken: string) {
  * @param payload The payload to sign for the new access token
  * @returns The new access token
  */
-export async function refreshAccessToken(
-  req: Request,
-  res: Response,
-  payload: UserJWTPayload,
-) {
-  await verifyRefreshToken(req, res);
+export async function refreshAccessToken(req: Request, res: Response) {
+  const refreshTokenPayload = await verifyRefreshToken(req, res);
   const { ACCESS_TOKEN_SECRET } = envVariables;
-  const newAccessToken = await sign(payload, ACCESS_TOKEN_SECRET);
+  const newAccessToken = await sign(refreshTokenPayload, ACCESS_TOKEN_SECRET);
   return newAccessToken;
 }
 
@@ -167,4 +165,8 @@ export async function hashPassword(password: string) {
 
 export async function verifyPassword(password: string, passwordHash: string) {
   return compare(password, passwordHash);
+}
+
+export function isRefreshTokenCokkiePresent(req: Request) {
+  return req.cookies?.[refreshTokebCookieKey] ? true : false;
 }
