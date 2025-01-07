@@ -7,7 +7,8 @@ import * as middlewares from "./middlewares.ts";
 import v1Api from "./api/v1/index.ts";
 import cookieParser from "cookie-parser";
 import type { UserJWTPayload } from "./schemas/user-schema.ts";
-
+import {  } from "express-openapi-decorator";
+import router from "./api/v1/index.ts";
 declare global {
   namespace Express {
     interface Request {
@@ -15,8 +16,6 @@ declare global {
     }
   }
 }
-
-
 
 const app = express();
 
@@ -35,6 +34,7 @@ app.use(
     },
   }),
 );
+
 
 app.use(cors({ origin: ["*"] }));
 app.use(express.json());

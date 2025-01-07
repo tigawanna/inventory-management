@@ -4,6 +4,7 @@ import inventoryRoute from "./inventory/index.ts";
 import swaggerJsdoc from "swagger-jsdoc";
 import { apiReference } from "@scalar/express-api-reference";
 
+
 const router = express.Router();
 
 router.get("/docs", (req, res) => {
@@ -37,27 +38,7 @@ router.use(
     },
   }),
 );
-/**
- * @openapi
- * /:
- *   get:
- *     summary: Returns a mysterious string
- *     responses:
- *       200:
- *         description: Returns a mysterious string.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- */
-router.get<{}, { message: string }>("/", (req, res) => {
-  res.json({
-    message: "welcome to v1 api",
-  });
-});
+
 router.use("/auth", authRoute);
 router.use("/inventory", inventoryRoute);
 

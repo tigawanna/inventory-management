@@ -1,12 +1,12 @@
 
 import { and, eq, like, desc, asc } from "drizzle-orm";
 import { z } from "zod";
-import type { InventorySchema, QuerySchema } from "@/api/v1/inventory";
 import { db } from "@/db/client.ts";
 import { inventoryTable } from "@/db/schema/inventory.ts";
+import type { inventoryInsertSchema, inventoryUpdateSchema, listInventoryQueryParamsSchema } from "@/schemas/inventory-schema.ts";
 
 export class InventoryService {
-  async findAll(query: z.infer<typeof QuerySchema>) {
+  async findAll(query: z.infer<typeof listInventoryQueryParamsSchema>) {
     const { page, limit, sort, order, search, categoryId } = query;
 
     const dbQuery = db
@@ -43,13 +43,13 @@ export class InventoryService {
     return item[0];
   }
 
-  async create(data: z.infer<typeof InventorySchema>) {
+  async create(data: z.infer<typeof inventoryInsertSchema>) {
     const item = await db.insert(inventoryTable).values(data).returning();
 
     return item[0];
   }
 
-  async update(id: string, data: Partial<z.infer<typeof InventorySchema>>) {
+  async update(id: string, data: Partial<z.infer<typeof inventoryUpdateSchema>>) {
     const item = await db
       .update(inventoryTable)
       .set(data)
