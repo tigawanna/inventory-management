@@ -1,7 +1,6 @@
 import { db } from "@/db/client.ts";
 import { inventoryTable } from "@/db/schema/inventory.ts";
-import type { MessageResponse } from "@/interfaces/Responses.ts";
-import { authenticateAdminOnly, validate } from "@/middleware/auth.ts";
+import { authenticateAdminOnly } from "@/middleware/auth.ts";
 import {
   inventoryInsertSchema,
   listInventoryQueryParamsSchema,
@@ -12,7 +11,7 @@ import express from "express";
 
 
 const router = express.Router();
-
+//  list
 router.get("/", async (req, res) => {
   const { success, data, error } = listInventoryQueryParamsSchema.safeParse(
     req.query,
@@ -46,7 +45,7 @@ router.get("/", async (req, res) => {
   const items = await query;
   res.json(items);
 });
-
+// view
 router.get("/:id", async (req, res) => {
   const item = await db
     .select()
@@ -62,7 +61,7 @@ router.get("/:id", async (req, res) => {
   if (!item) return res.status(404).json({ message: "Item not found" });
   res.json(item);
 });
-
+// create
 router.post("/", authenticateAdminOnly, async (req, res) => {
   const { success, data, error } = inventoryInsertSchema.safeParse(req.body);
   if (!success || !data) {
@@ -75,7 +74,7 @@ router.post("/", authenticateAdminOnly, async (req, res) => {
   const item = await db.insert(inventoryTable).values(data).returning();
   res.status(201).json(item[0]);
 });
-
+// update
 router.put("/:id", authenticateAdminOnly, async (req, res) => {
   const { success, data, error } = viewInventoryParamsSchema.safeParse(
     req.params,
@@ -95,7 +94,7 @@ router.put("/:id", authenticateAdminOnly, async (req, res) => {
   if (!item.length) return res.status(404).json({ message: "Item not found" });
   res.json(item[0]);
 });
-
+// delete
 router.delete("/:id", authenticateAdminOnly, async (req, res) => {
   const { success, data, error } = viewInventoryParamsSchema.safeParse(
     req.params,
