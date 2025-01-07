@@ -4,14 +4,13 @@ import { AuthService } from "@/services/auth-service.ts";
 
 const router = express.Router();
 const authService = new AuthService();
-const verifySchema = z.object({
-  token: z.string().min(1),
+const verifyQuerySchema = z.object({
+  token: z.string().min(1).optional(),
+  email: z.string().email().optional(),
 });
 
-router.post("/verify-email/:token", async (req, res) => {
-  console.log(" == req.params  ===", req.params);
-  console.log(" == req.query  ===", req.params);
-  const { success, data, error } = verifySchema.safeParse(req.params);
+router.post("/verify-email", async (req, res) => {
+  const { success, data, error } = verifyQuerySchema.safeParse(req.query);
   if (!success) {
     return res.status(400).json({
       message: "invalid fields",
@@ -19,7 +18,7 @@ router.post("/verify-email/:token", async (req, res) => {
     });
   }
   try {
-    const verifiedUser = await authService.verifyEmail(data.token);
+    const verifiedUser = await authService.verifyEmail(data.token, data.email);
     res.status(201);
     res.json({
       message: "user email verified",

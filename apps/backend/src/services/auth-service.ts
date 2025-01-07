@@ -12,6 +12,12 @@ export class AuthService {
 
   private readonly SALT_ROUNDS = 10;
 
+  private emailService: EmailService;
+
+  constructor() {
+    this.emailService = new EmailService();
+  }
+
   async getUser(userId: string) {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.id, userId),
@@ -36,7 +42,7 @@ export class AuthService {
       })
       .returning();
 
-    await new EmailService().sendEmail({
+    await this.emailService.sendEmail({
       mail_to: data.email,
       token: verificationToken,
       type: "verifyemail",
@@ -57,13 +63,33 @@ export class AuthService {
     return user;
   }
 
-  async verifyEmail(token: string) {
-    const user = await db.query.usersTable.findFirst({
-      where: eq(usersTable.verificationToken, token),
-    });
+  async verifyEmail(token?: string, email?: string) {
+    const getUserByEmailOrToken = async (email?: string, token?: string) => {
+      if (email) {
+        return db.query.usersTable.findFirst({
+          where: eq(usersTable.email, email),
+        });
+      } else if (token) {
+        return db.query.usersTable.findFirst({
+          where: eq(usersTable.verificationToken, token),
+        });
+      }
+      return;
+    };
+    if (email && !token) {
+      const user = await getUserByEmailOrToken(email);
+      if (!user) throw new Error("User not found");
+      const verificationToken = randomBytes(4).toString("hex");
+      this.emailService.sendEmail({
+        mail_to: email,
+        token: verificationToken,
+        type: "verifyemail",
+      });
+      throw new Error("Please check your email to verify your account");
+    }
 
+    const user = await getUserByEmailOrToken(token);
     if (!user) throw new Error("Invalid verification token");
-
     return db
       .update(usersTable)
       .set({
@@ -119,7 +145,7 @@ export class AuthService {
       token,
       expiresAt,
     });
-    await new EmailService().sendEmail({
+    await this.emailService.sendEmail({
       mail_to: email,
       token,
       type: "resetpassword",

@@ -15,7 +15,7 @@ export function emailTemplates({ from, to, token }: EmailTemplateProps) {
       text: ` 
       Verify your email:
       enter the code below to verify your email: ${token}
-    } `,
+    }`,
     },
 
     resetpassword: {
@@ -25,7 +25,7 @@ export function emailTemplates({ from, to, token }: EmailTemplateProps) {
       text: ` 
       Reset your password:
       enter the code below to reset your password: ${token}
-    } `,
+    `,
     },
   };
 }
