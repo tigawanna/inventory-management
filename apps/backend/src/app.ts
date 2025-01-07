@@ -6,10 +6,20 @@ import cors from "cors";
 import { apiReference } from "@scalar/express-api-reference";
 import * as middlewares from "./middlewares.ts";
 import api from "./api/index.ts";
+import cookieParser from "cookie-parser";
+
+
+// declare module "express" {
+//   interface Request {
+//     cookies?: { [key: string]: string };
+//   }
+// }
+
 
 const app = express();
 
 app.use(morgan("dev"));
+app.use(cookieParser());
 app.use(helmet());
 app.use(cors());
 app.use(express.json());

@@ -1,4 +1,10 @@
+import express from "express";
+const router = express.Router();
 
-export function registerUser(){
+router.post("/", (req, res) => {
+  res.json({
+    message: "its register time",
+  });
+});
 
-}
+export default router;

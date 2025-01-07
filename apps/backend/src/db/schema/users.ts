@@ -11,7 +11,8 @@ export const usersTable = pgTable("users", {
   password: text().notNull(),
   avatarUrl: text(),
   role: userRole().default("user"),
-  tokenVersion: integer().default(0),
+  refreshToken: text(),
+  refreshTokenVersion: integer().default(0),
   verificationToken: text(),
   isEmailVerified: boolean().default(false),
 });
@@ -37,13 +38,3 @@ export const passwordResets = pgTable("password_resets", {
   isUsed: boolean("is_used").default(false),
 });
 
-export const refreshTokens = pgTable("refresh_tokens", {
-  ...commonColumns,
-  userId: text("user_id")
-    .references(() => usersTable.id)
-    .notNull(),
-  token: text("token").notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
-  isRevoked: boolean("is_revoked").default(false),
-  family: text("family").notNull(), // For token rotation
-});
