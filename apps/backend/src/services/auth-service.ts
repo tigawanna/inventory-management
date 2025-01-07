@@ -160,7 +160,6 @@ export class AuthService {
     if (reset.expiresAt < new Date()) throw new Error("Token expired");
 
     const hashedPassword = await hash(newPassword, this.SALT_ROUNDS);
-
     await db.transaction(async (tx) => {
       await tx
         .update(usersTable)
@@ -170,4 +169,6 @@ export class AuthService {
       await tx.delete(passwordResets).where(eq(passwordResets.token, token));
     });
   }
+
+
 }

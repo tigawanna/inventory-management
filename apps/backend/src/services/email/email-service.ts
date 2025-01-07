@@ -1,4 +1,4 @@
-import { sendEmailwithBrevoSMTP } from "./utils.ts";
+import { sendEmailwithSMTP } from "./utils.ts";
 
 interface SendEmailProps {
   token: string;
@@ -12,6 +12,6 @@ export class EmailService {
     token,
     type,
   }: SendEmailProps) {
-    return sendEmailwithBrevoSMTP({ token, type, mail_to });
+    return sendEmailwithSMTP({ token, type, mail_to });
   }
 }

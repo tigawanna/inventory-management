@@ -1,9 +1,9 @@
 import express from "express";
 import { AuthService } from "@/services/auth-service.ts";
-import { verifyUserTokenRoute, meRoute } from "./identity.ts";
-import { loginUserRoute } from "./login.ts";
+import { verifyUserTokenRoute, meRoute, refreshTokenRoute, logoutRoute } from "./identity.ts";
+import { loginUserRoute } from "./signin.ts";
 import { forgotPasswordRoute, resetPasswordRoute } from "./password.ts";
-import { registerUserRoute } from "./register.ts";
+import { registerUserRoute } from "./signup.ts";
 
 const router = express.Router();
 const authService = new AuthService();
@@ -19,5 +19,9 @@ meRoute(router, authService);
 forgotPasswordRoute(router, authService);
 // reset password
 resetPasswordRoute(router, authService);
+// refresh token 
+refreshTokenRoute(router, authService);
+// logout
+logoutRoute(router, authService);
 
 export default router;

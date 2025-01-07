@@ -14,8 +14,9 @@ export function emailTemplates({ from, to, token }: EmailTemplateProps) {
       to,
       text: ` 
       Verify your email:
-      enter the code below to verify your email: ${token}
-    }`,
+      enter the code below to verify your email: 
+      <h1>${token}</h1>
+    `,
     },
 
     resetpassword: {
@@ -24,7 +25,9 @@ export function emailTemplates({ from, to, token }: EmailTemplateProps) {
       to,
       text: ` 
       Reset your password:
-      enter the code below to reset your password: ${token}
+
+      enter the code below to reset your password: 
+      <h1>${token}</h1>
     `,
     },
   };
@@ -41,21 +44,30 @@ export interface SendEmailVersionProps {
   mail_to: string;
   type: "verifyemail" | "resetpassword";
 }
-export async function sendEmailwithBrevoSMTP({
+export async function sendEmailwithSMTP({
   token,
   type,
   mail_to,
 }: SendEmailVersionProps) {
-  const { BREVO_KEY, EMAIL_FROM } = envVariables;
-  console.log({EMAIL_FROM,mail_to});
+  const { EMAIL_FROM, MAILTRAP_API_KEY, MAILTRAP_USER } = envVariables;
+
+  // const transporter = createTransport({
+  //   host: "smtp-relay.brevo.com",
+  //   port: 587,
+  //   auth: {
+  //   user: EMAIL_FROM,
+  //     pass: BREVO_KEY,
+  //   },
+  // });
   const transporter = createTransport({
-    host: "smtp-relay.brevo.com",
+    host: "live.smtp.mailtrap.io",
     port: 587,
     auth: {
-      user: mail_to,
-      pass: BREVO_KEY,
+      user: MAILTRAP_USER,
+      pass: MAILTRAP_API_KEY,
     },
   });
+
 
   const mailOptions = emailTemplates({
     from: EMAIL_FROM,

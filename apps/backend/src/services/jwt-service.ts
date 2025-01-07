@@ -5,6 +5,8 @@ import type { CookieOptions, Response, Request } from "express";
 import { bumpUserTokenVersion, findUserByID } from "./user-servoce.ts";
 import { type UserJWTPayload } from "@/schemas/user-schema.ts";
 import { compare, hash } from "bcrypt";
+
+
 const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
@@ -68,7 +70,7 @@ export async function createRefreshToken(
  * Verifies the refresh token stored in the request cookie, and returns the verified payload.
  * @param req Express request object
  * @param res Express response object
- * @returns The verified refresh token payload
+ * @returns {UserJWTPayload} The verified refresh token payload
  * @throws {JsonWebTokenError} If the refresh token is invalid
  * @throws {Response} If the refresh token is not found or outdated, with status 401 or 403 respectively
  */
@@ -159,6 +161,11 @@ export async function generateUserAuthTokens(
   return { accessToken, refreshToken };
 }
 
+export async function clearRefreshTokenCookie(res: Response,userid:string) {
+  await bumpUserTokenVersion(userid);
+  res.clearCookie(refreshTokebCookieKey, cookieOptions);
+
+}
 export async function hashPassword(password: string) {
   return hash(password, 10);
 }

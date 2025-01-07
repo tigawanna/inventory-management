@@ -4,10 +4,7 @@ import { generateUserAuthTokens } from "@/services/jwt-service.ts";
 import type { Router } from "express";
 import { z } from "zod";
 
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
+
 export function loginUserRoute(router: Router, authService: AuthService) {
 const signinSchema = z.object({
   email: z.string().email(),
@@ -53,7 +50,7 @@ router.post("/signin", async (req, res) => {
   } catch (err: any) {
     console.log("== error ===", err);
     res.status(400);
-    res.json({
+    return res.json({
       message: "user login failed",
       error: err?.message,
     });

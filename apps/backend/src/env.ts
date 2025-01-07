@@ -17,8 +17,11 @@ const envScheme = z.object({
   FRONTEND_URL: z.string(),
   ACCESS_TOKEN_SECRET: z.string(),
   REFRESH_TOKEN_SECRET: z.string(),
-  BREVO_KEY: z.string(),
+  BREVO_API_KEY: z.string(),
+  BREVO_USER: z.string(),
   EMAIL_FROM: z.string(),
+  MAILTRAP_USER: z.string(),
+  MAILTRAP_API_KEY: z.string(),
 });
 
 export const envVariables = envScheme.parse(process.env);
