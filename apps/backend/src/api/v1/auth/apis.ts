@@ -4,8 +4,8 @@ import signinRoute from "./signin.ts";
 import verifyEmailRoute from "./verify-emai.ts";
 
 const router = express.Router();
-router.use("/signup", signupRoute);
-router.use("/signin", signinRoute);
-router.use("/verify-email/:token", verifyEmailRoute);
+router.use(signupRoute);
+router.use(signinRoute);
+router.use(verifyEmailRoute);
 
 export default router;

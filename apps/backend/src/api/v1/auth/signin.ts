@@ -10,7 +10,7 @@ const signinSchema = z.object({
   password: z.string().min(8),
 });
 
-router.post("/", async (req, res) => {
+router.post("/signin", async (req, res) => {
   const { success, data, error } = signinSchema.safeParse(req.body);
   if (!success) {
     return res.status(400).json({
@@ -47,6 +47,7 @@ router.post("/", async (req, res) => {
       },
     });
   } catch (err: any) {
+    console.log("== error ===", err);
     res.status(400);
     res.json({
       message: "user login failed",

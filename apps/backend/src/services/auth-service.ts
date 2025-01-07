@@ -26,7 +26,7 @@ export class AuthService {
 
   async register(data: { email: string; password: string; name: string }) {
     const hashedPassword = await hash(data.password, this.SALT_ROUNDS);
-    const verificationToken = randomBytes(32).toString("hex");
+    const verificationToken = randomBytes(4).toString("hex");
     const newUser = await db
       .insert(usersTable)
       .values({
@@ -112,7 +112,7 @@ export class AuthService {
 
     if (!user) throw new Error("User not found");
 
-    const token = randomBytes(32).toString("hex");
+    const token = randomBytes(4).toString("hex");
     const expiresAt = new Date(Date.now() + 3_600_000); // 1 hour
     await db.insert(passwordResets).values({
       userId: user.id,

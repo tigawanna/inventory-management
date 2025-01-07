@@ -1,10 +1,12 @@
-import { drizzle } from "drizzle-orm/neon-http";
+import { drizzle } from "drizzle-orm/node-postgres";
 import * as usersSchema from "./schema/users.ts";
 import * as inventorySchema from "./schema/inventory.ts";
 import type { Logger } from "drizzle-orm/logger";
 import { formatSqlQuery } from "./helpers/query-logger.ts";
 import { envVariables } from "@/env.ts";
-import { neon } from "@neondatabase/serverless";
+import pg from "pg";
+// import { drizzle } from "drizzle-orm/neon-http";
+// import { neon } from "@neondatabase/serverless";
 
 class MyLogger implements Logger {
 
@@ -19,20 +21,20 @@ class MyLogger implements Logger {
 }
 
 // // Use pg driver.
-// const { Pool } = pg;
-// // Instantiate Drizzle client with pg driver and schema.
-// export const db = drizzle({
-//   client: new Pool({
-//     connectionString: envVariables.dbUrl,
-//   }),
-//   schema: { ...projectSchema, ...authSchema },
-//   logger: envVariables.NODE_ENV === "development" ? new MyLogger() : false,
-// });
-
+const { Pool } = pg;
 // Instantiate Drizzle client with pg driver and schema.
 export const db = drizzle({
-  client: neon(envVariables.DATABASE_URL),
+  client: new Pool({
+    connectionString: envVariables.DATABASE_URL,
+  }),
   schema: { ...inventorySchema, ...usersSchema },
   logger: envVariables.NODE_ENV === "development" ? new MyLogger() : false,
 });
+
+// Instantiate Drizzle client with pg driver and schema.
+// export const db = drizzle({
+//   client: neon(envVariables.DATABASE_URL),
+//   schema: { ...inventorySchema, ...usersSchema },
+//   logger: envVariables.NODE_ENV === "development" ? new MyLogger() : false,
+// });
 

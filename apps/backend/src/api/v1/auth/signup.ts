@@ -10,7 +10,7 @@ const registerSchema = z.object({
   password: z.string().min(8),
 });
 
-router.post("/", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { success, data, error } = registerSchema.safeParse(req.body);
   if (!success) {
     return res.status(400).json({

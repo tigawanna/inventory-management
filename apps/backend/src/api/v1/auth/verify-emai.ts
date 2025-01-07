@@ -8,7 +8,9 @@ const verifySchema = z.object({
   token: z.string().min(1),
 });
 
-router.post("/", async (req, res) => {
+router.post("/verify-email/:token", async (req, res) => {
+  console.log(" == req.params  ===", req.params);
+  console.log(" == req.query  ===", req.params);
   const { success, data, error } = verifySchema.safeParse(req.params);
   if (!success) {
     return res.status(400).json({
