@@ -23,7 +23,11 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": {
+                        email:string;
+                        password:string;
+                        name:string;
+                    };
                 };
             };
             responses: {
@@ -33,7 +37,9 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": unknown;
+                        "application/json": {
+                            
+                        };
                     };
                 };
             };

@@ -15,7 +15,7 @@ router.post("/signup", async (req, res) => {
   if (!success) {
     return res.status(400).json({
       message: "invalid fields",
-      error: error.flatten(),
+      data: error.flatten(),
     });
   }
   try {

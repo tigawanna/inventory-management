@@ -8,17 +8,18 @@ import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
+import { apiQuery } from "@/lib/api/client";
 
 interface SigninComponentProps {}
 
 interface UsersigninFields {
-  emailOrUsername: string;
+  email: string;
   password: string;
 }
 
 const formOpts = formOptions<UsersigninFields>({
   defaultValues: {
-    emailOrUsername: "",
+    email: "",
     password: "",
   },
 });
@@ -27,34 +28,13 @@ export function SigninComponent({}: SigninComponentProps) {
   const qc = useQueryClient();
   const { returnTo } = Route.useSearch();
   const navigate = useNavigate({ from: "/auth" });
-  const mutation = useMutation({
-    mutationFn: (data: UsersigninFields) => {
-      return new Promise<{
-        record: {
-          id: string;
-          name: string;
-          email: string;
-          username: string;
-          role: string;
-        };
-      }>((resolve) => {
-        setTimeout(() => {
-          resolve({
-            record: {
-              id: "1",
-              name: "John Doe",
-              email: data.emailOrUsername,
-              username: data.emailOrUsername,
-              role: "admin",
-            },
-          });
-        }, 2000);
-      });
-    },
+
+  const mutation = apiQuery.useMutation("post", "/api/v1/auth/signin", {
     onSuccess(data) {
+      const resonseMeassge = data as { message: string };
       makeHotToast({
         title: "signed in",
-        description: `Welcome ${data.record.username}`,
+        description: resonseMeassge.message,
         variant: "success",
         duration: 2000,
       });
@@ -68,10 +48,10 @@ export function SigninComponent({}: SigninComponentProps) {
       }
     },
     onError(error) {
-      console.log(error.name);
+      const errorMessage = error as { message: string };
       makeHotToast({
         title: "Something went wrong",
-        description: `${error.message}`,
+        description: `${errorMessage.message}`,
         variant: "error",
         duration: 20000,
       });
@@ -80,7 +60,9 @@ export function SigninComponent({}: SigninComponentProps) {
   const form = useForm({
     ...formOpts,
     onSubmit: async ({ value }) => {
-      await mutation.mutate(value);
+      await mutation.mutate({
+        body:value as any
+      });
     },
   });
   return (
@@ -101,7 +83,7 @@ export function SigninComponent({}: SigninComponentProps) {
         <div className="flex w-full flex-col items-center justify-center gap-2">
           <h1 className="text-4xl font-bold">Sign in</h1>
           <form.Field
-            name="emailOrUsername"
+            name="email"
             validatorAdapter={zodValidator()}
             validators={{
               onChange: z.string(),
@@ -110,7 +92,7 @@ export function SigninComponent({}: SigninComponentProps) {
               return (
                 <TextFormField<UsersigninFields>
                   field={field}
-                  fieldKey="emailOrUsername"
+                  fieldKey="email"
                   fieldlabel="email or username"
                   inputOptions={{
                     onBlur: field.handleBlur,
@@ -165,9 +147,13 @@ export function SigninComponent({}: SigninComponentProps) {
         />
         <div className="flex flex-col items-center justify-center gap-2">
           Don&apos;t have an account?
-          <Link to="/auth/signup" search={{
-            returnTo: returnTo || "/",
-          }} className="text-primary">
+          <Link
+            to="/auth/signup"
+            search={{
+              returnTo: returnTo || "/",
+            }}
+            className="text-primary"
+          >
             Sign up
           </Link>
         </div>

@@ -1,35 +1,30 @@
 import { formOptions, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {  useQueryClient } from "@tanstack/react-query";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
+import { apiQuery } from "@/lib/api/client";
 
 interface SignupComponentProps {}
 
-interface CreateuserFields{
-  username: string;
+interface CreateuserFields {
+  name: string;
   email: string;
-  emailVisibility: boolean;
   password: string;
-  passwordConfirm: string;
-  phone: string;
-  avatar: File | null;
+  passwordConfirm:string;
 }
 
 const formOpts = formOptions<CreateuserFields>({
   defaultValues: {
-    username: "",
     email: "",
-    emailVisibility: true,
+    name: "",
     password: "",
-    passwordConfirm: "",
-    phone: "",
-    avatar: null,
+    passwordConfirm:""
   },
 });
 
@@ -40,45 +35,22 @@ export function SignupComponent({}: SignupComponentProps) {
   const [showPassword, setShowPassword] = useState(false);
   const qc = useQueryClient();
   const navigate = useNavigate({ from: "/auth/signup" });
-  const mutation = useMutation({
-    mutationFn: (data: CreateuserFields) => {
-      return new Promise<{
-        username: string;
-        email: string;
-        emailVisibility: boolean;
-        password: string;
-        passwordConfirm: string;
-        phone: string;
-        avatar: File | null;
-      }>((resolve) => {
-        setTimeout(() => {
-          resolve({
-            username: data.username,
-            email: data.email,
-            emailVisibility: data.emailVisibility,
-            password: data.password,
-            passwordConfirm: data.passwordConfirm,
-            phone: data.phone,
-            avatar: data.avatar,
-          });
-        }, 2000);
-      });
-      },
+
+  const mutation = apiQuery.useMutation("post", "/api/v1/auth/signin", {
     onSuccess(data) {
       makeHotToast({
         title: "signed up",
-        description: `Welcome ${data.username}`,
-        duration: 2000,
+        description: `Welcome`,
         variant: "success",
       });
       qc.invalidateQueries(viewerqueryOptions());
       navigate({ to: "/auth", search: { returnTo: "/profile" } });
     },
     onError(error) {
-      console.log(error.name);
+      const mutationErrpr = error as { message: string };
       makeHotToast({
         title: "Something went wrong",
-        description: `${error.message}`,
+        description: `${mutationErrpr.message}`,
         duration: 20000,
         variant: "error",
       });
@@ -86,8 +58,10 @@ export function SignupComponent({}: SignupComponentProps) {
   });
   const form = useForm({
     ...formOpts,
-      onSubmit: async ({ value }) => {
-      await mutation.mutate(value);
+    onSubmit: async ({ value }) => {
+      await mutation.mutate({
+        body: value as any,
+      });
     },
   });
 
@@ -109,7 +83,7 @@ export function SignupComponent({}: SignupComponentProps) {
         <div className="gap- flex h-full w-full flex-col items-center justify-center">
           <h1 className="text-4xl font-bold">Sign up</h1>
           <form.Field
-            name="username"
+            name="name"
             validatorAdapter={zodValidator()}
             validators={{
               onChange: z.string(),
@@ -118,11 +92,11 @@ export function SignupComponent({}: SignupComponentProps) {
               return (
                 <TextFormField<CreateuserFields>
                   field={field}
-                  fieldKey="username"
+                  fieldKey="name"
                   inputOptions={{
                     onBlur: field.handleBlur,
                     onChange: (e) => {
-                      field.handleChange(e.target.value)
+                      field.handleChange(e.target.value);
                     },
                   }}
                 />
@@ -162,6 +136,7 @@ export function SignupComponent({}: SignupComponentProps) {
                   fieldKey="password"
                   inputOptions={{
                     type: showPassword ? "text" : "password",
+                    minLength:8,
                     onBlur: field.handleBlur,
                     onChange: (e) => field.handleChange(e.target.value),
                   }}
