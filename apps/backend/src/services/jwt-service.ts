@@ -176,6 +176,9 @@ export async function generateUserAuthTokens(
   return { accessToken, refreshToken };
 }
 
+export async function clearAccessTokenCookie(res: Response) {
+  res.clearCookie(accessTokebCookieKey, accessTokencookieOptions);
+}
 export async function clearRefreshTokenCookie(res: Response, userid: string) {
   await bumpUserTokenVersion(userid);
   res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);

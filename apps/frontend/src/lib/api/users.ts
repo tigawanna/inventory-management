@@ -11,3 +11,16 @@ export interface InventoryUser {
   verificationToken?: string;
   isEmailVerified: boolean;
 }
+
+const authEndponts  = {
+  me:"/api/v1/auth/me",
+  signin:"/api/v1/auth/signin",
+  signup:"/api/v1/auth/signup",
+  logout:"/api/v1/auth/logout",
+  "verify-email":"/api/v1/auth/verify-email",
+  "refresh-token":"/api/v1/auth/refresh-token",
+}
+
+export async function getCurrentUser(){
+
+}

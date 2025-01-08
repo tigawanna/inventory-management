@@ -3,6 +3,7 @@ import { errorCodes } from "@/schemas/error-schema.ts";
 import type { UserJWTPayload } from "@/schemas/user-schema.ts";
 import type { AuthService } from "@/services/auth-service.ts";
 import {
+  clearAccessTokenCookie,
   clearRefreshTokenCookie,
   generateUserAuthTokens,
   verifyRefreshToken,
@@ -101,6 +102,7 @@ export function refreshTokenRoute(router: Router, authService: AuthService) {
 
 export function logoutRoute(router: Router, authService: AuthService) {
   router.post("/logout", authenticate, async (req, res) => {
+    clearAccessTokenCookie(res);
     clearRefreshTokenCookie(res, req.user.id);
     // @ts-expect-error
     req.user = undefined;
