@@ -331,7 +331,19 @@
                 }
             }
         },
-        "/api/v1/items/0194431b-f610-724a-a396-a1936d36d2f6": {
+        "/api/v1/items/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "description": "Item ID"
+                }
+            ],
             "get": {
                 "tags": [
                     "inventory"
@@ -364,9 +376,7 @@
                         }
                     }
                 }
-            }
-        },
-        "/api/v1/items/0194431e-b01f-7b61-8da3-25a7eb8310f8": {
+            },
             "put": {
                 "tags": [
                     "inventory"
