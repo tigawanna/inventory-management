@@ -12,17 +12,25 @@ export const inventoryInsertSchema = createInsertSchema(inventoryTable);
 export const inventoryUpdateSchema = createUpdateSchema(inventoryTable);
 
 export const listInventoryQueryParamsSchema = z.object({
-  page: z.number().default(1),
-  limit: z.number().default(10),
+  page: z.string().default('1'),
+  limit: z.string().default('10'),
   sort: z.enum(["name", "price", "quantity"]).optional(),
   order: z.enum(["asc", "desc"]).default("asc"),
   search: z.string().optional(),
-  categoryId: z.string().uuid().optional(),
+  categoryId: z.string().optional(),
 });
 
 export const viewInventoryParamsSchema = z.object({
     id:z.string()
 })
+
+export type listInventoryQueryParams = z.infer<typeof listInventoryQueryParamsSchema>
+export type listInventory = z.infer<typeof inventorySelectSchema>;
+export type updateInventory = z.infer<typeof inventoryUpdateSchema>
+export type createInventory = z.infer<typeof inventoryInsertSchema>
+export type viewInventoryParams = z.infer<typeof viewInventoryParamsSchema>
+
+
 
 export const categorySelectSchema = createSelectSchema(categoryTable);
 export const categoryInsertSchema = createInsertSchema(categoryTable);

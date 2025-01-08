@@ -1,4 +1,4 @@
-import { and, eq, like, desc, asc } from "drizzle-orm";
+import { and, eq, like, desc, asc, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client.ts";
 import { inventoryTable } from "@/db/schema/inventory.ts";
@@ -22,18 +22,26 @@ export class InventoryService {
   async findAll(query: z.infer<typeof listInventoryQueryParamsSchema>) {
     const { page, limit, sort, order, search, categoryId } = query;
 
+    // Base conditions for both count and data query
+    const conditions = and(
+      eq(inventoryTable.isActive, true),
+      search ? like(inventoryTable.name, `%${search}%`) : undefined,
+      categoryId ? eq(inventoryTable.categoryId, categoryId) : undefined,
+    );
+
+    // Get total count
+    const [{ count }] = await db
+      .select({ count: sql`count(*)`.mapWith(Number) })
+      .from(inventoryTable)
+      .where(conditions);
+
+    // Get paginated data
     const dbQuery = db
       .select()
       .from(inventoryTable)
-      .where(
-        and(
-          eq(inventoryTable.isActive, true),
-          search ? like(inventoryTable.name, `%${search}%`) : undefined,
-          categoryId ? eq(inventoryTable.categoryId, categoryId) : undefined,
-        ),
-      )
-      .limit(limit)
-      .offset((page - 1) * limit);
+      .where(conditions)
+      .limit(+limit)
+      .offset((+page - 1) * +limit);
 
     if (sort) {
       dbQuery.orderBy(
@@ -43,7 +51,15 @@ export class InventoryService {
       );
     }
 
-    return dbQuery;
+    const items = await dbQuery;
+
+    return {
+      page,
+      perPage: limit,
+      totalItems: count,
+      totalPages: Math.ceil(count / +limit),
+      items,
+    };
   }
 
   async findById(id: string) {
@@ -72,7 +88,7 @@ export class InventoryService {
   async update(
     id: string,
     data: Partial<z.infer<typeof inventoryUpdateSchema>>,
-    req:Request
+    req: Request,
   ) {
     const item = await db
       .update(inventoryTable)
@@ -90,6 +106,20 @@ export class InventoryService {
   }
 
   async delete(id: string, req: Request) {
+    if (req.user.role === "admin") {
+      const item = await db
+        .delete(inventoryTable)
+        .where(eq(inventoryTable.id, id))
+        .returning();
+      await this.auditLogService.createChangeLog({
+        userId: req.user.id,
+        entityType: EntityType.INVENTORY,
+        entityId: id,
+        newData: item,
+        ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
+      });
+      return item[0];
+    }
     const item = await db
       .update(inventoryTable)
       .set({ isActive: false })
