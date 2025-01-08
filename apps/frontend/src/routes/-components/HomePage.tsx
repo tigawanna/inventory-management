@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
 import { ArrowRightIcon } from "lucide-react";
 import { FlipClock } from "@/components/flip-clock/DigitalFlipClock";
-import { ProfileLinkCard } from "./HomeComponents";
 import { Helmet } from "@/components/wrappers/custom-helmet";
 import { ResponsiveGenericToolbar } from "./ResponsiveGenericToolbar";
 
@@ -28,7 +27,7 @@ export function HomePage() {
               data-test="homepage-section-welcome"
               className="break-all text-7xl font-bold text-primary"
             >
-              welcome {viewer?.username}
+              welcome {viewer?.name}
             </h1>
             <FlipClock />
             {/* {viewer && <ProfileLinkCard viewer={viewer} />} */}
@@ -38,7 +37,7 @@ export function HomePage() {
             >
               {viewer ? (
                 <Link
-                  to="/dashboard"
+                  to="/inventory"
                   data-test="homepage-section--dashboard-link"
                   className="group flex items-center justify-center"
                 >

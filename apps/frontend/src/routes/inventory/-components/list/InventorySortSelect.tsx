@@ -83,11 +83,11 @@ export function InventoryOrderSelect({}: InventorySortSelectProps) {
 }
 
 
-interface InventorySortSelectProps {
+interface InventoryCategoriesSelectProps {
   onCategoryChange:(cat:string)=>void
 }
 
-export function InventoryCategoriesSelect({onCategoryChange}: InventorySortSelectProps) {
+export function InventoryCategoriesSelect({onCategoryChange}: InventoryCategoriesSelectProps) {
 
   const [category,setCategory] = useState("category_1_id")
   const categories = ["category_id_1", "category_id_2", "category_id_3"];

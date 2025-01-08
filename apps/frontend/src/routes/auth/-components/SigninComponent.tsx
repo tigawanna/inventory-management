@@ -8,7 +8,6 @@ import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
-import { apiQuery } from "@/lib/api/client";
 import { signInUser } from "@/lib/api/users";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 

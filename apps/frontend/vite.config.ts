@@ -23,13 +23,13 @@ export default defineConfig({
     port: 3000,
     host: true,
   },
-  test: {
-    onConsoleLog(log: string, type: "stdout" | "stderr"): boolean | void {
-      return;
-      log;
-    },
-    setupFiles: ["dotenv/config"], //this line,
-    include: ["./src/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
-    exclude: ["e2e-tests", "node_modules"],
-  },
+  // test: {
+  //   onConsoleLog(log: string, type: "stdout" | "stderr"): boolean | void {
+  //     return;
+  //     log;
+  //   },
+  //   setupFiles: ["dotenv/config"], //this line,
+  //   include: ["./src/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
+  //   exclude: ["e2e-tests", "node_modules"],
+  // },
 });

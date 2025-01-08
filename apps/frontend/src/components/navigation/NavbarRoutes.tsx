@@ -11,15 +11,7 @@ export function NavbarRoutes({}: NavbarRoutesProps) {
         <Home />
       </Link>
       <div className="flex h-full w-full items-center justify-center gap-2">
-        {routes.map((route) => (
-          <Link
-            key={route.name}
-            to={route.href}
-            className="btn btn-link btn-sm flex items-center justify-center bg-base-300"
-          >
-            {route.name}
-          </Link>
-        ))}
+
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/api/users";
+import { getCurrentUser, InventoryUser } from "@/lib/api/users";
 import {
   QueryClient,
   useMutation,
@@ -71,7 +71,15 @@ export function useViewer() {
   } as const;
 }
 
-export type PocketbaseViewerType = ViewerType | { record: null; token: null };
+export type PocketbaseViewerType =
+  | {
+      record: null;
+      error: any;
+    }
+  | {
+      record: InventoryUser;
+      error: null;
+    };
 
 
 type BeforeLoadCTX = BeforeLoadContextOptions<
