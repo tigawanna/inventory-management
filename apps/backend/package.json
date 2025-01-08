@@ -9,7 +9,7 @@
     "drizzle:migrate": "drizzle-kit migrate ",
     "start": "node  dist/index.cjs",
     "dev": "tsx watch src/index.ts",
-    "build": "tsup",
+    "build": "npm install",
     "start:dist": "node dist/src/index.js",
     "lint": "eslint --fix src test",
     "test": "jest",
