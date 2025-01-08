@@ -44,8 +44,14 @@ export async function createAccessToken(
 ) {
   const { ACCESS_TOKEN_SECRET } = envVariables;
   const fiftenMinutesInSeconds = Math.floor(Date.now() / 1000) + 60 * 15; // 15 minutes
+      const sanitizedPayload = {
+        id: payload.id,
+        email: payload.email,
+        role: payload.role,
+        name: payload.name,
+      };
   const accessToken = await sign(
-    { ...payload, exp: fiftenMinutesInSeconds },
+    { ...sanitizedPayload, exp: fiftenMinutesInSeconds },
     ACCESS_TOKEN_SECRET,
   );
   res.cookie(accessTokebCookieKey, accessToken, accessTokencookieOptions);
@@ -72,8 +78,14 @@ export async function createRefreshToken(
   const { refreshTokenVersion } = await bumpUserTokenVersion(payload.id);
   const twelveDaysInSeconds = 5 * 24 * 60 * 60;
   const expriesin = Math.floor(Date.now() / 1000) + twelveDaysInSeconds;
+    const sanitizedPayload = {
+      id: payload.id,
+      email: payload.email,
+      role: payload.role,
+      name: payload.name,
+    };
   const refreshToken = await sign(
-    { ...payload, refreshTokenVersion, exp: expriesin },
+    { ...sanitizedPayload, refreshTokenVersion, exp: expriesin },
     REFRESH_TOKEN_SECRET,
   );
   //   setCookie(c, refreshTokebCookieKey, refreshToken, { path: "/", httpOnly: true });

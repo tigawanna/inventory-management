@@ -43,13 +43,14 @@ export function InventoryList({ keyword = "" }: InventoryListProps) {
           return (
             <li
               key={item.id}
-              className="flex h-56 w-[95%] items-center justify-center gap-2 rounded-xl bg-base-300 p-4 sm:w-[45%] lg:w-[30%]"
+              className="flex h w-[95%] items-center justify-center gap-2 rounded-xl bg-base-300 p-4 sm:w-[45%] lg:w-[30%]"
             >
               <div className="flex h-full w-full flex-col justify-between gap-2">
                 <div className="flex h-full w-full justify-between gap-2">
                   <h1 className="text-2xl font-bold">{item.name}</h1>
                   <UpdateInventoryform item={item} />
                 </div>
+                <p>{item.description}</p>
                 <div className="flex flex-wrap  justify-between gap-2">
                   <div>Price: {item.price}</div>
                   <div>Quan: {item.quantity}</div>

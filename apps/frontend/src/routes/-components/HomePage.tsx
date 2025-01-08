@@ -4,6 +4,7 @@ import { ArrowRightIcon } from "lucide-react";
 import { FlipClock } from "@/components/flip-clock/DigitalFlipClock";
 import { Helmet } from "@/components/wrappers/custom-helmet";
 import { ResponsiveGenericToolbar } from "./ResponsiveGenericToolbar";
+import { LoggedInUser } from "./LoggedInUser";
 
 export function HomePage() {
   const { viewer } = useViewer();
@@ -55,6 +56,7 @@ export function HomePage() {
                 </Link>
               )}
             </div>
+            <LoggedInUser viewer={viewer} />
           </div>
           <div className="h-24 w-full -z-10 " />
         </div>

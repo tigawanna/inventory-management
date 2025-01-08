@@ -102,10 +102,21 @@ export function refreshTokenRoute(router: Router, authService: AuthService) {
 
 export function logoutRoute(router: Router, authService: AuthService) {
   router.post("/logout", authenticate, async (req, res) => {
-    clearAccessTokenCookie(res);
-    clearRefreshTokenCookie(res, req.user.id);
-    // @ts-expect-error
-    req.user = undefined;
-    res.json({ message: "user logged out" });
+   try {
+     // Clear cookies first
+     await clearAccessTokenCookie(res);
+     await clearRefreshTokenCookie(res, req.user.id);
+     // Clear user
+     // @ts-expect-error
+     req.user = undefined;
+
+     // Send single response
+     return res.status(200).json({ message: "user logged out" });
+   } catch (error) {
+     return res.status(400).json({
+       message: "logout failed",
+       error: error instanceof Error ? error.message : error,
+     });
+   }
   });
 }

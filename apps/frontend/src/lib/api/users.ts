@@ -151,3 +151,29 @@ export async function verifyEmail(token: string) {
     };
   }
 }
+
+export async function logoutUser() {
+  try {
+    const res = await fetch(baseUrl + authEndponts.logout, {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!res.ok) {
+      return {
+        record: null,
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
+      };
+    }
+    return { record: (await res.json()) as InventoryUser, error: null };
+  } catch (error) {
+    return {
+      record: null,
+      error: error as AuthEnpointsEroor,
+    };
+  }
+}

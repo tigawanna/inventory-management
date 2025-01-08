@@ -8,6 +8,7 @@ import { CreateInventoryForm } from "./form/create";
 import { InventoryList } from "./list/InventoryList";
 import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
 import { InventoryOrderSelect, InventorySortSelect } from "./list/InventorySortSelect";
+import { ChevronLeft } from "lucide-react";
 
 interface InventoryPageProps {
 }
@@ -20,7 +21,11 @@ export function InventoryPage({}: InventoryPageProps) {
       <Helmet title="Collabs | inventory" description="The list of Collabs | inventory" />
       <ListPageHeader
         title="Inventory"
-        formTrigger={<CreateInventoryForm />}
+        formTrigger={
+          <div className="w-full flex gap-2">
+        <CreateInventoryForm />
+          </div>
+      }
         searchBox={
           <div className="w-full flex gap-2">
           <SearchBox

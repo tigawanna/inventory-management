@@ -35,7 +35,6 @@ export function SigninComponent({}: SigninComponentProps) {
       return signInUser(body);
     },
     onSuccess(data) {
-      console.log({data});
       if(data.error){
         makeHotToast({
           title: "Something went wrong",
@@ -53,7 +52,7 @@ export function SigninComponent({}: SigninComponentProps) {
       });
       
       qc.invalidateQueries(viewerqueryOptions());
-      // navigate({ to: returnTo || "/" });
+      navigate({ to:"/inventory" });
       // qc.setQueryData(["viewer"], () => data.record);
       // if (typeof window !== "undefined") {
       //   location.reload();

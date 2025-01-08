@@ -1,4 +1,5 @@
-import { getCurrentUser, InventoryUser } from "@/lib/api/users";
+import { makeHotToast } from "@/components/toasters";
+import { getCurrentUser, InventoryUser, logoutUser } from "@/lib/api/users";
 import {
   QueryClient,
   useMutation,
@@ -16,12 +17,12 @@ import {
 } from "@tanstack/react-router";
 
 export type ViewerType = {
-  record:{
+  record: {
     id: string;
     name: string;
     email: string;
     username: string;
-    role:"user"|"admin";
+    role: "user" | "admin";
   };
   token: string;
 };
@@ -33,7 +34,7 @@ export function viewerqueryOptions() {
       // return new Promise<ViewerType>((res, rej) => {
       //   setTimeout(() => {
       //     res({
-      //       record: { 
+      //       record: {
       //           id: "id_1",
       //           name: "name_1",
       //           email: "email1@email.com",
@@ -46,18 +47,46 @@ export function viewerqueryOptions() {
       // });
       return await getCurrentUser();
     },
-    staleTime: 12 * 60 * 1000
+    staleTime: 12 * 60 * 1000,
   };
 }
-
 
 export function useViewer() {
   const qc = useQueryClient();
   // const navigate = useNavigate()
   const logoutMutation = useMutation({
-    mutationFn: async () => {;
+    mutationFn: async () => {
+      qc.invalidateQueries(viewerqueryOptions());
+      return await logoutUser();
+      // navigate({ to: "/auth", search: { returnTo: "/" } });
+    },
+    onSuccess: (data) => {
+      if (data.error) {
+        makeHotToast({
+          title: "Something went wrong",
+          description: data.error.message,
+          variant: "error",
+          duration: 20000,
+        });
+        return;
+      }
+      makeHotToast({
+        title: "signed in",
+        description: "",
+        variant: "success",
+        duration: 2000,
+      });
       qc.invalidateQueries(viewerqueryOptions());
       // navigate({ to: "/auth", search: { returnTo: "/" } });
+    },
+    onError(error) {
+      const errorMessage = error as { message: string };
+      makeHotToast({
+        title: "Something went wrong",
+        description: `${errorMessage.message}`,
+        variant: "error",
+        duration: 20000,
+      });
     },
   });
   const viewerQuery = useSuspenseQuery(viewerqueryOptions());
@@ -66,7 +95,7 @@ export function useViewer() {
   return {
     viewerQuery,
     viewer,
-    role:viewer?.role,
+    role: viewer?.role,
     logoutMutation,
   } as const;
 }
@@ -81,43 +110,41 @@ export type PocketbaseViewerType =
       error: null;
     };
 
-
 type BeforeLoadCTX = BeforeLoadContextOptions<
-    Route<
-      RootRoute<
-        undefined,
-        {
-          queryClient: QueryClient;
-          viewer?: PocketbaseViewerType;
-        },
-        AnyContext,
-        AnyContext,
-        {},
-        undefined,
-        unknown,
-        unknown
-      >,
-      "/profile",
-      "/profile",
-      "/profile",
-      "/profile",
+  Route<
+    RootRoute<
       undefined,
-      Record<never, string>,
-      AnyContext,
+      {
+        queryClient: QueryClient;
+        viewer?: PocketbaseViewerType;
+      },
       AnyContext,
       AnyContext,
       {},
       undefined,
+      unknown,
       unknown
     >,
-    (search: Record<string, unknown>) => {
-      returnTo?: string | undefined;
-    },
+    "/profile",
+    "/profile",
+    "/profile",
+    "/profile",
+    undefined,
     Record<never, string>,
     AnyContext,
-    AnyContext
-  >;
-
+    AnyContext,
+    AnyContext,
+    {},
+    undefined,
+    unknown
+  >,
+  (search: Record<string, unknown>) => {
+    returnTo?: string | undefined;
+  },
+  Record<never, string>,
+  AnyContext,
+  AnyContext
+>;
 
 type AuthBeforeloadContext = BeforeLoadContextOptions<
   RootRoute<
@@ -159,16 +186,15 @@ interface AuthGuardProps {
 export async function authGuard({ ctx, role, reverse }: AuthGuardProps) {
   const returnTo = ctx.search?.returnTo ?? "/";
   const user = ctx.context?.viewer;
-    if (!user?.record) {
-      throw redirect({
-        to: "/auth",
-        search: {
-          returnTo: ctx.location.pathname,
-        },
-      });
-    }
-  if (!(role && user?.record && user?.record?.role !== role)
-  ) {
+  if (!user?.record) {
+    throw redirect({
+      to: "/auth",
+      search: {
+        returnTo: ctx.location.pathname,
+      },
+    });
+  }
+  if (!(role && user?.record && user?.record?.role !== role)) {
     throw redirect({
       to: "..",
       search: {

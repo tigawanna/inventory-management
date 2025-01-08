@@ -48,12 +48,12 @@ export function UpdateInventoryform({ item }: UpdateInventoryformInterface) {
     <DiaDrawer
       open={open}
       setOpen={setOpen}
-      title="Add Inventory"
-      description="Add a new staff"
+      title="Update Inventory"
+      description="Update Inventory entry"
       trigger={<Edit className="size-5" />}
     >
       <div className="flex h-full max-h-[80vh] w-full flex-col gap-2 overflow-auto">
-        <BaseInventoryForm mutation={mutation} row={{ item }} />
+        <BaseInventoryForm mutation={mutation} row={item } />
       </div>
     </DiaDrawer>
   );
