@@ -7,7 +7,7 @@
     "drizzle:gen": "drizzle-kit generate",
     "drizzle:push": "drizzle-kit push ",
     "drizzle:migrate": "drizzle-kit migrate ",
-    "start": "tsx src/index.ts",
+    "start": "node  dist/index.cjs",
     "dev": "tsx watch src/index.ts",
     "build": "tsup",
     "start:dist": "node dist/src/index.js",
