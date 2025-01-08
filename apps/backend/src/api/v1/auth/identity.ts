@@ -1,4 +1,5 @@
 import { authenticate } from "@/middleware/auth.ts";
+import { errorCodes } from "@/schemas/error-schema.ts";
 import type { UserJWTPayload } from "@/schemas/user-schema.ts";
 import type { AuthService } from "@/services/auth-service.ts";
 import {
@@ -48,9 +49,24 @@ export function meRoute(router: Router, authService: AuthService) {
   router.get("/me", authenticate, async (req, res) => {
     try {
       const user = await authService.getUser(req.user.id);
-      res.json(user);
+      // const tokens = await generateUserAuthTokens(res, user);
+      res.status(200);
+      res.json({
+        user
+      });
     } catch (error) {
-      return res.json({ error });
+      if (error instanceof Error) {
+        return res.status(400).json({
+          error: error.message,
+          message: "user not found",
+          code: errorCodes.loginRequired,
+        });
+      }
+      return res.json({
+        error,
+        message: "user not found",
+        code: errorCodes.loginRequired,
+      });
     }
   });
 }

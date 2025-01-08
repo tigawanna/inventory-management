@@ -5,15 +5,24 @@ import type { CookieOptions, Response, Request } from "express";
 import { bumpUserTokenVersion, findUserByID } from "./user-servoce.ts";
 import { type UserJWTPayload } from "@/schemas/user-schema.ts";
 import { compare, hash } from "bcrypt";
+import { errorCodes } from "@/schemas/error-schema.ts";
 
-
-const cookieOptions: CookieOptions = {
+const refreshCookieOptions: CookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "none",
   path: "/",
 } as const;
 
+const accessTokencookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "none",
+  path: "/",
+  expires: new Date(Date.now() + 12 * 60 * 1000), // expires in 12  minutes
+} as const;
+
+const accessTokebCookieKey = "jwt";
 const refreshTokebCookieKey = "kjz-rft";
 
 /**
@@ -27,13 +36,17 @@ const refreshTokebCookieKey = "kjz-rft";
  * @returns The generated access token.
  */
 
-export async function createAccessToken(payload: UserJWTPayload) {
+export async function createAccessToken(
+  res: Response,
+  payload: UserJWTPayload,
+) {
   const { ACCESS_TOKEN_SECRET } = envVariables;
-  const fiftenMinutesInSeconds = Math.floor(Date.now() / 1000) + 60 * 15;
+  const fiftenMinutesInSeconds = Math.floor(Date.now() / 1000) + 60 * 15; // 15 minutes
   const accessToken = await sign(
     { ...payload, exp: fiftenMinutesInSeconds },
     ACCESS_TOKEN_SECRET,
   );
+  res.cookie(accessTokebCookieKey, accessToken, accessTokencookieOptions);
   return accessToken;
 }
 
@@ -62,7 +75,7 @@ export async function createRefreshToken(
     REFRESH_TOKEN_SECRET,
   );
   //   setCookie(c, refreshTokebCookieKey, refreshToken, { path: "/", httpOnly: true });
-  res.cookie(refreshTokebCookieKey, refreshToken, cookieOptions);
+  res.cookie(refreshTokebCookieKey, refreshToken, refreshCookieOptions);
   return refreshToken;
 }
 
@@ -78,11 +91,12 @@ export async function verifyRefreshToken(req: Request, res: Response) {
   const { REFRESH_TOKEN_SECRET } = envVariables;
   const refreshTtoken = req.cookies?.[refreshTokebCookieKey];
   if (!refreshTtoken) {
-    res.clearCookie(refreshTokebCookieKey, cookieOptions);
+    res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
     res.status(401);
     return res.json({
       error: "Unauthorized",
       message: "Missing credentials",
+      code: errorCodes.loginRequired,
     });
   }
   const refreshTokenPayload = (await verify(
@@ -95,11 +109,12 @@ export async function verifyRefreshToken(req: Request, res: Response) {
     !matchingUser ||
     matchingUser.refreshTokenVersion !== refreshTokenPayload.refreshTokenVersion
   ) {
-    res.clearCookie(refreshTokebCookieKey, cookieOptions);
+    res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
     res.status(403);
     return res.json({
       error: "Unauthorized",
       message: "Invalid credentials",
+      code: errorCodes.loginRequired,
     });
   }
   const { password, verificationToken, refreshToken, ...newuserPayload } =
@@ -109,7 +124,7 @@ export async function verifyRefreshToken(req: Request, res: Response) {
 
 export async function verifyAccessToken(accesToken: string) {
   const payload = await verify(accesToken, envVariables.ACCESS_TOKEN_SECRET);
-  return payload;
+  return payload as UserJWTPayload;
 }
 
 /**
@@ -136,7 +151,7 @@ export async function invalidateRefreshToken(req: Request, res: Response) {
   const refreshTokenPayload = await verifyRefreshToken(req, res);
   if ("id" in refreshTokenPayload && "tokenVerion" in refreshTokenPayload) {
     await bumpUserTokenVersion(refreshTokenPayload.id);
-    res.clearCookie(refreshTokebCookieKey, cookieOptions);
+    res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
   }
 }
 
@@ -156,15 +171,14 @@ export async function generateUserAuthTokens(
   res: Response,
   userPayload: UserJWTPayload,
 ) {
-  const accessToken = await createAccessToken(userPayload);
+  const accessToken = await createAccessToken(res, userPayload);
   const refreshToken = await createRefreshToken(res, userPayload);
   return { accessToken, refreshToken };
 }
 
-export async function clearRefreshTokenCookie(res: Response,userid:string) {
+export async function clearRefreshTokenCookie(res: Response, userid: string) {
   await bumpUserTokenVersion(userid);
-  res.clearCookie(refreshTokebCookieKey, cookieOptions);
-
+  res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
 }
 export async function hashPassword(password: string) {
   return hash(password, 10);
@@ -176,4 +190,21 @@ export async function verifyPassword(password: string, passwordHash: string) {
 
 export function isRefreshTokenCokkiePresent(req: Request) {
   return req.cookies?.[refreshTokebCookieKey] ? true : false;
+}
+
+export async function getAccessTokenFromCokkieOrHeaders(req: Request) {
+  try {
+    const beareToken = req.headers.authorization?.split(" ")[1];
+    if (beareToken && beareToken.length > 0) {
+      return await verifyAccessToken(beareToken);
+    }
+    const cookieToekn = req.cookies?.[accessTokebCookieKey];
+    if (cookieToekn && cookieToekn.length > 0) {
+      return await verifyAccessToken(cookieToekn);
+    }
+    return;
+  } catch (error) {
+
+    return;
+  }
 }

@@ -3,9 +3,14 @@ const { verify } = jwt;
 import type { Request, Response, NextFunction } from "express";
 import { ZodError, ZodSchema } from "zod";
 import { envVariables } from "@/env.ts";
-import { isRefreshTokenCokkiePresent } from "@/services/jwt-service.ts";
+import {
+  generateUserAuthTokens,
+  getAccessTokenFromCokkieOrHeaders,
+  isRefreshTokenCokkiePresent,
+  verifyRefreshToken,
+} from "@/services/jwt-service.ts";
 import type { UserJWTPayload } from "@/schemas/user-schema.ts";
-
+import { errorCodes } from "@/schemas/error-schema.ts";
 
 /**
  * Middleware to authenticate a user.
@@ -27,52 +32,65 @@ import type { UserJWTPayload } from "@/schemas/user-schema.ts";
  *   });
  * });
  * ```
- * 
+ *
  */
-export const authenticate = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const refreshTokenPresent = isRefreshTokenCokkiePresent(req);
-  if (!token) {
-    if (refreshTokenPresent) {
-      return res.status(401).json({ message: "No token provided",action:"login" });
+export const authenticate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const decodedUser = await getAccessTokenFromCokkieOrHeaders(req);
+  if (!decodedUser) {
+    const refreshTokenPresent = isRefreshTokenCokkiePresent(req);
+    if (!refreshTokenPresent) {
+      return res
+        .status(401)
+        .json({ message: "No token provided", code: errorCodes.loginRequired });
     }
-    return res.status(401).json({ message: "No token provided",action:"refresh-token" });
+    const userFromRefreshToken = await verifyRefreshToken(req, res);
+    await generateUserAuthTokens(res, userFromRefreshToken as UserJWTPayload);
+    req.user = userFromRefreshToken as UserJWTPayload;
+    return next();
   }
-  try {
-    const decoded = verify(token,envVariables.ACCESS_TOKEN_SECRET);
-    req.user = decoded as any;
-    next();
-  } catch (error) {
-    res.status(403).json({ message: "Invalid token",action:"refresh-token" });
-  }
+  req.user = decodedUser;
+  return next();
 };
 
-
-export const authenticateAdminOnly = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  const refreshTokenPresent = isRefreshTokenCokkiePresent(req);
-  if (!token) {
-    if (refreshTokenPresent) {
-      return res.status(401).json({ message: "No token provided",action:"login" });
+export const authenticateAdminOnly = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const decodedUser = await getAccessTokenFromCokkieOrHeaders(req);
+  if (!decodedUser) {
+    const refreshTokenPresent = isRefreshTokenCokkiePresent(req);
+    if (!refreshTokenPresent) {
+      return res
+        .status(401)
+        .json({ message: "No token provided", code: errorCodes.loginRequired });
     }
-    return res.status(401).json({ message: "No token provided",action:"refresh-token" });
-  }
-  try {
-    const decoded = verify(
-      token,
-      envVariables.ACCESS_TOKEN_SECRET,
-    ) as UserJWTPayload;
-    if (decoded.role !== "admin") {
-      return res.status(403).json({ message: "Unauthorized",action:"admin" });
+    const userFromRefreshToken = (await verifyRefreshToken(
+      req,
+      res,
+    )) as UserJWTPayload;
+    // console.log({userFromRefreshToken});
+    await generateUserAuthTokens(res, userFromRefreshToken as UserJWTPayload);
+    if (userFromRefreshToken?.role && userFromRefreshToken?.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized", code: errorCodes.adminRequired });
     }
-    req.user = decoded ;
-    next();
-  } catch (error) {
-    res.status(403).json({ message: "Invalid token",action:"refresh-token" });
+    req.user = userFromRefreshToken as UserJWTPayload;
+    return next();
   }
+  if (decodedUser?.role !== "admin") {
+    return res
+      .status(403)
+      .json({ message: "Unauthorized", code: errorCodes.adminRequired });
+  }
+  req.user = decodedUser;
+  return next();
 };
-
-
 
 export const validate = (schema: ZodSchema) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -80,10 +98,10 @@ export const validate = (schema: ZodSchema) => {
       await schema.parseAsync(req.body);
       next();
     } catch (error) {
-      if(error instanceof ZodError){
+      if (error instanceof ZodError) {
         res.status(400).json({ error: error.flatten() });
       }
-      if(error instanceof Error){
+      if (error instanceof Error) {
         return res.status(400).json({ error: error.message });
       }
       res.status(400).json({ error });
