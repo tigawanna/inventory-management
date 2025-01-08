@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
+import { useState } from "react";
 interface InventorySortSelectProps {}
 
 export function InventorySortSelect({}: InventorySortSelectProps) {
@@ -69,6 +70,44 @@ export function InventoryOrderSelect({}: InventorySortSelectProps) {
         <SelectGroup>
           <SelectLabel>{order}</SelectLabel>
           {paymentTypes.map((type) => {
+            return (
+              <SelectItem key={type} value={type}>
+                {type}
+              </SelectItem>
+            );
+          })}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+}
+
+
+interface InventorySortSelectProps {
+  onCategoryChange:(cat:string)=>void
+}
+
+export function InventoryCategoriesSelect({onCategoryChange}: InventorySortSelectProps) {
+
+  const [category,setCategory] = useState("category_1_id")
+  const categories = ["category_1_id", "category_id_2", "category_id_3"];
+  return (
+    <Select
+      value={category}
+      onValueChange={(value: any) => {
+        if (value) {
+          setCategory(value)
+          onCategoryChange(value)
+        }
+      }}
+    >
+      <SelectTrigger className="">
+        <SelectValue placeholder="Sort by" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>{category}</SelectLabel>
+          {categories.map((type) => {
             return (
               <SelectItem key={type} value={type}>
                 {type}

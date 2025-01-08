@@ -1,11 +1,10 @@
-
-
 import { useState } from "react";
 import { DiaDrawer } from "@/components/wrappers/DiaDrawer";
 import { Edit } from "lucide-react";
 import { makeHotToast } from "@/components/toasters";
 import { BaseInventoryForm } from "./base";
 import { useMutation } from "@tanstack/react-query";
+import { updateInventoryItem } from "@/lib/api/inventory";
 
 interface UpdateInventoryformInterface {
   item: Record<string, any> & { id: string };
@@ -13,14 +12,20 @@ interface UpdateInventoryformInterface {
 export function UpdateInventoryform({ item }: UpdateInventoryformInterface) {
   const [open, setOpen] = useState(false);
   const mutation = useMutation({
-    mutationFn: (value: {}) => {
-      return new Promise<{}>((resolve) => {
-        setTimeout(() => {
-          resolve(value);
-        }, 2000);
-      });
+    mutationFn: (value: any) => {
+      return updateInventoryItem(item.id, value);
     },
-    onSuccess: () => {
+
+    onSuccess: (data) => {
+      console.log({ data });
+      if (data.error) {
+        makeHotToast({
+          title: "Something went wrong",
+          description: data.error.message,
+          variant: "error",
+        });
+        return;
+      }
       makeHotToast({
         title: "Inventory added",
         description: "Inventory has been added successfully",
@@ -47,12 +52,9 @@ export function UpdateInventoryform({ item }: UpdateInventoryformInterface) {
       description="Add a new staff"
       trigger={<Edit className="size-5" />}
     >
-      <div className="flex h-full max-h-[80vh] w-fit flex-col gap-2 overflow-auto">
-        <BaseInventoryForm mutation={mutation} row={{item}} />
+      <div className="flex h-full max-h-[80vh] w-full flex-col gap-2 overflow-auto">
+        <BaseInventoryForm mutation={mutation} row={{ item }} />
       </div>
     </DiaDrawer>
   );
 }
-
-
- 

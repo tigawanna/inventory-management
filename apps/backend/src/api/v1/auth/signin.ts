@@ -1,6 +1,7 @@
 import { validate } from "@/middleware/auth.ts";
 import type { AuthService } from "@/services/auth-service.ts";
 import { generateUserAuthTokens } from "@/services/jwt-service.ts";
+import { parseZodError } from "@/utils/zod-errors.ts";
 import type { Router } from "express";
 import { z } from "zod";
 
@@ -16,7 +17,8 @@ router.post("/signin", async (req, res) => {
   if (!success) {
     return res.status(400).json({
       message: "invalid fields",
-      error: error.flatten(),
+      data: parseZodError(error),
+      error: error?.flatten(),
     });
   }
   try {
@@ -48,7 +50,6 @@ router.post("/signin", async (req, res) => {
       },
     });
   } catch (err: any) {
-    console.log("== error ===", err);
     res.status(400);
     return res.json({
       message: "user login failed",

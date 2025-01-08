@@ -1,4 +1,5 @@
 import { pgTable, integer, decimal, boolean, text } from "drizzle-orm/pg-core";
+import { uuidv7 } from "uuidv7";
 import { commonColumns } from "../helpers/columns.ts";
 
 export const categoryTable = pgTable("categories", {
@@ -14,17 +15,7 @@ export const inventoryTable = pgTable("inventory", {
   quantity: integer("quantity").notNull().default(0),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
   categoryId: text("category_id").references(() => categoryTable.id),
-  sku: text("sku").unique(),
+  sku: text("sku").unique().$defaultFn(()=>uuidv7()),
   isActive: boolean("is_active").default(true),
 });
 
-
-const dummyInventiry = {
-  name: "dummy",
-  description: "dummy",
-  quantity: 0,
-  price: 0,
-  categoryId: "category_id_1",
-  sku: "dummy",
-  isActive: true,
-}

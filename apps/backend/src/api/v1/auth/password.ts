@@ -1,5 +1,6 @@
 import { validate } from "@/middleware/auth.ts";
 import type { AuthService } from "@/services/auth-service.ts";
+import { parseZodError } from "@/utils/zod-errors.ts";
 import type { Router } from "express";
 import { z } from "zod";
 
@@ -14,7 +15,8 @@ export function forgotPasswordRoute(router: Router, authService: AuthService) {
     if (!success) {
       return res.status(400).json({
         message: "invalid fields",
-        error: error.flatten(),
+        data: parseZodError(error),
+        error: error?.flatten(),
       });
     }
     await authService.requestReset(data.email);
@@ -27,7 +29,8 @@ export function resetPasswordRoute(router: Router, authService: AuthService) {
     if (!success) {
       return res.status(400).json({
         message: "invalid fields",
-        error: error.flatten(),
+        data: parseZodError(error),
+        error: error?.flatten(),
       });
     }
     await authService.resetPassword(data.token, data.password);

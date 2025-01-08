@@ -1,24 +1,27 @@
-
-
 import { useState } from "react";
 import { DiaDrawer } from "@/components/wrappers/DiaDrawer";
 import { Plus } from "lucide-react";
 import { makeHotToast } from "@/components/toasters";
 import { BaseInventoryForm } from "./base";
 import { useMutation } from "@tanstack/react-query";
+import { createInventoryItem } from "@/lib/api/inventory";
 
 export function CreateInventoryForm() {
   const [open, setOpen] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: (value: {}) => {
-      return new Promise<{}>((resolve) => {
-        setTimeout(() => {
-          resolve(value);
-        }, 2000);
-      });
+    mutationFn: (value: any) => {
+      return createInventoryItem(value);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if(data.error){
+        makeHotToast({
+          title: "Something went wrong",
+          description: data.error.message,
+          variant: "error",
+        });
+        return
+      }
       makeHotToast({
         title: "Inventory added",
         description: "Inventory has been added successfully",
@@ -34,7 +37,7 @@ export function CreateInventoryForm() {
       });
     },
     meta: {
-      invalidates: ["inventory"],
+      invalidates: ["inventory_list"],
     },
   });
   return (
@@ -56,6 +59,3 @@ export function CreateInventoryForm() {
     </DiaDrawer>
   );
 }
-
- 
- 

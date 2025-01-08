@@ -5,6 +5,7 @@ import {
   viewInventoryParamsSchema,
 } from "@/schemas/inventory-schema.ts";
 import { InventoryService } from "@/services/inventory-service.ts";
+import { parseZodError } from "@/utils/zod-errors.ts";
 import express from "express";
 
 const router = express.Router();
@@ -17,7 +18,7 @@ router.get("/", authenticate, async (req, res) => {
   if (!success || !data) {
     return res.status(400).json({
       message: "invalid fields",
-      error: error?.flatten(),
+      error: parseZodError(error),
     });
   }
   const response = await inventoryservice.findAll(data);
@@ -37,7 +38,8 @@ router.post("/", authenticateAdminOnly, async (req, res) => {
   if (!success || !data) {
     return res.status(400).json({
       message: "invalid fields",
-      error: error?.flatten(),
+      data: parseZodError(error),
+error: error?.flatten(),
     });
   }
   try {
@@ -62,7 +64,8 @@ router.put("/:id", authenticateAdminOnly, async (req, res) => {
   if (!success || !data) {
     return res.status(400).json({
       message: "invalid param",
-      error: error?.flatten(),
+      data: parseZodError(error),
+error: error?.flatten(),
     });
   }
   const body = inventoryInsertSchema.safeParse(req.body);
@@ -84,7 +87,8 @@ router.delete("/:id", authenticateAdminOnly, async (req, res) => {
   if (!success || !data) {
     return res.status(400).json({
       message: "invalid param",
-      error: error?.flatten(),
+      data: parseZodError(error),
+error: error?.flatten(),
     });
   }
   const item = await inventoryservice.delete(data.id, req);

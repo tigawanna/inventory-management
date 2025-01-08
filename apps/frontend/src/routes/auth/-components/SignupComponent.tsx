@@ -8,8 +8,7 @@ import { useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
-import { apiQuery } from "@/lib/api/client";
-import { InventoryUser, signUpUser } from "@/lib/api/users";
+import {  signUpUser } from "@/lib/api/users";
 
 interface SignupComponentProps {}
 

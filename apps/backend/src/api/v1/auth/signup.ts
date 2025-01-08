@@ -1,4 +1,5 @@
 import type { AuthService } from "@/services/auth-service.ts";
+import { parseZodError } from "@/utils/zod-errors.ts";
 import type { Router } from "express";
 import { z } from "zod";
 
@@ -15,7 +16,8 @@ router.post("/signup", async (req, res) => {
   if (!success) {
     return res.status(400).json({
       message: "invalid fields",
-      data: error.flatten(),
+      data: parseZodError(error),
+      error: error?.flatten(),
     });
   }
   try {

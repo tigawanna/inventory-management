@@ -47,7 +47,6 @@ export async function listInventory(params: ListInventoryParams) {
   try {
     const queryParams = new URLSearchParams(params as Record<string, string>);
     const istURL = `${baseUrl}${inventoryEndpoints.list}?${queryParams}`;
-    console.log({istURL});
     const res = await fetch(
       `${baseUrl}${inventoryEndpoints.list}?${queryParams}`,
       {
@@ -57,7 +56,12 @@ export async function listInventory(params: ListInventoryParams) {
     if (!res.ok) {
       return {
         record: null,
-        error: { message: res.statusText },
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
       };
     }
     return { record: (await res.json()) as ListInventoryResponse, error: null };
@@ -77,7 +81,12 @@ export async function getInventoryItem(id: string) {
     if (!res.ok) {
       return {
         record: null,
-        error: { message: res.statusText },
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
       };
     }
     return { record: (await res.json()) as InventoryItem, error: null };
@@ -100,7 +109,12 @@ export async function createInventoryItem(item: CreateInventoryItem) {
     if (!res.ok) {
       return {
         record: null,
-        error: { message: res.statusText },
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return {message: res.statusText};
+          }),
       };
     }
     return { record: (await res.json()) as InventoryItem, error: null };
@@ -126,7 +140,12 @@ export async function updateInventoryItem(
     if (!res.ok) {
       return {
         record: null,
-        error: { message: res.statusText },
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
       };
     }
     return { record: (await res.json()) as InventoryItem, error: null };
@@ -147,7 +166,12 @@ export async function deleteInventoryItem(id: string) {
     if (!res.ok) {
       return {
         record: null,
-        error: { message: res.statusText },
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
       };
     }
     return { record: { message: "Item deleted successfully" }, error: null };

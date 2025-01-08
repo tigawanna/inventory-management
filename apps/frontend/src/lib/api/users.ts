@@ -51,7 +51,12 @@ export async function getCurrentUser() {
     if (!res.ok) {
       return {
         record: null,
-        error: {message:res.statusText},
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
       };
     }
     return { record: (await res.json()) as InventoryUser, error: null };
@@ -74,7 +79,12 @@ export async function signUpUser(user: CreateInventoryUser) {
     if (!res.ok) {
       return {
         record: null,
-        error: {message:res.statusText},
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
       };
     }
     return { record: (await res.json()) as InventoryUser, error: null };
@@ -96,7 +106,12 @@ export async function signInUser(user: LoginInventoryUser) {
     if (!res.ok) {
       return {
         record: null,
-        error: { message: res.statusText },
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
       };
     }
     return { record: (await res.json()) as InventoryUser, error: null };
@@ -120,7 +135,12 @@ export async function verifyEmail(token: string) {
     if (!res.ok) {
       return {
         record: null,
-        error: { message: res.statusText },
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
       };
     }
     return { record: (await res.json()) as InventoryUser, error: null };
