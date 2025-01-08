@@ -52,9 +52,7 @@ export function meRoute(router: Router, authService: AuthService) {
       const user = await authService.getUser(req.user.id);
       // const tokens = await generateUserAuthTokens(res, user);
       res.status(200);
-      res.json({
-        user
-      });
+      res.json(user);
     } catch (error) {
       if (error instanceof Error) {
         return res.status(400).json({

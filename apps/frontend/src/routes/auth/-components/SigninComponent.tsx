@@ -9,6 +9,8 @@ import { useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { apiQuery } from "@/lib/api/client";
+import { signInUser } from "@/lib/api/users";
+import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 
 interface SigninComponentProps {}
 
@@ -29,23 +31,34 @@ export function SigninComponent({}: SigninComponentProps) {
   const { returnTo } = Route.useSearch();
   const navigate = useNavigate({ from: "/auth" });
 
-  const mutation = apiQuery.useMutation("post", "/api/v1/auth/signin", {
+  const mutation = useMutation({
+    mutationFn: async ({ body }: { body: UsersigninFields }) => {
+      return signInUser(body);
+    },
     onSuccess(data) {
-      const resonseMeassge = data as { message: string };
+      console.log({data});
+      if(data.error){
+        makeHotToast({
+          title: "Something went wrong",
+          description: data.error.message,
+          variant: "error",
+          duration: 20000,
+        });
+        return
+      }
       makeHotToast({
         title: "signed in",
-        description: resonseMeassge.message,
+        description:"",
         variant: "success",
         duration: 2000,
       });
-
-      // qc.invalidateQueries(viewerqueryOptions);
-      qc.setQueryData(["viewer"], () => data);
-
-      navigate({ to: returnTo || "/" });
-      if (typeof window !== "undefined") {
-        location.reload();
-      }
+      
+      qc.invalidateQueries(viewerqueryOptions());
+      // navigate({ to: returnTo || "/" });
+      // qc.setQueryData(["viewer"], () => data.record);
+      // if (typeof window !== "undefined") {
+      //   location.reload();
+      // }
     },
     onError(error) {
       const errorMessage = error as { message: string };

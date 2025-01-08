@@ -1,13 +1,13 @@
-import { Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
-import { useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
-import { apiQuery } from "@/lib/api/client";
+import { verifyEmail } from "@/lib/api/users";
+import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 
 interface VerifyEmailComponentProps {}
 
@@ -22,21 +22,29 @@ const formOpts = formOptions<UsersigninFields>({
 });
 
 export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
-
-
+ const qc = useQueryClient();
   const navigate = useNavigate({ from: "/auth/verify-email" });
-
-  const mutation = apiQuery.useMutation("post", "/api/v1/auth/verify-email", {
+  const mutation = useMutation( {
+    mutationFn: async ({ body }: { body: UsersigninFields }) => {
+      return verifyEmail(body.token);
+    },
     onSuccess(data) {
-      const resonseMeassge = data as { message: string };
+      if(data.error){
+        makeHotToast({
+          title: "Something went wrong",
+          description: data.error.message,
+          variant: "error",
+          duration: 2000,
+        });
+        return
+      }
       makeHotToast({
-        title: "signed in",
-        description: resonseMeassge.message,
+        title: "Email verified",
         variant: "success",
-        duration: 2000,
+        duration: 1000,
       });
 
-      // qc.invalidateQueries(viewerqueryOptions);
+      qc.invalidateQueries(viewerqueryOptions());
       // qc.setQueryData(["viewer"], () => data);
 
       navigate({ to:"/auth",search:{returnTo:"/"}});
@@ -45,10 +53,9 @@ export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
       }
     },
     onError(error) {
-      const errorMessage = error as { message: string };
       makeHotToast({
         title: "Something went wrong",
-        description: `${errorMessage.message}`,
+        description: `${error.message}`,
         variant: "error",
         duration: 20000,
       });

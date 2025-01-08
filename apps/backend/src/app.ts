@@ -8,6 +8,7 @@ import v1Api from "./api/v1/index.ts";
 import cookieParser from "cookie-parser";
 import type { UserJWTPayload } from "./schemas/user-schema.ts";
 import {  } from "express-openapi-decorator";
+import { allowedOrigins, corsHeaders } from "./middleware/cors-stuff.ts";
 
 
 declare global {
@@ -17,6 +18,7 @@ declare global {
     }
   }
 }
+
 
 const app = express();
 
@@ -35,20 +37,17 @@ app.use(
     },
   }),
 );
-
-
+app.use(corsHeaders);
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Origin",
-      "X-Requested-With",
-      "Content-Type",
-      "Accept",
-      "Authorization",
-    ],
+    origin: (origin, callback) => {
+      if (origin && allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    optionsSuccessStatus: 200,
   }),
 );
 app.use(express.json());

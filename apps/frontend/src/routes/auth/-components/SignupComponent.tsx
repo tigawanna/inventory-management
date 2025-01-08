@@ -1,7 +1,7 @@
 import { formOptions, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
-import {  useQueryClient } from "@tanstack/react-query";
+import {  useMutation, useQueryClient } from "@tanstack/react-query";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { useState } from "react";
@@ -9,7 +9,7 @@ import { makeHotToast } from "@/components/toasters";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 import { apiQuery } from "@/lib/api/client";
-import { InventoryUser } from "@/lib/api/users";
+import { InventoryUser, signUpUser } from "@/lib/api/users";
 
 interface SignupComponentProps {}
 
@@ -37,9 +37,11 @@ export function SignupComponent({}: SignupComponentProps) {
   const qc = useQueryClient();
   const navigate = useNavigate({ from: "/auth/signup" });
 
-  const mutation = apiQuery.useMutation("post", "/api/v1/auth/signin", {
+  const mutation = useMutation({
+    mutationFn: async ({ body }: { body: CreateuserFields }) => {
+      return signUpUser({...body,"role":"user"});
+    },
     onSuccess(data) {
-      const signupResponse = data as { message: string; data: InventoryUser };
       makeHotToast({
         title: "signed up",
         description: `Welcome`,
@@ -49,10 +51,9 @@ export function SignupComponent({}: SignupComponentProps) {
       navigate({ to: "/auth", search: { returnTo: "/verify-email?" } });
     },
     onError(error) {
-      const mutationErrpr = error as { message: string };
       makeHotToast({
         title: "Something went wrong",
-        description: `${mutationErrpr.message}`,
+        description: `${error.message}`,
         duration: 20000,
         variant: "error",
       });

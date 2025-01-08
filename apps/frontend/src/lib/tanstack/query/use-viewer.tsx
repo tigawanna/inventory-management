@@ -1,3 +1,4 @@
+import { getCurrentUser } from "@/lib/api/users";
 import {
   QueryClient,
   useMutation,
@@ -29,21 +30,23 @@ export function viewerqueryOptions() {
   return {
     queryKey: ["viewer"],
     queryFn: async () => {
-      return new Promise<ViewerType>((res, rej) => {
-        setTimeout(() => {
-          res({
-            record: { 
-                id: "id_1",
-                name: "name_1",
-                email: "email1@email.com",
-                username: "username_1",
-                role: "user",
-             },
-            token: "token_1",
-          });
-        }, 1000);
-      });
+      // return new Promise<ViewerType>((res, rej) => {
+      //   setTimeout(() => {
+      //     res({
+      //       record: { 
+      //           id: "id_1",
+      //           name: "name_1",
+      //           email: "email1@email.com",
+      //           username: "username_1",
+      //           role: "user",
+      //        },
+      //       token: "token_1",
+      //     });
+      //   }, 1000);
+      // });
+      return await getCurrentUser();
     },
+    staleTime: 12 * 60 * 1000
   };
 }
 

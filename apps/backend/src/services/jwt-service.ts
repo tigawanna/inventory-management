@@ -9,17 +9,19 @@ import { errorCodes } from "@/schemas/error-schema.ts";
 
 const refreshCookieOptions: CookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  secure: true,
   sameSite: "none",
+
   path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7 days
 } as const;
 
 const accessTokencookieOptions: CookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
+  secure:true,
   sameSite: "none",
   path: "/",
-  expires: new Date(Date.now() + 12 * 60 * 1000), // expires in 12  minutes
+  maxAge: 12 * 60 * 1000, // expires in 12 minutes
 } as const;
 
 const accessTokebCookieKey = "jwt";

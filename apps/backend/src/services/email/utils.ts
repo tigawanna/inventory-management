@@ -1,5 +1,6 @@
 import { envVariables } from "@/env.ts";
 import { createTransport } from "nodemailer";
+import sendmail from "sendmail";
 
 interface EmailTemplateProps {
   from: string;
@@ -68,7 +69,6 @@ export async function sendEmailwithSMTP({
     },
   });
 
-
   const mailOptions = emailTemplates({
     from: EMAIL_FROM,
     to: mail_to,
@@ -96,3 +96,5 @@ export async function sendEmailwithSMTP({
 
   return asyncsendMail();
 }
+
+
