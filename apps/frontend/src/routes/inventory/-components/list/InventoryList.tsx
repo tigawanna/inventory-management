@@ -2,7 +2,7 @@
 import { ItemNotFound } from "@/components/wrappers/ItemNotFound";
 import { ErrorWrapper } from "@/components/wrappers/ErrorWrapper";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import ResponsivePagination from "react-responsive-pagination";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { UpdateInventoryform } from "@/routes/inventory/-components/form/update";
@@ -14,7 +14,9 @@ interface InventoryListProps {
 
 export function InventoryList({ keyword = "" }: InventoryListProps) {
   const { page,updatePage } = usePageSearchQuery("/inventory");
-  const query = useSuspenseQuery(inventoryListQueryOptions({ keyword,page }));
+const sp = useSearch({ from: "/inventory/" });
+  // @ts-expect-error
+  const query = useSuspenseQuery(inventoryListQueryOptions({ ...sp,keyword,page }));
   const data = query.data;
   const error = query.error;
 

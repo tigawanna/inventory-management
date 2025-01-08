@@ -7,6 +7,7 @@ import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { CreateInventoryForm } from "./form/create";
 import { InventoryList } from "./list/InventoryList";
 import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
+import { InventoryOrderSelect, InventorySortSelect } from "./list/InventorySortSelect";
 
 interface InventoryPageProps {
 }
@@ -21,6 +22,7 @@ export function InventoryPage({}: InventoryPageProps) {
         title="Inventory"
         formTrigger={<CreateInventoryForm />}
         searchBox={
+          <div className="w-full flex gap-2">
           <SearchBox
             inputProps={{
               placeholder: "Search by name",
@@ -30,10 +32,13 @@ export function InventoryPage({}: InventoryPageProps) {
             setKeyword={setKeyword}
             keyword={keyword}
           />
+          <InventorySortSelect/>
+          <InventoryOrderSelect/>
+          </div>
         }
       />
 
-     <div className="m-3 flex h-full w-full items-center justify-center p-5">
+     <div className="m-3 pt-10 flex h-full w-full items-center justify-center p-5">
         <Suspense fallback={<CardsListSuspenseFallback />}>
           <InventoryList keyword={keyword} />
         </Suspense>
