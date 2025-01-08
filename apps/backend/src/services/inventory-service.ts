@@ -26,7 +26,7 @@ export class InventoryService {
     const conditions = and(
       eq(inventoryTable.isActive, true),
       search ? like(inventoryTable.name, `%${search}%`) : undefined,
-      categoryId ? eq(inventoryTable.categoryId, categoryId) : undefined,
+      // categoryId ? eq(inventoryTable.categoryId, categoryId) : undefined,
     );
 
     // Get total count
@@ -52,7 +52,7 @@ export class InventoryService {
     }
 
     const items = await dbQuery;
-
+    // console.log({items});
     return {
       page,
       perPage: limit,
