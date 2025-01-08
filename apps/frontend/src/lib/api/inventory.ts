@@ -65,10 +65,10 @@ export async function listInventory(params: ListInventoryParams) {
       };
     }
     return { record: (await res.json()) as ListInventoryResponse, error: null };
-  } catch (error) {
+  } catch (error:any) {
     return {
       record: null,
-      error: error as Error,
+      error: error.message,
     };
   }
 }
@@ -90,10 +90,10 @@ export async function getInventoryItem(id: string) {
       };
     }
     return { record: (await res.json()) as InventoryItem, error: null };
-  } catch (error) {
+  } catch (error:any) {
     return {
       record: null,
-      error: error as Error,
+      error: error.message
     };
   }
 }
@@ -118,10 +118,10 @@ export async function createInventoryItem(item: CreateInventoryItem) {
       };
     }
     return { record: (await res.json()) as InventoryItem, error: null };
-  } catch (error) {
+  } catch (error:any) {
     return {
       record: null,
-      error: error as Error,
+      error: error.message,
     };
   }
 }
@@ -149,10 +149,10 @@ export async function updateInventoryItem(
       };
     }
     return { record: (await res.json()) as InventoryItem, error: null };
-  } catch (error) {
+  } catch (error:any) {
     return {
       record: null,
-      error: error as Error,
+      error: error.message
     };
   }
 }
@@ -175,10 +175,10 @@ export async function deleteInventoryItem(id: string) {
       };
     }
     return { record: { message: "Item deleted successfully" }, error: null };
-  } catch (error) {
+  } catch (error:any) {
     return {
       record: null,
-      error: error as Error,
+      error: error.message
     };
   }
 }

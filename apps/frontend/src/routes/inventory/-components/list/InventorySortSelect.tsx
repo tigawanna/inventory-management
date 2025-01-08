@@ -90,7 +90,7 @@ interface InventorySortSelectProps {
 export function InventoryCategoriesSelect({onCategoryChange}: InventorySortSelectProps) {
 
   const [category,setCategory] = useState("category_1_id")
-  const categories = ["category_1_id", "category_id_2", "category_id_3"];
+  const categories = ["category_id_1", "category_id_2", "category_id_3"];
   return (
     <Select
       value={category}

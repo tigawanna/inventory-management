@@ -6,6 +6,7 @@ import ResponsivePagination from "react-responsive-pagination";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { UpdateInventoryform } from "@/routes/inventory/-components/form/update";
 import { inventoryListQueryOptions } from "@/routes/inventory/-query-options/inventory-query-option";
+import { DeleteInventoryForm } from "../form/delete";
 
 interface InventoryListProps {
   keyword?: string;
@@ -56,6 +57,7 @@ export function InventoryList({ keyword = "" }: InventoryListProps) {
                 <div className="flex flex-wrap text-sm justify-between gap-2">
                   <div>{item.categoryId}</div>
                   <div>SKU: {item.sku}</div>
+                  <DeleteInventoryForm id={item.id}/>
                 </div>
               </div>
             </li>

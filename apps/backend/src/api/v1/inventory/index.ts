@@ -39,7 +39,7 @@ router.post("/", authenticateAdminOnly, async (req, res) => {
     return res.status(400).json({
       message: "invalid fields",
       data: parseZodError(error),
-error: error?.flatten(),
+      error: error?.flatten(),
     });
   }
   try {
@@ -51,6 +51,7 @@ error: error?.flatten(),
       return res.json({
         message: "inventory creation failed",
         error: error?.message,
+        data: error?.message,
       });
     }
     return res.json({ message: "inventory creation failed", error });
@@ -65,7 +66,7 @@ router.put("/:id", authenticateAdminOnly, async (req, res) => {
     return res.status(400).json({
       message: "invalid param",
       data: parseZodError(error),
-error: error?.flatten(),
+      error: error?.flatten(),
     });
   }
   const body = inventoryInsertSchema.safeParse(req.body);
@@ -88,7 +89,7 @@ router.delete("/:id", authenticateAdminOnly, async (req, res) => {
     return res.status(400).json({
       message: "invalid param",
       data: parseZodError(error),
-error: error?.flatten(),
+      error: error?.flatten(),
     });
   }
   const item = await inventoryservice.delete(data.id, req);

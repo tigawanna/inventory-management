@@ -23,11 +23,11 @@ export function BaseInventoryForm<T extends InventoryItem>({
 }: BaseInventoryFormProps<T>) {
   const form = useForm<InventoryForm>({
     defaultValues: {
-      name: row.name ?? "",
-      description: row.description ?? "",
-      quantity: row.quantity ?? 50,
-      price: row.price ?? 72000,
-      categoryId: row.categoryId ?? "",
+      name: row?.name ?? "",
+      description: row?.description ?? "",
+      quantity: row?.quantity ?? 50,
+      price: row?.price ?? 72000,
+      categoryId: row?.categoryId ?? "",
     },
     onSubmit: async ({ value }) => {
       console.log({ value });
@@ -36,18 +36,16 @@ export function BaseInventoryForm<T extends InventoryItem>({
       afterSave?.();
     },
   });
-const mutationError = mutation?.error as any
+const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<string, Array<string>>
   useEffect(() => {
-    console.log("mutation errors  == ",mutationError?.error);
     mutationError &&
-      Object?.entries((mutationError as any)?.error)?.forEach(
+      Object?.entries((mutationError))?.forEach(
         ([key, value]) => {
           form.setFieldMeta(key as any, (prev) => {
             return {
               ...prev,
               errorMap: {
-                // @ts-expect-error
-                onChange: value?.message,
+                onChange: value?.join(", "),
               },
             };
           });
@@ -131,7 +129,7 @@ const mutationError = mutation?.error as any
             name="price"
             validatorAdapter={zodValidator()}
             validators={{
-              onChange: z.number(),
+              onChange: z.string(),
             }}
             children={(field) => {
               return (
@@ -140,7 +138,6 @@ const mutationError = mutation?.error as any
                   fieldKey="price"
                   fieldlabel="price"
                   inputOptions={{
-                    type: "number",
                     onBlur: field.handleBlur,
                     onChange: (e) => field.handleChange(e.target.value),
                   }}
