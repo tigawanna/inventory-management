@@ -1,3 +1,5 @@
+import { apiQuery } from "@/lib/api/client";
+import { InventoryUser } from "@/lib/api/users";
 import {
   QueryClient,
   useMutation,
@@ -57,9 +59,16 @@ export function useViewer() {
       // navigate({ to: "/auth", search: { returnTo: "/" } });
     },
   });
-  const viewerQuery = useSuspenseQuery(viewerqueryOptions());
-  const viewer = viewerQuery.data?.record;
-
+  const viewerQuery = useSuspenseQuery(
+    apiQuery.queryOptions("get", "/api/v1/auth/me", {
+      
+    },{
+      select(data) {
+        return data as InventoryUser;
+      },
+    }),
+  );
+  const viewer = viewerQuery.data as InventoryUser;
   return {
     viewerQuery,
     viewer,

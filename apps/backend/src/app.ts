@@ -8,7 +8,8 @@ import v1Api from "./api/v1/index.ts";
 import cookieParser from "cookie-parser";
 import type { UserJWTPayload } from "./schemas/user-schema.ts";
 import {  } from "express-openapi-decorator";
-import router from "./api/v1/index.ts";
+
+
 declare global {
   namespace Express {
     interface Request {
@@ -36,9 +37,25 @@ app.use(
 );
 
 
-app.use(cors({ origin: ["*"] }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:3001"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+    ],
+  }),
+);
 app.use(express.json());
 app.use(express.static("openapi.json"));
+app.get("/", (req, res) => {
+  res.json({ message: "welcome to v1 api" });
+})
 app.use("/api/v1", v1Api);
 
 app.use(middlewares.notFound);

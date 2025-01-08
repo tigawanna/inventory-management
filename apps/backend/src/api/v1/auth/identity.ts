@@ -46,8 +46,12 @@ export function verifyUserTokenRoute(router: Router, authService: AuthService) {
 
 export function meRoute(router: Router, authService: AuthService) {
   router.get("/me", authenticate, async (req, res) => {
-    const user = await authService.getUser(req.user.id);
-    res.json(user);
+    try {
+      const user = await authService.getUser(req.user.id);
+      res.json(user);
+    } catch (error) {
+      return res.json({ error });
+    }
   });
 }
 
