@@ -16,3 +16,8 @@ To run the frontend
 cd apps/frontend
 npm run dev
 ```
+
+
+sudo docker buld . -t inventory
+sudo docker run -p 5000:5000 inventory
+sudo docker stop inventory

@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import type { ErrorResponse } from './interfaces/Responses.ts';
+
 
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
@@ -9,7 +9,7 @@ export function notFound(req: Request, res: Response, next: NextFunction) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function errorHandler(err: Error, req: Request, res: Response<ErrorResponse>, next: NextFunction) {
+export function errorHandler(err: Error, req: Request, res: Response<{ message: string; stack?: string }>, next: NextFunction) {
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
   res.status(statusCode);
   res.json({

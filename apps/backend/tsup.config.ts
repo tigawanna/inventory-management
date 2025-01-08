@@ -7,5 +7,5 @@ export default defineConfig({
   sourcemap: true,
   format: ["cjs"],
   clean: true,
-  outDir: "server",
+  outDir: "dist",
 });

@@ -7,10 +7,10 @@
     "drizzle:gen": "drizzle-kit generate",
     "drizzle:push": "drizzle-kit push ",
     "drizzle:migrate": "drizzle-kit migrate ",
-    "start": "node  server/index.cjs",
+    "start": "node  dist/index.cjs",
     "dev": "tsx watch src/index.ts",
-    "build": "npm version",
-    "start:dist": "node dist/src/index.js",
+    "start:tsx": "tsx src/index.ts",
+    "build": "tsup",
     "lint": "eslint --fix src test",
     "test": "jest",
     "typecheck": "tsc --noEmit"
