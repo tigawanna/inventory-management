@@ -50,11 +50,11 @@ export function viewerqueryOptions() {
 
 export function useViewer() {
   const qc = useQueryClient();
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const logoutMutation = useMutation({
     mutationFn: async () => {;
       qc.invalidateQueries(viewerqueryOptions());
-      navigate({ to: "/auth", search: { returnTo: "/" } });
+      // navigate({ to: "/auth", search: { returnTo: "/" } });
     },
   });
   const viewerQuery = useSuspenseQuery(viewerqueryOptions());

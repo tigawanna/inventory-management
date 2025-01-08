@@ -6,16 +6,17 @@ import { randomBytes } from "crypto";
 import { db } from "@/db/client.ts";
 import { passwordResets, usersTable } from "@/db/schema/users.ts";
 import { EmailService } from "./email/email-service.ts";
+import { AuditAction, AuditLogService, EntityType } from "./audit-log.service.ts";
 
 export class AuthService {
   private readonly JWT_SECRET = process.env.JWT_SECRET!;
 
   private readonly SALT_ROUNDS = 10;
-
   private emailService: EmailService;
-
+  private auditLogService: AuditLogService;
   constructor() {
     this.emailService = new EmailService();
+    this.auditLogService = new AuditLogService();
   }
 
   async getUser(userId: string) {
@@ -25,7 +26,7 @@ export class AuthService {
     if (!user) throw new Error("User not found");
 
     // Exclude sensitive data
-    const { password, verificationToken,refreshToken, ...userProfile } = user;
+    const { password, verificationToken, refreshToken, ...userProfile } = user;
     return userProfile;
   }
 
@@ -40,6 +41,15 @@ export class AuthService {
         verificationToken,
       })
       .returning();
+
+    // Audit log the registration
+    await this.auditLogService.create({
+      userId: newUser[0].id,
+      action: AuditAction.CREATE,
+      entityType: EntityType.USER,
+      entityId: newUser[0].id,
+      newData: { email: data.email, name: data.name },
+    });
 
     await this.emailService.sendEmail({
       mail_to: data.email,
@@ -58,7 +68,7 @@ export class AuthService {
     if (!user) throw new Error("Invalid credentials");
     const isValid = await compare(data.password, user.password);
     if (!isValid) throw new Error("Invalid credentials");
-
+    await this.auditLogService.logLogin(user.id);
     return user;
   }
 
@@ -169,6 +179,4 @@ export class AuthService {
       await tx.delete(passwordResets).where(eq(passwordResets.token, token));
     });
   }
-
-
 }

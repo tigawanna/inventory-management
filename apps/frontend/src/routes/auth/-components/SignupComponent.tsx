@@ -9,6 +9,7 @@ import { makeHotToast } from "@/components/toasters";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 import { apiQuery } from "@/lib/api/client";
+import { InventoryUser } from "@/lib/api/users";
 
 interface SignupComponentProps {}
 
@@ -38,13 +39,14 @@ export function SignupComponent({}: SignupComponentProps) {
 
   const mutation = apiQuery.useMutation("post", "/api/v1/auth/signin", {
     onSuccess(data) {
+      const signupResponse = data as { message: string; data: InventoryUser };
       makeHotToast({
         title: "signed up",
         description: `Welcome`,
         variant: "success",
       });
       qc.invalidateQueries(viewerqueryOptions());
-      navigate({ to: "/auth", search: { returnTo: "/profile" } });
+      navigate({ to: "/auth", search: { returnTo: "/verify-email?" } });
     },
     onError(error) {
       const mutationErrpr = error as { message: string };

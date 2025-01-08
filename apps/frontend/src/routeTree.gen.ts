@@ -11,20 +11,13 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ProfileLayoutImport } from './routes/profile/layout'
 import { Route as AuthLayoutImport } from './routes/auth/layout'
 import { Route as IndexImport } from './routes/index'
-import { Route as ProfileIndexImport } from './routes/profile/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
+import { Route as AuthVerifyEmailImport } from './routes/auth/verify-email'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 
 // Create/Update Routes
-
-const ProfileLayoutRoute = ProfileLayoutImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AuthLayoutRoute = AuthLayoutImport.update({
   id: '/auth',
@@ -38,15 +31,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ProfileIndexRoute = ProfileIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => ProfileLayoutRoute,
-} as any)
-
 const AuthIndexRoute = AuthIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthVerifyEmailRoute = AuthVerifyEmailImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
@@ -74,18 +67,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileLayoutImport
-      parentRoute: typeof rootRoute
-    }
     '/auth/signup': {
       id: '/auth/signup'
       path: '/signup'
       fullPath: '/auth/signup'
       preLoaderRoute: typeof AuthSignupImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/auth/verify-email': {
+      id: '/auth/verify-email'
+      path: '/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthVerifyEmailImport
       parentRoute: typeof AuthLayoutImport
     }
     '/auth/': {
@@ -95,13 +88,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexImport
       parentRoute: typeof AuthLayoutImport
     }
-    '/profile/': {
-      id: '/profile/'
-      path: '/'
-      fullPath: '/profile/'
-      preLoaderRoute: typeof ProfileIndexImport
-      parentRoute: typeof ProfileLayoutImport
-    }
   }
 }
 
@@ -109,11 +95,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthLayoutRouteChildren {
   AuthSignupRoute: typeof AuthSignupRoute
+  AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthSignupRoute: AuthSignupRoute,
+  AuthVerifyEmailRoute: AuthVerifyEmailRoute,
   AuthIndexRoute: AuthIndexRoute,
 }
 
@@ -121,76 +109,53 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
   AuthLayoutRouteChildren,
 )
 
-interface ProfileLayoutRouteChildren {
-  ProfileIndexRoute: typeof ProfileIndexRoute
-}
-
-const ProfileLayoutRouteChildren: ProfileLayoutRouteChildren = {
-  ProfileIndexRoute: ProfileIndexRoute,
-}
-
-const ProfileLayoutRouteWithChildren = ProfileLayoutRoute._addFileChildren(
-  ProfileLayoutRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthLayoutRouteWithChildren
-  '/profile': typeof ProfileLayoutRouteWithChildren
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
-  '/profile/': typeof ProfileIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth': typeof AuthIndexRoute
-  '/profile': typeof ProfileIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthLayoutRouteWithChildren
-  '/profile': typeof ProfileLayoutRouteWithChildren
   '/auth/signup': typeof AuthSignupRoute
+  '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
-  '/profile/': typeof ProfileIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/auth'
-    | '/profile'
-    | '/auth/signup'
-    | '/auth/'
-    | '/profile/'
+  fullPaths: '/' | '/auth' | '/auth/signup' | '/auth/verify-email' | '/auth/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/signup' | '/auth' | '/profile'
+  to: '/' | '/auth/signup' | '/auth/verify-email' | '/auth'
   id:
     | '__root__'
     | '/'
     | '/auth'
-    | '/profile'
     | '/auth/signup'
+    | '/auth/verify-email'
     | '/auth/'
-    | '/profile/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
-  ProfileLayoutRoute: typeof ProfileLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthLayoutRoute: AuthLayoutRouteWithChildren,
-  ProfileLayoutRoute: ProfileLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -204,8 +169,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/auth",
-        "/profile"
+        "/auth"
       ]
     },
     "/": {
@@ -215,26 +179,21 @@ export const routeTree = rootRoute
       "filePath": "auth/layout.tsx",
       "children": [
         "/auth/signup",
+        "/auth/verify-email",
         "/auth/"
-      ]
-    },
-    "/profile": {
-      "filePath": "profile/layout.tsx",
-      "children": [
-        "/profile/"
       ]
     },
     "/auth/signup": {
       "filePath": "auth/signup.tsx",
       "parent": "/auth"
     },
+    "/auth/verify-email": {
+      "filePath": "auth/verify-email.tsx",
+      "parent": "/auth"
+    },
     "/auth/": {
       "filePath": "auth/index.tsx",
       "parent": "/auth"
-    },
-    "/profile/": {
-      "filePath": "profile/index.tsx",
-      "parent": "/profile"
     }
   }
 }
