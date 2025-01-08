@@ -29,9 +29,9 @@ const refreshTokebCookieKey = "kjz-rft";
 
 export async function createAccessToken(payload: UserJWTPayload) {
   const { ACCESS_TOKEN_SECRET } = envVariables;
-  const expriesin = Math.floor(Date.now() / 1000) + 30 * 2;
+  const fiftenMinutesInSeconds = Math.floor(Date.now() / 1000) + 60 * 15;
   const accessToken = await sign(
-    { ...payload, exp: expriesin },
+    { ...payload, exp: fiftenMinutesInSeconds },
     ACCESS_TOKEN_SECRET,
   );
   return accessToken;

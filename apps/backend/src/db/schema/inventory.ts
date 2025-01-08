@@ -17,3 +17,14 @@ export const inventoryTable = pgTable("inventory", {
   sku: text("sku").unique(),
   isActive: boolean("is_active").default(true),
 });
+
+
+const dummyInventiry = {
+  name: "dummy",
+  description: "dummy",
+  quantity: 0,
+  price: 0,
+  categoryId: "category_id_1",
+  sku: "dummy",
+  isActive: true,
+}

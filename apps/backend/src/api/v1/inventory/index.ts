@@ -1,18 +1,18 @@
 import { db } from "@/db/client.ts";
 import { inventoryTable } from "@/db/schema/inventory.ts";
-import { authenticateAdminOnly } from "@/middleware/auth.ts";
+import { authenticate, authenticateAdminOnly } from "@/middleware/auth.ts";
 import {
   inventoryInsertSchema,
   listInventoryQueryParamsSchema,
   viewInventoryParamsSchema,
 } from "@/schemas/inventory-schema.ts";
+import { rateLimit } from "@/services/rate-limit-service.ts";
 import { and, asc, desc, eq, like } from "drizzle-orm";
 import express from "express";
 
-
 const router = express.Router();
 //  list
-router.get("/", async (req, res) => {
+router.get("/", authenticate, async (req, res) => {
   const { success, data, error } = listInventoryQueryParamsSchema.safeParse(
     req.query,
   );
@@ -20,6 +20,12 @@ router.get("/", async (req, res) => {
     return res.status(400).json({
       message: "invalid fields",
       error: error?.flatten(),
+    });
+  }
+  const shouldRAteLimit = await rateLimit(req.user.id);
+  if (shouldRAteLimit) {
+    return res.status(429).json({
+      message: "rate limit exceeded",
     });
   }
   const { page, limit, sort, order, search, categoryId } = data;
@@ -46,7 +52,7 @@ router.get("/", async (req, res) => {
   res.json(items);
 });
 // view
-router.get("/:id", async (req, res) => {
+router.get("/:id", authenticate, async (req, res) => {
   const item = await db
     .select()
     .from(inventoryTable)
@@ -59,7 +65,8 @@ router.get("/:id", async (req, res) => {
     .limit(1);
 
   if (!item) return res.status(404).json({ message: "Item not found" });
-  res.json(item);
+  res.status(200);
+  return res.json(item);
 });
 // create
 router.post("/", authenticateAdminOnly, async (req, res) => {
@@ -70,9 +77,19 @@ router.post("/", authenticateAdminOnly, async (req, res) => {
       error: error?.flatten(),
     });
   }
-
-  const item = await db.insert(inventoryTable).values(data).returning();
-  res.status(201).json(item[0]);
+  try {
+    const item = await db.insert(inventoryTable).values(data).returning();
+    res.status(201).json(item[0]);
+  } catch (error) {
+    res.status(400);
+    if (error instanceof Error) {
+      return res.json({
+        message: "inventory creation failed",
+        error: error?.message,
+      });
+    }
+    return res.json({ message: "inventory creation failed", error });
+  }
 });
 // update
 router.put("/:id", authenticateAdminOnly, async (req, res) => {
@@ -85,14 +102,21 @@ router.put("/:id", authenticateAdminOnly, async (req, res) => {
       error: error?.flatten(),
     });
   }
+  const body = inventoryInsertSchema.safeParse(req.body);
+  if (!body.success || !body.data) {
+    return res.status(400).json({
+      message: "invalid fields",
+      error: body.error?.flatten(),
+    });
+  }
   const item = await db
     .update(inventoryTable)
-    .set(req.body)
+    .set(body.data)
     .where(eq(inventoryTable.id, data.id))
     .returning();
 
   if (!item.length) return res.status(404).json({ message: "Item not found" });
-  res.json(item[0]);
+  return res.json(item[0]);
 });
 // delete
 router.delete("/:id", authenticateAdminOnly, async (req, res) => {
@@ -105,14 +129,24 @@ router.delete("/:id", authenticateAdminOnly, async (req, res) => {
       error: error?.flatten(),
     });
   }
+  if (req.user.role === "admin") {
+    await db
+      .delete(inventoryTable)
+      .where(eq(inventoryTable.id, data.id))
+      .returning();
+    return res.json({ message: "Item deleted successfully" });
+  }
   const item = await db
     .update(inventoryTable)
     .set({ isActive: false })
     .where(eq(inventoryTable.id, data.id))
     .returning();
 
-  if (!item.length) return res.status(404).json({ message: "Item not found" });
-  res.json({ message: "Item deleted successfully" });
+  if (!item.length) {
+    return res.status(404).json({ message: "Item not found" });
+  }
+
+  return res.json({ message: "Item deleted successfully" });
 });
 
 export default router;

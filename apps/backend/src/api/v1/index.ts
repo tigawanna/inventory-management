@@ -40,6 +40,6 @@ router.use(
 );
 
 router.use("/auth", authRoute);
-router.use("/inventory", inventoryRoute);
+router.use("/items", inventoryRoute);
 
 export default router;
