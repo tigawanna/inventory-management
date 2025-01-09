@@ -8,7 +8,7 @@ import { CreateInventoryForm } from "./form/create";
 import { InventoryList } from "./list/InventoryList";
 import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
 import { InventoryOrderSelect, InventorySortSelect } from "./list/InventorySortSelect";
-import { ChevronLeft } from "lucide-react";
+import { ThemeToggle } from "@/components/navigation/ThemeToggle";
 
 interface InventoryPageProps {
 }
@@ -27,7 +27,7 @@ export function InventoryPage({}: InventoryPageProps) {
           </div>
       }
         searchBox={
-          <div className="w-full flex gap-2">
+          <div className="w-[99%] flex gap-2">
           <SearchBox
             inputProps={{
               placeholder: "Search by name",
@@ -39,6 +39,7 @@ export function InventoryPage({}: InventoryPageProps) {
           />
           <InventorySortSelect/>
           <InventoryOrderSelect/>
+          <ThemeToggle />
           </div>
         }
       />

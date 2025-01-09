@@ -23,9 +23,9 @@ export function ThemeToggle({}: ThemeToggleProps) {
   return (
     <div data-test="theme-toggle" className="flex items-center justify-between gap-2 ">
       <div className="hidden md:flex">
-        {import.meta.env.DEV && (
+        {/* {import.meta.env.DEV && ( */}
           <select
-            className="select select-bordered select-sm max-w-xs"
+            className="select select-bordered select-sm max-w-xs "
             onChange={(e) =>
               (document.documentElement.dataset.style = e.target.value)
             }
@@ -37,7 +37,7 @@ export function ThemeToggle({}: ThemeToggleProps) {
             <option value="flip">Flip</option>
             <option value="slides">Slides</option>
           </select>
-        )}
+        {/* )} */}
       </div>
       <button onClick={() => transitionColors()} data-test="theme-toggle-button" className="btn">
         {theme === "light" ? <Moon /> : <Sun />}
