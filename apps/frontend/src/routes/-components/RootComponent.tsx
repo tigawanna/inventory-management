@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 export function RootComponent() {
   return (
     <div className="content min-h-screen w-full">
-      <TailwindIndicator />
+      {/* <TailwindIndicator /> */}
       <Outlet />
       <ReactQueryDevtools buttonPosition="bottom-right" />
       {/* <TanStackRouterDevtools position="bottom-left" /> */}

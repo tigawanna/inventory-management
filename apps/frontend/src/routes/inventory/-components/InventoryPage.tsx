@@ -43,7 +43,7 @@ export function InventoryPage({}: InventoryPageProps) {
         }
       />
 
-     <div className="m-3 pt-10 flex h-full w-full items-center justify-center p-5">
+     <div className="m-3 flex h-full w-full items-center justify-center p-5 ">
         <Suspense fallback={<CardsListSuspenseFallback />}>
           <InventoryList keyword={keyword} />
         </Suspense>

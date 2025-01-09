@@ -6,7 +6,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { RouterPendingComponent } from "./lib/tanstack/router/RouterPendingComponent";
 import { RouterErrorComponent } from "./lib/tanstack/router/routerErrorComponent";
 import { RouterNotFoundComponent } from "./lib/tanstack/router/RouterNotFoundComponent";
@@ -66,7 +66,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <Suspense fallback={<RouterPendingComponent />}>
+          <App />
+        </Suspense>
       </QueryClientProvider>
     </React.StrictMode>,
   );
