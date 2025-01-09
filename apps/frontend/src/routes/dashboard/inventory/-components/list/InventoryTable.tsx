@@ -7,9 +7,10 @@ import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";
 import { inventoryListQueryOptions } from "../../-query-options/inventory-query-option";
-
+import { DeleteInventoryForm } from "../form/delete";
+import ResponsivePagination from "react-responsive-pagination";
 interface InventoryTableProps {
-    keyword:string
+  keyword: string;
 }
 
 type TableAccessror = keyof InventoryItem;
@@ -18,11 +19,11 @@ type TableColumn = {
   accessor: TableAccessror;
 };
 
-export function InventoryTable({keyword}: InventoryTableProps) {
+export function InventoryTable({ keyword="" }: InventoryTableProps) {
   const columns: TableColumn[] = [
     {
       accessor: "name",
-      label: "Reciept Number",
+      label: "Name",
     },
     {
       label: "Description",
@@ -31,61 +32,80 @@ export function InventoryTable({keyword}: InventoryTableProps) {
     { label: "SKU", accessor: "sku" },
     { label: "Year", accessor: "price" },
     { label: "price", accessor: "price" },
-    { label: "Shop", accessor: "created_at" },
+    { label: "Created", accessor: "created_at" },
   ];
   const { page, updatePage } = usePageSearchQuery("/dashboard/inventory");
   const sp = useSearch({ from: "/dashboard/inventory/" });
   const { viewer } = useViewer();
   const query = useSuspenseQuery(
-      inventoryListQueryOptions({ ...sp, keyword, page }),
+    inventoryListQueryOptions({ ...sp, keyword, page }),
+  );
+  const data = query.data;
+  const error = query.error;
+  if (error) {
+    return (
+      <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
+        <ErrorWrapper err={error} />
+      </div>
     );
-    const data = query.data;
-    const error = query.error;
-
-    if (error) {
-      return (
-        <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
-          <ErrorWrapper err={error} />
-        </div>
-      );
-    }
-    if (!data || data.items.length === 0) {
-      return (
-        <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
-          <ItemNotFound label="Inventory" />
-        </div>
-      );
-    }
+  }
+  if (!data || data.items.length === 0) {
+    return (
+      <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
+        <ItemNotFound label="Inventory" />
+      </div>
+    );
+  }
   const role = viewer?.role;
   return (
     <div className="w-full overflow-x-auto">
       <table className="table table-zebra table-lg w-full">
         <thead>
           <tr>
-            <th>name</th>
-            {columns.map((column) => {
-              return <th key={column.accessor}>{column.label}</th>;
+            {columns.map((column, idx) => {
+              return (
+                <th key={column.accessor + column.label + idx}>
+                  {column.label}
+                </th>
+              );
             })}
             {role === "admin" && <th>Edit</th>}
+            {role === "admin" ? <th>Hard Delete</th> : <th>Soft Delete</th>}
           </tr>
         </thead>
         <tbody>
           {data?.items.map((row) => {
-            return(
-            <tr key={row.id}>
-              {columns.map((column) => {
-                return <td key={column.accessor}>{row?.[column?.accessor]}</td>;
-              })}
-              {role === "admin" && (
-                <td>
-                  <UpdateInventoryform item={row} />
+            return (
+              <tr key={row.id}>
+                {columns.map((column, idx) => {
+                  return (
+                    <td key={column.accessor + row.id + idx}>
+                      {row?.[column?.accessor]}
+                    </td>
+                  );
+                })}
+                {role === "admin" && (
+                  <td key={"update" + row.id}>
+                    <UpdateInventoryform item={row} />
+                  </td>
+                )}
+                <td key={"delete" + row.id}>
+                  <DeleteInventoryForm id={row.id} />
                 </td>
-              )}
-            </tr>
-          )}
-          )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
+      <div className="flex w-full items-center justify-center">
+        <ResponsivePagination
+          current={page ?? 1}
+          total={data.totalPages}
+          onPageChange={(e) => {
+            updatePage(e);
+          }}
+        />
+      </div>
     </div>
   );
 }

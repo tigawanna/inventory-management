@@ -47,8 +47,8 @@ export function DiaDrawer({
         </DialogTrigger>
         <DialogContent className="max:w-[70vw] ">
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
-            <DialogDescription>{description}</DialogDescription>
+            <DialogTitle className="text-2xl">{title}</DialogTitle>
+            <DialogDescription className="">{description}</DialogDescription>
           </DialogHeader>
           {children}
         </DialogContent>

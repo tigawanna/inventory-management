@@ -54,6 +54,7 @@ export async function createAccessToken(
     { ...sanitizedPayload, exp: fiftenMinutesInSeconds },
     ACCESS_TOKEN_SECRET,
   );
+  res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
   res.cookie(accessTokebCookieKey, accessToken, accessTokencookieOptions);
   return accessToken;
 }
@@ -89,6 +90,7 @@ export async function createRefreshToken(
     REFRESH_TOKEN_SECRET,
   );
   //   setCookie(c, refreshTokebCookieKey, refreshToken, { path: "/", httpOnly: true });
+  res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
   res.cookie(refreshTokebCookieKey, refreshToken, refreshCookieOptions);
   return refreshToken;
 }

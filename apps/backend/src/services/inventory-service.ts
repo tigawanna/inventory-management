@@ -1,4 +1,4 @@
-import { and, eq, like, desc, asc, sql } from "drizzle-orm";
+import { and, eq, ilike, desc, asc, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db/client.ts";
 import { inventoryTable } from "@/db/schema/inventory.ts";
@@ -21,11 +21,10 @@ export class InventoryService {
   }
   async findAll(query: z.infer<typeof listInventoryQueryParamsSchema>) {
     const { page, limit, sort, order, search, categoryId } = query;
-
     // Base conditions for both count and data query
     const conditions = and(
       // eq(inventoryTable.isActive, true),
-      search ? like(inventoryTable.name, `%${search}%`) : undefined,
+      search ? ilike(inventoryTable.name, `%${search}%`) : undefined,
       // categoryId ? eq(inventoryTable.categoryId, categoryId) : undefined,
     );
 
@@ -48,6 +47,12 @@ export class InventoryService {
         order === "desc"
           ? desc(inventoryTable[sort])
           : asc(inventoryTable[sort]),
+      );
+    } else {
+      dbQuery.orderBy(
+        order === "desc"
+          ? desc(inventoryTable["name"])
+          : asc(inventoryTable["name"]),
       );
     }
 

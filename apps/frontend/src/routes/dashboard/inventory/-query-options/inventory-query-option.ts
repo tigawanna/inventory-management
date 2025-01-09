@@ -9,10 +9,9 @@ export function inventoryListQueryOptions({
   keyword,
   page = 1,
   categoryId,
-  limit = 24,
+  limit = 10,
   order = "desc",
   sort = "name",
-  search,
 }: inventoryQueryOptionPropss) {
   return queryOptions({
     queryKey: ["inventory_list", keyword, page, categoryId, limit, order, sort],

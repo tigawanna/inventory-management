@@ -47,16 +47,16 @@ export function DeleteInventoryForm({id}: {id: string}) {
       description="Delete inventory item"
       trigger={<Trash className="text-error" />}
     >
-      <div className="flex h-full max-h-[80vh] w-fit flex-col gap-2 overflow-auto">
+      <div className="flex h-full max-h-[80vh] w-full flex-col gap-2 overflow-auto">
         <form className="w-full">
-          <h1 className="text-xl ">Are you sure you want to delete this inventory</h1>
+          <h1 className=" ">Are you sure you want to delete this inventory</h1>
           <div className="flex gap-5 justify-end items-end w-full pt-5">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 setOpen(false);
               }}
-              className="btn btn-ghost"
+              className="btn btn-accent btn-outline"
             >
               Cancel
             </button>
