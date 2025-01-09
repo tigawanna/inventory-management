@@ -19,24 +19,53 @@ class MyLogger implements Logger {
   }
 }
 
-function creteDB() {
+const RETRY_ATTEMPTS = 3;
+const RETRY_DELAY = 2000;
+
+async function createLocalPool() {
+  const { Pool } = pg;
+  const pool = new Pool({
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
+    connectionString: envVariables.DATABASE_URL,
+  });
+
+  // Test connection with retries
+  for (let i = 0; i < RETRY_ATTEMPTS; i++) {
+    try {
+      const client = await pool.connect();
+      console.log("Successfully connected to local database");
+      client.release();
+      return pool;
+    } catch (error) {
+      console.error(`Connection attempt ${i + 1} failed:`, error);
+      if (i < RETRY_ATTEMPTS - 1) {
+        await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
+      }
+    }
+  }
+  throw new Error("Failed to connect to database after multiple attempts");
+}
+
+export async function createDB() {
   if (envVariables.NODE_ENV === "development") {
-    const { Pool } = pg;
-    // Instantiate Drizzle client with pg driver and schema.
+    const pool = await createLocalPool();
     return pgDrizzle({
-      client: new Pool({
-        connectionString: envVariables.DATABASE_URL,
-      }),
+      client: pool,
       schema: { ...inventorySchema, ...usersSchema },
-      logger: envVariables.NODE_ENV === "development" ? new MyLogger() : false,
+      logger: new MyLogger(),
     });
   }
+
   return drizzle({
     client: neon(envVariables.DATABASE_URL),
     schema: { ...inventorySchema, ...usersSchema },
-    // logger: envVariables.NODE_ENV === "development" ? new MyLogger() : false,
   });
 }
 
-// // Use pg driver.
-export const db = creteDB();
+// Initialize DB with error handling
+export const db = await createDB().catch((error) => {
+  console.error("Failed to initialize database:", error);
+  process.exit(1);
+});

@@ -1,8 +1,8 @@
 export interface InventoryItem {
   name: string;
   id: string;
-  updated_at: Date | null;
-  created_at: Date | null;
+  updated_at: string | null;
+  created_at: string | null;
   price: string;
   quantity: number;
   categoryId: string | null;

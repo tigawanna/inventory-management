@@ -8,6 +8,7 @@ import { CreateInventoryForm } from "./form/create";
 import { InventoryList } from "./list/InventoryList";
 import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
 import { InventoryOrderSelect, InventorySortSelect } from "./list/InventorySortSelect";
+import { InventoryTable } from "./list/InventoryTable";
 
 
 interface InventoryPageProps {
@@ -45,7 +46,8 @@ export function InventoryPage({}: InventoryPageProps) {
 
      <div className="m-3 flex h-full w-full items-center justify-center p-5 ">
         <Suspense fallback={<CardsListSuspenseFallback />}>
-          <InventoryList keyword={keyword} />
+          {/* <InventoryList keyword={keyword} /> */}
+          <InventoryTable keyword=""/>
         </Suspense>
       </div>
     </div>

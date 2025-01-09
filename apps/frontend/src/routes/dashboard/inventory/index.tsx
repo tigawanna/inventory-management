@@ -12,11 +12,7 @@ const searchparams = z.object({
 })
 
 export const Route = createFileRoute('/dashboard/inventory/')({
-  beforeLoad: ({ context }) => {
-    if (!context?.viewer?.record?.id) {
-      throw redirect({ to: '/auth', search: { returnTo: '/inventory' } })
-    }
-  },
+
   component: InventoryPage,
   validateSearch: (search) => searchparams.parse(search),
 })
