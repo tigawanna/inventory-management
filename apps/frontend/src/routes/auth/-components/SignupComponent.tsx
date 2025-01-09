@@ -47,13 +47,13 @@ export function SignupComponent({}: SignupComponentProps) {
         variant: "success",
       });
       qc.invalidateQueries(viewerqueryOptions());
-      navigate({ to: "/auth", search: { returnTo: "/verify-email?" } });
+      navigate({ to: "/auth", search: { returnTo: "/auth/verify-email?" } });
     },
     onError(error) {
       makeHotToast({
         title: "Something went wrong",
         description: `${error.message}`,
-        duration: 20000,
+        duration: 10000,
         variant: "error",
       });
     },

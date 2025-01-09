@@ -57,7 +57,7 @@ export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
         title: "Something went wrong",
         description: `${error.message}`,
         variant: "error",
-        duration: 20000,
+        duration: 10000,
       });
     },
   });

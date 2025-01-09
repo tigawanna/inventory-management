@@ -66,12 +66,12 @@ export function useViewer() {
           title: "Something went wrong",
           description: data.error.message,
           variant: "error",
-          duration: 20000,
+          duration: 10000,
         });
         return;
       }
       makeHotToast({
-        title: "signed in",
+        title: "signed out",
         description: "",
         variant: "success",
         duration: 2000,
@@ -85,7 +85,7 @@ export function useViewer() {
         title: "Something went wrong",
         description: `${errorMessage.message}`,
         variant: "error",
-        duration: 20000,
+        duration: 10000,
       });
     },
   });
@@ -110,41 +110,7 @@ export type PocketbaseViewerType =
       error: null;
     };
 
-type BeforeLoadCTX = BeforeLoadContextOptions<
-  Route<
-    RootRoute<
-      undefined,
-      {
-        queryClient: QueryClient;
-        viewer?: PocketbaseViewerType;
-      },
-      AnyContext,
-      AnyContext,
-      {},
-      undefined,
-      unknown,
-      unknown
-    >,
-    "/profile",
-    "/profile",
-    "/profile",
-    "/profile",
-    undefined,
-    Record<never, string>,
-    AnyContext,
-    AnyContext,
-    AnyContext,
-    {},
-    undefined,
-    unknown
-  >,
-  (search: Record<string, unknown>) => {
-    returnTo?: string | undefined;
-  },
-  Record<never, string>,
-  AnyContext,
-  AnyContext
->;
+
 
 type AuthBeforeloadContext = BeforeLoadContextOptions<
   RootRoute<

@@ -21,7 +21,7 @@ export function LoggedInUser({ viewer }: LoggedInUserProps) {
       <div className="flex w-full justify-evenly gap-2">
         {viewer.role === "admin" && <UserCheck className="text-success" />}
         <button
-          className="btn btn-sm btn-wide"
+          className="btn btn-wide"
           onClick={() => {
             logoutMutation.mutate();
             tsrNavigate({ to: "/auth", search: { returnTo: "/" } });

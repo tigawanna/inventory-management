@@ -40,7 +40,7 @@ export function SigninComponent({}: SigninComponentProps) {
           title: "Something went wrong",
           description: data.error.message,
           variant: "error",
-          duration: 20000,
+          duration: 10000,
         });
         return
       }
@@ -54,9 +54,9 @@ export function SigninComponent({}: SigninComponentProps) {
       qc.invalidateQueries(viewerqueryOptions());
       navigate({ to:"/dashboard" });
       // qc.setQueryData(["viewer"], () => data.record);
-      // if (typeof window !== "undefined") {
-      //   location.reload();
-      // }
+      if (typeof window !== "undefined") {
+        location.reload();
+      }
     },
     onError(error) {
       const errorMessage = error as { message: string };
@@ -64,7 +64,7 @@ export function SigninComponent({}: SigninComponentProps) {
         title: "Something went wrong",
         description: `${errorMessage.message}`,
         variant: "error",
-        duration: 20000,
+        duration: 10000,
       });
     },
   });
