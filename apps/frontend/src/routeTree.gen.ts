@@ -22,9 +22,6 @@ import { Route as DashboardTeamIndexImport } from './routes/dashboard/team/index
 import { Route as DashboardInventoryIndexImport } from './routes/dashboard/inventory/index'
 import { Route as DashboardCategoriesIndexImport } from './routes/dashboard/categories/index'
 import { Route as DashboardAuditlogsIndexImport } from './routes/dashboard/auditlogs/index'
-import { Route as DashboardTeamTeamIndexImport } from './routes/dashboard/team/$team/index'
-import { Route as DashboardCategoriesCategoriesIndexImport } from './routes/dashboard/categories/$categories/index'
-import { Route as DashboardAuditlogsAuditlogsIndexImport } from './routes/dashboard/auditlogs/$auditlogs/index'
 
 // Create/Update Routes
 
@@ -93,26 +90,6 @@ const DashboardAuditlogsIndexRoute = DashboardAuditlogsIndexImport.update({
   path: '/auditlogs/',
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
-
-const DashboardTeamTeamIndexRoute = DashboardTeamTeamIndexImport.update({
-  id: '/team/$team/',
-  path: '/team/$team/',
-  getParentRoute: () => DashboardLayoutRoute,
-} as any)
-
-const DashboardCategoriesCategoriesIndexRoute =
-  DashboardCategoriesCategoriesIndexImport.update({
-    id: '/categories/$categories/',
-    path: '/categories/$categories/',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
-
-const DashboardAuditlogsAuditlogsIndexRoute =
-  DashboardAuditlogsAuditlogsIndexImport.update({
-    id: '/auditlogs/$auditlogs/',
-    path: '/auditlogs/$auditlogs/',
-    getParentRoute: () => DashboardLayoutRoute,
-  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -195,27 +172,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTeamIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
-    '/dashboard/auditlogs/$auditlogs/': {
-      id: '/dashboard/auditlogs/$auditlogs/'
-      path: '/auditlogs/$auditlogs'
-      fullPath: '/dashboard/auditlogs/$auditlogs'
-      preLoaderRoute: typeof DashboardAuditlogsAuditlogsIndexImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/dashboard/categories/$categories/': {
-      id: '/dashboard/categories/$categories/'
-      path: '/categories/$categories'
-      fullPath: '/dashboard/categories/$categories'
-      preLoaderRoute: typeof DashboardCategoriesCategoriesIndexImport
-      parentRoute: typeof DashboardLayoutImport
-    }
-    '/dashboard/team/$team/': {
-      id: '/dashboard/team/$team/'
-      path: '/team/$team'
-      fullPath: '/dashboard/team/$team'
-      preLoaderRoute: typeof DashboardTeamTeamIndexImport
-      parentRoute: typeof DashboardLayoutImport
-    }
   }
 }
 
@@ -243,9 +199,6 @@ interface DashboardLayoutRouteChildren {
   DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
   DashboardInventoryIndexRoute: typeof DashboardInventoryIndexRoute
   DashboardTeamIndexRoute: typeof DashboardTeamIndexRoute
-  DashboardAuditlogsAuditlogsIndexRoute: typeof DashboardAuditlogsAuditlogsIndexRoute
-  DashboardCategoriesCategoriesIndexRoute: typeof DashboardCategoriesCategoriesIndexRoute
-  DashboardTeamTeamIndexRoute: typeof DashboardTeamTeamIndexRoute
 }
 
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
@@ -254,10 +207,6 @@ const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
   DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
   DashboardInventoryIndexRoute: DashboardInventoryIndexRoute,
   DashboardTeamIndexRoute: DashboardTeamIndexRoute,
-  DashboardAuditlogsAuditlogsIndexRoute: DashboardAuditlogsAuditlogsIndexRoute,
-  DashboardCategoriesCategoriesIndexRoute:
-    DashboardCategoriesCategoriesIndexRoute,
-  DashboardTeamTeamIndexRoute: DashboardTeamTeamIndexRoute,
 }
 
 const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
@@ -276,9 +225,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory': typeof DashboardInventoryIndexRoute
   '/dashboard/team': typeof DashboardTeamIndexRoute
-  '/dashboard/auditlogs/$auditlogs': typeof DashboardAuditlogsAuditlogsIndexRoute
-  '/dashboard/categories/$categories': typeof DashboardCategoriesCategoriesIndexRoute
-  '/dashboard/team/$team': typeof DashboardTeamTeamIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -291,9 +237,6 @@ export interface FileRoutesByTo {
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory': typeof DashboardInventoryIndexRoute
   '/dashboard/team': typeof DashboardTeamIndexRoute
-  '/dashboard/auditlogs/$auditlogs': typeof DashboardAuditlogsAuditlogsIndexRoute
-  '/dashboard/categories/$categories': typeof DashboardCategoriesCategoriesIndexRoute
-  '/dashboard/team/$team': typeof DashboardTeamTeamIndexRoute
 }
 
 export interface FileRoutesById {
@@ -309,9 +252,6 @@ export interface FileRoutesById {
   '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory/': typeof DashboardInventoryIndexRoute
   '/dashboard/team/': typeof DashboardTeamIndexRoute
-  '/dashboard/auditlogs/$auditlogs/': typeof DashboardAuditlogsAuditlogsIndexRoute
-  '/dashboard/categories/$categories/': typeof DashboardCategoriesCategoriesIndexRoute
-  '/dashboard/team/$team/': typeof DashboardTeamTeamIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -328,9 +268,6 @@ export interface FileRouteTypes {
     | '/dashboard/categories'
     | '/dashboard/inventory'
     | '/dashboard/team'
-    | '/dashboard/auditlogs/$auditlogs'
-    | '/dashboard/categories/$categories'
-    | '/dashboard/team/$team'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -342,9 +279,6 @@ export interface FileRouteTypes {
     | '/dashboard/categories'
     | '/dashboard/inventory'
     | '/dashboard/team'
-    | '/dashboard/auditlogs/$auditlogs'
-    | '/dashboard/categories/$categories'
-    | '/dashboard/team/$team'
   id:
     | '__root__'
     | '/'
@@ -358,9 +292,6 @@ export interface FileRouteTypes {
     | '/dashboard/categories/'
     | '/dashboard/inventory/'
     | '/dashboard/team/'
-    | '/dashboard/auditlogs/$auditlogs/'
-    | '/dashboard/categories/$categories/'
-    | '/dashboard/team/$team/'
   fileRoutesById: FileRoutesById
 }
 
@@ -409,10 +340,7 @@ export const routeTree = rootRoute
         "/dashboard/auditlogs/",
         "/dashboard/categories/",
         "/dashboard/inventory/",
-        "/dashboard/team/",
-        "/dashboard/auditlogs/$auditlogs/",
-        "/dashboard/categories/$categories/",
-        "/dashboard/team/$team/"
+        "/dashboard/team/"
       ]
     },
     "/auth/signup": {
@@ -445,18 +373,6 @@ export const routeTree = rootRoute
     },
     "/dashboard/team/": {
       "filePath": "dashboard/team/index.tsx",
-      "parent": "/dashboard"
-    },
-    "/dashboard/auditlogs/$auditlogs/": {
-      "filePath": "dashboard/auditlogs/$auditlogs/index.tsx",
-      "parent": "/dashboard"
-    },
-    "/dashboard/categories/$categories/": {
-      "filePath": "dashboard/categories/$categories/index.tsx",
-      "parent": "/dashboard"
-    },
-    "/dashboard/team/$team/": {
-      "filePath": "dashboard/team/$team/index.tsx",
       "parent": "/dashboard"
     }
   }

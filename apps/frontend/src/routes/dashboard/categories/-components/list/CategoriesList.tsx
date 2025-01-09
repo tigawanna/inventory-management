@@ -21,7 +21,7 @@ export function CategoriesList({ keyword = "" }: CategoriesListProps) {
   if (error) {
     return (
       <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
-        <ErrorWrapper error={error} />
+        <ErrorWrapper err={error} />
       </div>
     );
   }
@@ -48,13 +48,6 @@ export function CategoriesList({ keyword = "" }: CategoriesListProps) {
               </h1>
               <UpdateCategoriesform item={item} />
               </div>
-                <Link
-                  to={`/dashboard/categories/${item.id}/`}
-                  className="text-primary-foreground bg-primary p-2  w-full flex justify-between"
-                >
-                  <div>see details</div>
-                   ➡️
-                </Link>
               </div>
             </li>
           );

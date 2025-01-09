@@ -12,10 +12,10 @@ import { PocketbaseViewerType } from "@/lib/tanstack/query/use-viewer";
 import { RootComponent } from "./-components/RootComponent";
 import { z } from "zod";
 
-const searchparams = z.object({
-  globalPage: z.number().optional(),
-  globalSearch: z.string().optional(),
-});
+// const searchparams = z.object({
+//   globalPage: z.number().optional(),
+//   globalSearch: z.string().optional(),
+// });
 
 
 
@@ -24,6 +24,6 @@ export const Route = createRootRouteWithContext<{
   viewer?: PocketbaseViewerType;
 }>()({
   component: RootComponent,
-  validateSearch: (search) => searchparams.parse(search),
+  // validateSearch: (search) => searchparams.parse(search),
 
 });

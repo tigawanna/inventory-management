@@ -52,7 +52,7 @@ export function SigninComponent({}: SigninComponentProps) {
       });
       
       qc.invalidateQueries(viewerqueryOptions());
-      navigate({ to:"/inventory" });
+      navigate({ to:"/dashboard" });
       // qc.setQueryData(["viewer"], () => data.record);
       // if (typeof window !== "undefined") {
       //   location.reload();

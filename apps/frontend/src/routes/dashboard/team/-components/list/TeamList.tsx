@@ -2,7 +2,6 @@
 import { ItemNotFound } from "@/components/wrappers/ItemNotFound";
 import { ErrorWrapper } from "@/components/wrappers/ErrorWrapper";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
 import ResponsivePagination from "react-responsive-pagination";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { UpdateTeamform } from "@/routes/dashboard/team/-components/form/update";
@@ -21,7 +20,7 @@ export function TeamList({ keyword = "" }: TeamListProps) {
   if (error) {
     return (
       <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
-        <ErrorWrapper error={error} />
+        <ErrorWrapper err={error} />
       </div>
     );
   }
@@ -48,13 +47,6 @@ export function TeamList({ keyword = "" }: TeamListProps) {
               </h1>
               <UpdateTeamform item={item} />
               </div>
-                <Link
-                  to={`/dashboard/team/${item.id}/`}
-                  className="text-primary-foreground bg-primary p-2  w-full flex justify-between"
-                >
-                  <div>see details</div>
-                   ➡️
-                </Link>
               </div>
             </li>
           );

@@ -8,14 +8,14 @@ import { CreateInventoryForm } from "./form/create";
 import { InventoryList } from "./list/InventoryList";
 import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
 import { InventoryOrderSelect, InventorySortSelect } from "./list/InventorySortSelect";
-import { ThemeToggle } from "@/components/navigation/ThemeToggle";
+
 
 interface InventoryPageProps {
 }
 
 export function InventoryPage({}: InventoryPageProps) {
   const { debouncedValue, isDebouncing, keyword, setKeyword } =
-    usePageSearchQuery("/inventory");
+    usePageSearchQuery("/dashboard/inventory");
   return (
     <div className="min-h-screen flex h-full w-full gap-5 flex-col items-center ">
       <Helmet title="Collabs | inventory" description="The list of Collabs | inventory" />
@@ -39,7 +39,6 @@ export function InventoryPage({}: InventoryPageProps) {
           />
           <InventorySortSelect/>
           <InventoryOrderSelect/>
-          <ThemeToggle />
           </div>
         }
       />

@@ -13,11 +13,11 @@ export function ListPageHeader({
   searchBox,
 }: ListPageHeaderProps) {
   return (
-    <div className="sticky top-5 z-20 flex w-full flex-wrap justify-between gap-3 px-3 pr-5">
+    <div className="sticky top-[7%] bg-base-200 z-20 flex w-full flex-wrap justify-between gap-3 px-3 pr-5">
       <div className="flex w-full items-center justify-between gap-2 md:w-fit">
-        <Link className="hover:text-accent" to="/">
+        {/* <Link className="hover:text-accent" to="/">
           <ChevronLeft className="size-10" />
-        </Link>
+        </Link> */}
         <h1 className="text-2xl font-bold">{title}</h1>
         <div className="">{formTrigger}</div>
       </div>

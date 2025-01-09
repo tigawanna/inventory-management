@@ -17,6 +17,6 @@ export const Route = createFileRoute('/dashboard/inventory/')({
       throw redirect({ to: '/auth', search: { returnTo: '/inventory' } })
     }
   },
-  validateSearch: (search) => searchparams.parse(search),
   component: InventoryPage,
+  validateSearch: (search) => searchparams.parse(search),
 })

@@ -12,15 +12,16 @@ import { useState } from "react";
 interface InventorySortSelectProps {}
 
 export function InventorySortSelect({}: InventorySortSelectProps) {
-  const { sort, ...rest } = useSearch({ from: "/dashboard/inventory/" });
   const navigate = useNavigate({ from: "/dashboard/inventory" });
-  const paymentTypes = ["name", "quantity", "price", "All"] as const;
+  // @ts-expect-error
+  const { sort, ...rest } = useSearch({ from: "/dashboard/inventory/" });
+  const paymentTypes = ["name", "quantity", "price", "default"] as const;
   return (
     <Select
       value={sort}
       onValueChange={(value: any) => {
         if (value) {
-          if (value === "All") {
+          if (value === "default") {
             navigate({ search: { sort: undefined, ...rest }, replace: true });
           } else {
             navigate({ search: { sort: value, ...rest }, replace: true });
@@ -47,8 +48,9 @@ export function InventorySortSelect({}: InventorySortSelectProps) {
   );
 }
 export function InventoryOrderSelect({}: InventorySortSelectProps) {
-  const { order, ...rest } = useSearch({ from: "/inventory/" });
-  const navigate = useNavigate({ from: "/inventory" });
+  // @ts-expect-error
+  const { order, ...rest } = useSearch({ from: "/dashboard/inventory/" });
+  const navigate = useNavigate({ from: "/dashboard/inventory" });
   const paymentTypes = ["desc", "asc"] as const;
   return (
     <Select

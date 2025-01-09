@@ -38,7 +38,7 @@ export function HomePage() {
             >
               {viewer ? (
                 <Link
-                  to="/inventory"
+                  to="/dashboard/inventory"
                   data-test="homepage-section--dashboard-link"
                   className="group flex items-center justify-center"
                 >

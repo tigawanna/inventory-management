@@ -4,9 +4,9 @@ import { Suspense } from "react";
 import { ListPageHeader } from "@/components/wrappers/ListPageHeader";
 import { Helmet } from "@/components/wrappers/custom-helmet";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
-import { CardsListSuspenseFallback } from "@/components/loaders/GenericDataCardsListSuspenseFallback";
 import { CreateAuditlogsForm } from "./form/create";
 import { AuditlogsList } from "./list/AuditlogsList";
+import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
 
 interface AuditlogsPageProps {
 }
