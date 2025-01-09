@@ -23,7 +23,7 @@ router.get("/", authenticate, async (req, res) => {
   }
   const response = await inventoryservice.findAll(data);
   res.status(200);
-  res.json(response);
+  return res.json(response);
 });
 // view
 router.get("/:id", authenticate, async (req, res) => {

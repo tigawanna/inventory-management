@@ -8,6 +8,7 @@ import v1Api from "./api/v1/index.ts";
 import cookieParser from "cookie-parser";
 import type { UserJWTPayload } from "./schemas/user-schema.ts";
 import { allowedOrigins, corsHeaders } from "./middleware/cors-stuff.ts";
+import { rateLimitMiddleware } from "./middleware/rate-limit.ts";
 
 
 declare global {
@@ -50,7 +51,7 @@ app.use(
   }),
 );
 app.use(express.json());
-app.use(express.static("openapi.json"));
+app.use((...props)=>rateLimitMiddleware(...props,["/api/v1"]));
 app.get("/", (req, res) => {
   res.json({ message: "welcome to v1 api" });
 })

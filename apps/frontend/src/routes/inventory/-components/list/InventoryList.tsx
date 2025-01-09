@@ -16,7 +16,6 @@ export function InventoryList({ keyword = "" }: InventoryListProps) {
   const { page, updatePage } = usePageSearchQuery("/inventory");
   const sp = useSearch({ from: "/inventory/" });
   const query = useSuspenseQuery(
-    // @ts-expect-error
     inventoryListQueryOptions({ ...sp, keyword, page }),
   );
   const data = query.data;
@@ -43,7 +42,7 @@ export function InventoryList({ keyword = "" }: InventoryListProps) {
           return (
             <li
               key={item.id}
-              className="flex h w-[95%] items-center justify-center gap-2 rounded-xl bg-base-300 p-4 sm:w-[45%] lg:w-[30%]"
+              className="h flex w-[95%] items-center justify-center gap-2 rounded-xl bg-base-300 p-4 sm:w-[45%] lg:w-[30%]"
             >
               <div className="flex h-full w-full flex-col justify-between gap-2">
                 <div className="flex h-full w-full justify-between gap-2">
@@ -51,14 +50,14 @@ export function InventoryList({ keyword = "" }: InventoryListProps) {
                   <UpdateInventoryform item={item} />
                 </div>
                 <p>{item.description}</p>
-                <div className="flex flex-wrap  justify-between gap-2">
+                <div className="flex flex-wrap justify-between gap-2">
                   <div>Price: {item.price}</div>
                   <div>Quan: {item.quantity}</div>
                 </div>
-                <div className="flex flex-wrap text-sm justify-between gap-2">
+                <div className="flex flex-wrap justify-between gap-2 text-sm">
                   <div>{item.categoryId}</div>
                   <div>SKU: {item.sku}</div>
-                  <DeleteInventoryForm id={item.id}/>
+                  <DeleteInventoryForm id={item.id} />
                 </div>
               </div>
             </li>

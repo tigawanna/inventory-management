@@ -1,8 +1,5 @@
-import jwt from "jsonwebtoken";
-const { verify } = jwt;
 import type { Request, Response, NextFunction } from "express";
 import { ZodError, ZodSchema } from "zod";
-import { envVariables } from "@/env.ts";
 import {
   generateUserAuthTokens,
   getAccessTokenFromCokkieOrHeaders,

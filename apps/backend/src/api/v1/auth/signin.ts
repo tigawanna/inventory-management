@@ -29,13 +29,14 @@ router.post("/signin", async (req, res) => {
       verificationToken,
       ...publicUser
     } = loggedInUser;
-    if (!loggedInUser.isEmailVerified) {
-      res.status(400);
-      return res.json({
-        message: "user email not verified",
-        data: publicUser,
-      });
-    }
+    // TODO explore more reliable email services
+    // if (!loggedInUser.isEmailVerified) {
+    //   res.status(400);
+    //   return res.json({
+    //     message: "user email not verified",
+    //     data: publicUser,
+    //   });
+    // }
     const { accessToken, refreshToken } = await generateUserAuthTokens(
       res,
       publicUser,
@@ -50,6 +51,7 @@ router.post("/signin", async (req, res) => {
       },
     });
   } catch (err: any) {
+    console.log("== error  == ",err)
     res.status(400);
     return res.json({
       message: "user login failed",
