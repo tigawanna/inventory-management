@@ -18,10 +18,14 @@ import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
 import { Route as AuthVerifyEmailImport } from './routes/auth/verify-email'
 import { Route as AuthSignupImport } from './routes/auth/signup'
+import { Route as DashboardTeamLayoutImport } from './routes/dashboard/team/layout'
+import { Route as DashboardCategoriesLayoutImport } from './routes/dashboard/categories/layout'
+import { Route as DashboardAuditlogsLayoutImport } from './routes/dashboard/auditlogs/layout'
 import { Route as DashboardTeamIndexImport } from './routes/dashboard/team/index'
 import { Route as DashboardInventoryIndexImport } from './routes/dashboard/inventory/index'
 import { Route as DashboardCategoriesIndexImport } from './routes/dashboard/categories/index'
 import { Route as DashboardAuditlogsIndexImport } from './routes/dashboard/auditlogs/index'
+import { Route as DashboardTeamTeamImport } from './routes/dashboard/team/$team'
 
 // Create/Update Routes
 
@@ -67,10 +71,28 @@ const AuthSignupRoute = AuthSignupImport.update({
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
-const DashboardTeamIndexRoute = DashboardTeamIndexImport.update({
-  id: '/team/',
-  path: '/team/',
+const DashboardTeamLayoutRoute = DashboardTeamLayoutImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardCategoriesLayoutRoute = DashboardCategoriesLayoutImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardAuditlogsLayoutRoute = DashboardAuditlogsLayoutImport.update({
+  id: '/auditlogs',
+  path: '/auditlogs',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardTeamIndexRoute = DashboardTeamIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardTeamLayoutRoute,
 } as any)
 
 const DashboardInventoryIndexRoute = DashboardInventoryIndexImport.update({
@@ -80,15 +102,21 @@ const DashboardInventoryIndexRoute = DashboardInventoryIndexImport.update({
 } as any)
 
 const DashboardCategoriesIndexRoute = DashboardCategoriesIndexImport.update({
-  id: '/categories/',
-  path: '/categories/',
-  getParentRoute: () => DashboardLayoutRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardCategoriesLayoutRoute,
 } as any)
 
 const DashboardAuditlogsIndexRoute = DashboardAuditlogsIndexImport.update({
-  id: '/auditlogs/',
-  path: '/auditlogs/',
-  getParentRoute: () => DashboardLayoutRoute,
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardAuditlogsLayoutRoute,
+} as any)
+
+const DashboardTeamTeamRoute = DashboardTeamTeamImport.update({
+  id: '/$team',
+  path: '/$team',
+  getParentRoute: () => DashboardTeamLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -115,6 +143,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardLayoutImport
       parentRoute: typeof rootRoute
+    }
+    '/dashboard/auditlogs': {
+      id: '/dashboard/auditlogs'
+      path: '/auditlogs'
+      fullPath: '/dashboard/auditlogs'
+      preLoaderRoute: typeof DashboardAuditlogsLayoutImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/categories': {
+      id: '/dashboard/categories'
+      path: '/categories'
+      fullPath: '/dashboard/categories'
+      preLoaderRoute: typeof DashboardCategoriesLayoutImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/team': {
+      id: '/dashboard/team'
+      path: '/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof DashboardTeamLayoutImport
+      parentRoute: typeof DashboardLayoutImport
     }
     '/auth/signup': {
       id: '/auth/signup'
@@ -144,19 +193,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/dashboard/team/$team': {
+      id: '/dashboard/team/$team'
+      path: '/$team'
+      fullPath: '/dashboard/team/$team'
+      preLoaderRoute: typeof DashboardTeamTeamImport
+      parentRoute: typeof DashboardTeamLayoutImport
+    }
     '/dashboard/auditlogs/': {
       id: '/dashboard/auditlogs/'
-      path: '/auditlogs'
-      fullPath: '/dashboard/auditlogs'
+      path: '/'
+      fullPath: '/dashboard/auditlogs/'
       preLoaderRoute: typeof DashboardAuditlogsIndexImport
-      parentRoute: typeof DashboardLayoutImport
+      parentRoute: typeof DashboardAuditlogsLayoutImport
     }
     '/dashboard/categories/': {
       id: '/dashboard/categories/'
-      path: '/categories'
-      fullPath: '/dashboard/categories'
+      path: '/'
+      fullPath: '/dashboard/categories/'
       preLoaderRoute: typeof DashboardCategoriesIndexImport
-      parentRoute: typeof DashboardLayoutImport
+      parentRoute: typeof DashboardCategoriesLayoutImport
     }
     '/dashboard/inventory/': {
       id: '/dashboard/inventory/'
@@ -167,10 +223,10 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/team/': {
       id: '/dashboard/team/'
-      path: '/team'
-      fullPath: '/dashboard/team'
+      path: '/'
+      fullPath: '/dashboard/team/'
       preLoaderRoute: typeof DashboardTeamIndexImport
-      parentRoute: typeof DashboardLayoutImport
+      parentRoute: typeof DashboardTeamLayoutImport
     }
   }
 }
@@ -193,20 +249,61 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
   AuthLayoutRouteChildren,
 )
 
-interface DashboardLayoutRouteChildren {
-  DashboardIndexRoute: typeof DashboardIndexRoute
+interface DashboardAuditlogsLayoutRouteChildren {
   DashboardAuditlogsIndexRoute: typeof DashboardAuditlogsIndexRoute
+}
+
+const DashboardAuditlogsLayoutRouteChildren: DashboardAuditlogsLayoutRouteChildren =
+  {
+    DashboardAuditlogsIndexRoute: DashboardAuditlogsIndexRoute,
+  }
+
+const DashboardAuditlogsLayoutRouteWithChildren =
+  DashboardAuditlogsLayoutRoute._addFileChildren(
+    DashboardAuditlogsLayoutRouteChildren,
+  )
+
+interface DashboardCategoriesLayoutRouteChildren {
   DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
-  DashboardInventoryIndexRoute: typeof DashboardInventoryIndexRoute
+}
+
+const DashboardCategoriesLayoutRouteChildren: DashboardCategoriesLayoutRouteChildren =
+  {
+    DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
+  }
+
+const DashboardCategoriesLayoutRouteWithChildren =
+  DashboardCategoriesLayoutRoute._addFileChildren(
+    DashboardCategoriesLayoutRouteChildren,
+  )
+
+interface DashboardTeamLayoutRouteChildren {
+  DashboardTeamTeamRoute: typeof DashboardTeamTeamRoute
   DashboardTeamIndexRoute: typeof DashboardTeamIndexRoute
 }
 
-const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
-  DashboardIndexRoute: DashboardIndexRoute,
-  DashboardAuditlogsIndexRoute: DashboardAuditlogsIndexRoute,
-  DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
-  DashboardInventoryIndexRoute: DashboardInventoryIndexRoute,
+const DashboardTeamLayoutRouteChildren: DashboardTeamLayoutRouteChildren = {
+  DashboardTeamTeamRoute: DashboardTeamTeamRoute,
   DashboardTeamIndexRoute: DashboardTeamIndexRoute,
+}
+
+const DashboardTeamLayoutRouteWithChildren =
+  DashboardTeamLayoutRoute._addFileChildren(DashboardTeamLayoutRouteChildren)
+
+interface DashboardLayoutRouteChildren {
+  DashboardAuditlogsLayoutRoute: typeof DashboardAuditlogsLayoutRouteWithChildren
+  DashboardCategoriesLayoutRoute: typeof DashboardCategoriesLayoutRouteWithChildren
+  DashboardTeamLayoutRoute: typeof DashboardTeamLayoutRouteWithChildren
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardInventoryIndexRoute: typeof DashboardInventoryIndexRoute
+}
+
+const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardAuditlogsLayoutRoute: DashboardAuditlogsLayoutRouteWithChildren,
+  DashboardCategoriesLayoutRoute: DashboardCategoriesLayoutRouteWithChildren,
+  DashboardTeamLayoutRoute: DashboardTeamLayoutRouteWithChildren,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardInventoryIndexRoute: DashboardInventoryIndexRoute,
 }
 
 const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
@@ -217,14 +314,18 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthLayoutRouteWithChildren
   '/dashboard': typeof DashboardLayoutRouteWithChildren
+  '/dashboard/auditlogs': typeof DashboardAuditlogsLayoutRouteWithChildren
+  '/dashboard/categories': typeof DashboardCategoriesLayoutRouteWithChildren
+  '/dashboard/team': typeof DashboardTeamLayoutRouteWithChildren
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/auditlogs': typeof DashboardAuditlogsIndexRoute
-  '/dashboard/categories': typeof DashboardCategoriesIndexRoute
+  '/dashboard/team/$team': typeof DashboardTeamTeamRoute
+  '/dashboard/auditlogs/': typeof DashboardAuditlogsIndexRoute
+  '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory': typeof DashboardInventoryIndexRoute
-  '/dashboard/team': typeof DashboardTeamIndexRoute
+  '/dashboard/team/': typeof DashboardTeamIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -233,6 +334,7 @@ export interface FileRoutesByTo {
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/team/$team': typeof DashboardTeamTeamRoute
   '/dashboard/auditlogs': typeof DashboardAuditlogsIndexRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory': typeof DashboardInventoryIndexRoute
@@ -244,10 +346,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthLayoutRouteWithChildren
   '/dashboard': typeof DashboardLayoutRouteWithChildren
+  '/dashboard/auditlogs': typeof DashboardAuditlogsLayoutRouteWithChildren
+  '/dashboard/categories': typeof DashboardCategoriesLayoutRouteWithChildren
+  '/dashboard/team': typeof DashboardTeamLayoutRouteWithChildren
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/team/$team': typeof DashboardTeamTeamRoute
   '/dashboard/auditlogs/': typeof DashboardAuditlogsIndexRoute
   '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory/': typeof DashboardInventoryIndexRoute
@@ -260,14 +366,18 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/dashboard/auditlogs'
+    | '/dashboard/categories'
+    | '/dashboard/team'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth/'
     | '/dashboard/'
-    | '/dashboard/auditlogs'
-    | '/dashboard/categories'
+    | '/dashboard/team/$team'
+    | '/dashboard/auditlogs/'
+    | '/dashboard/categories/'
     | '/dashboard/inventory'
-    | '/dashboard/team'
+    | '/dashboard/team/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -275,6 +385,7 @@ export interface FileRouteTypes {
     | '/auth/verify-email'
     | '/auth'
     | '/dashboard'
+    | '/dashboard/team/$team'
     | '/dashboard/auditlogs'
     | '/dashboard/categories'
     | '/dashboard/inventory'
@@ -284,10 +395,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
+    | '/dashboard/auditlogs'
+    | '/dashboard/categories'
+    | '/dashboard/team'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth/'
     | '/dashboard/'
+    | '/dashboard/team/$team'
     | '/dashboard/auditlogs/'
     | '/dashboard/categories/'
     | '/dashboard/inventory/'
@@ -336,10 +451,32 @@ export const routeTree = rootRoute
     "/dashboard": {
       "filePath": "dashboard/layout.tsx",
       "children": [
+        "/dashboard/auditlogs",
+        "/dashboard/categories",
+        "/dashboard/team",
         "/dashboard/",
-        "/dashboard/auditlogs/",
-        "/dashboard/categories/",
-        "/dashboard/inventory/",
+        "/dashboard/inventory/"
+      ]
+    },
+    "/dashboard/auditlogs": {
+      "filePath": "dashboard/auditlogs/layout.tsx",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/auditlogs/"
+      ]
+    },
+    "/dashboard/categories": {
+      "filePath": "dashboard/categories/layout.tsx",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/categories/"
+      ]
+    },
+    "/dashboard/team": {
+      "filePath": "dashboard/team/layout.tsx",
+      "parent": "/dashboard",
+      "children": [
+        "/dashboard/team/$team",
         "/dashboard/team/"
       ]
     },
@@ -359,13 +496,17 @@ export const routeTree = rootRoute
       "filePath": "dashboard/index.tsx",
       "parent": "/dashboard"
     },
+    "/dashboard/team/$team": {
+      "filePath": "dashboard/team/$team.tsx",
+      "parent": "/dashboard/team"
+    },
     "/dashboard/auditlogs/": {
       "filePath": "dashboard/auditlogs/index.tsx",
-      "parent": "/dashboard"
+      "parent": "/dashboard/auditlogs"
     },
     "/dashboard/categories/": {
       "filePath": "dashboard/categories/index.tsx",
-      "parent": "/dashboard"
+      "parent": "/dashboard/categories"
     },
     "/dashboard/inventory/": {
       "filePath": "dashboard/inventory/index.tsx",
@@ -373,7 +514,7 @@ export const routeTree = rootRoute
     },
     "/dashboard/team/": {
       "filePath": "dashboard/team/index.tsx",
-      "parent": "/dashboard"
+      "parent": "/dashboard/team"
     }
   }
 }

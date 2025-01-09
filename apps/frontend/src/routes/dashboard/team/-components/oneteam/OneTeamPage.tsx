@@ -1,17 +1,17 @@
-
 import { Suspense } from "react";
 import { OneTeamDetails } from "./OneTeamDetails";
 
-interface OneTeamPageProps {
-}
+interface OneTeamPageProps {}
 
 export function OneTeamPage({}: OneTeamPageProps) {
   return (
-    <div className="w-full h-full min-h-screen flex flex-col items-center justify-center">
+    <div className="flex h-full min-h-screen w-full flex-col items-center justify-center">
       <Suspense
         fallback={
-          <div className=" min-h-screen h-full flex justify-center items-center w-full">
-            <div className="bg-base-300 text-2xl skeleton h-56 w-[70%] md:w-[60%] flex justify-center items-center">Loading</div>
+          <div className="flex h-full min-h-screen w-full items-center justify-center">
+            <div className="skeleton flex h-56 w-[70%] items-center justify-center bg-base-300 text-2xl md:w-[60%]">
+              Loading
+            </div>
           </div>
         }
       >
@@ -20,5 +20,3 @@ export function OneTeamPage({}: OneTeamPageProps) {
     </div>
   );
 }
-
-  

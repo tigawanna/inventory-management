@@ -8,7 +8,7 @@ interface OneTeamDetailsProps {
 }
 
 export function OneTeamDetails({}: OneTeamDetailsProps) {
-  const { team } = useParams({ from: "/dashboard/team/$team/" });
+  const { team } = useParams({ from: "/dashboard/team/$team" });
   const query = useSuspenseQuery(oneTeamQueryOptions({ team }));
   const data = query.data;
   const error = query.error;
@@ -16,7 +16,7 @@ export function OneTeamDetails({}: OneTeamDetailsProps) {
   if (error) {
     return (
       <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
-           <ErrorWrapper error={error} />
+           <ErrorWrapper err={error} />
       </div>
     );
   }

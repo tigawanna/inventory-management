@@ -13,7 +13,6 @@ interface InventorySortSelectProps {}
 
 export function InventorySortSelect({}: InventorySortSelectProps) {
   const navigate = useNavigate({ from: "/dashboard/inventory" });
-  // @ts-expect-error
   const { sort, ...rest } = useSearch({ from: "/dashboard/inventory/" });
   const paymentTypes = ["name", "quantity", "price", "default"] as const;
   return (
@@ -48,7 +47,6 @@ export function InventorySortSelect({}: InventorySortSelectProps) {
   );
 }
 export function InventoryOrderSelect({}: InventorySortSelectProps) {
-  // @ts-expect-error
   const { order, ...rest } = useSearch({ from: "/dashboard/inventory/" });
   const navigate = useNavigate({ from: "/dashboard/inventory" });
   const paymentTypes = ["desc", "asc"] as const;
