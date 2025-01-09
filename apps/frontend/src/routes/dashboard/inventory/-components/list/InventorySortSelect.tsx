@@ -12,8 +12,8 @@ import { useState } from "react";
 interface InventorySortSelectProps {}
 
 export function InventorySortSelect({}: InventorySortSelectProps) {
-  const { sort, ...rest } = useSearch({ from: "/inventory/" });
-  const navigate = useNavigate({ from: "/inventory" });
+  const { sort, ...rest } = useSearch({ from: "/dashboard/inventory/" });
+  const navigate = useNavigate({ from: "/dashboard/inventory" });
   const paymentTypes = ["name", "quantity", "price", "All"] as const;
   return (
     <Select

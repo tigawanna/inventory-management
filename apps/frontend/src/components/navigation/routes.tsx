@@ -1,28 +1,20 @@
-import { Droplet, Home, NotepadText, ShieldCheck, Store, User, Users, Wallet, Zap } from "lucide-react";
+import { Home, ShieldCheck, Store, Users, Wallet } from "lucide-react";
 
 export const dashboard_routes = [
-  { name: "shops", href: "/dashboard/shops", icon: <Store /> },
+  { name: "inventory", href: "/dashboard/inventory", icon: <Users /> },
+  { name: "categories", href: "/dashboard/categories", icon: <Wallet /> },
+  { name: "auditlogs", href: "/dashboard/auditlogs", icon: <Wallet /> },
   {
-    name: "utilities",
-    href: "/dashboard/bills",
+    name: "team",
+    href: "/dashboard/team",
     icon: (
       <div className="flex">
-        <Droplet className="fill-info text-info" />
-        <Zap className="fill-warning text-warning" />
+        <Users />
+        <ShieldCheck />
       </div>
     ),
   },
-  { name: "tenants", href: "/dashboard/tenants", icon: <Users /> },
-  { name: "payments", href: "/dashboard/payments", icon: <Wallet /> },
-  { name: "staff", href: "/dashboard/staff", icon: <div className="flex">
-    <Users />
-    <ShieldCheck />
-
-  </div> },
-  { name: "todos", href: "/dashboard/todos", icon: <NotepadText />},
 ] as const;
-
-
 
 export const routes = [
   {
@@ -37,12 +29,10 @@ export const routes = [
     icon: <Store />,
     children: dashboard_routes,
   },
-  {
-    name: "Profile",
-    href: "/profile",
-    icon: <User />,
-    children: undefined,
-  },
+  // {
+  //   name: "Profile",
+  //   href: "/profile",
+  //   icon: <User />,
+  //   children: undefined,
+  // },
 ] as const;
-
-

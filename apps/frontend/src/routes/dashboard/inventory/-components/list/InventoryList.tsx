@@ -1,20 +1,20 @@
 import { ItemNotFound } from "@/components/wrappers/ItemNotFound";
 import { ErrorWrapper } from "@/components/wrappers/ErrorWrapper";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useSearch } from "@tanstack/react-router";
+import {  useSearch } from "@tanstack/react-router";
 import ResponsivePagination from "react-responsive-pagination";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
-import { UpdateInventoryform } from "@/routes/inventory/-components/form/update";
-import { inventoryListQueryOptions } from "@/routes/inventory/-query-options/inventory-query-option";
 import { DeleteInventoryForm } from "../form/delete";
+import { inventoryListQueryOptions } from "../../-query-options/inventory-query-option";
+import { UpdateInventoryform } from "../form/update";
 
 interface InventoryListProps {
   keyword?: string;
 }
 
 export function InventoryList({ keyword = "" }: InventoryListProps) {
-  const { page, updatePage } = usePageSearchQuery("/inventory");
-  const sp = useSearch({ from: "/inventory/" });
+  const { page, updatePage } = usePageSearchQuery("/dashboard/inventory");
+  const sp = useSearch({ from: "/dashboard/inventory/" });
   const query = useSuspenseQuery(
     inventoryListQueryOptions({ ...sp, keyword, page }),
   );

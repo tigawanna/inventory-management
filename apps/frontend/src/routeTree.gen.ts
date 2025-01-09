@@ -11,14 +11,28 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as DashboardLayoutImport } from './routes/dashboard/layout'
 import { Route as AuthLayoutImport } from './routes/auth/layout'
 import { Route as IndexImport } from './routes/index'
-import { Route as InventoryIndexImport } from './routes/inventory/index'
+import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
 import { Route as AuthVerifyEmailImport } from './routes/auth/verify-email'
 import { Route as AuthSignupImport } from './routes/auth/signup'
+import { Route as DashboardTeamIndexImport } from './routes/dashboard/team/index'
+import { Route as DashboardInventoryIndexImport } from './routes/dashboard/inventory/index'
+import { Route as DashboardCategoriesIndexImport } from './routes/dashboard/categories/index'
+import { Route as DashboardAuditlogsIndexImport } from './routes/dashboard/auditlogs/index'
+import { Route as DashboardTeamTeamIndexImport } from './routes/dashboard/team/$team/index'
+import { Route as DashboardCategoriesCategoriesIndexImport } from './routes/dashboard/categories/$categories/index'
+import { Route as DashboardAuditlogsAuditlogsIndexImport } from './routes/dashboard/auditlogs/$auditlogs/index'
 
 // Create/Update Routes
+
+const DashboardLayoutRoute = DashboardLayoutImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthLayoutRoute = AuthLayoutImport.update({
   id: '/auth',
@@ -32,10 +46,10 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const InventoryIndexRoute = InventoryIndexImport.update({
-  id: '/inventory/',
-  path: '/inventory/',
-  getParentRoute: () => rootRoute,
+const DashboardIndexRoute = DashboardIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
 
 const AuthIndexRoute = AuthIndexImport.update({
@@ -56,6 +70,50 @@ const AuthSignupRoute = AuthSignupImport.update({
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
+const DashboardTeamIndexRoute = DashboardTeamIndexImport.update({
+  id: '/team/',
+  path: '/team/',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardInventoryIndexRoute = DashboardInventoryIndexImport.update({
+  id: '/inventory/',
+  path: '/inventory/',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardCategoriesIndexRoute = DashboardCategoriesIndexImport.update({
+  id: '/categories/',
+  path: '/categories/',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardAuditlogsIndexRoute = DashboardAuditlogsIndexImport.update({
+  id: '/auditlogs/',
+  path: '/auditlogs/',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardTeamTeamIndexRoute = DashboardTeamTeamIndexImport.update({
+  id: '/team/$team/',
+  path: '/team/$team/',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+
+const DashboardCategoriesCategoriesIndexRoute =
+  DashboardCategoriesCategoriesIndexImport.update({
+    id: '/categories/$categories/',
+    path: '/categories/$categories/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardAuditlogsAuditlogsIndexRoute =
+  DashboardAuditlogsAuditlogsIndexImport.update({
+    id: '/auditlogs/$auditlogs/',
+    path: '/auditlogs/$auditlogs/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -72,6 +130,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthLayoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardLayoutImport
       parentRoute: typeof rootRoute
     }
     '/auth/signup': {
@@ -95,12 +160,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexImport
       parentRoute: typeof AuthLayoutImport
     }
-    '/inventory/': {
-      id: '/inventory/'
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/auditlogs/': {
+      id: '/dashboard/auditlogs/'
+      path: '/auditlogs'
+      fullPath: '/dashboard/auditlogs'
+      preLoaderRoute: typeof DashboardAuditlogsIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/categories/': {
+      id: '/dashboard/categories/'
+      path: '/categories'
+      fullPath: '/dashboard/categories'
+      preLoaderRoute: typeof DashboardCategoriesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/inventory/': {
+      id: '/dashboard/inventory/'
       path: '/inventory'
-      fullPath: '/inventory'
-      preLoaderRoute: typeof InventoryIndexImport
-      parentRoute: typeof rootRoute
+      fullPath: '/dashboard/inventory'
+      preLoaderRoute: typeof DashboardInventoryIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/team/': {
+      id: '/dashboard/team/'
+      path: '/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof DashboardTeamIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/auditlogs/$auditlogs/': {
+      id: '/dashboard/auditlogs/$auditlogs/'
+      path: '/auditlogs/$auditlogs'
+      fullPath: '/dashboard/auditlogs/$auditlogs'
+      preLoaderRoute: typeof DashboardAuditlogsAuditlogsIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/categories/$categories/': {
+      id: '/dashboard/categories/$categories/'
+      path: '/categories/$categories'
+      fullPath: '/dashboard/categories/$categories'
+      preLoaderRoute: typeof DashboardCategoriesCategoriesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/team/$team/': {
+      id: '/dashboard/team/$team/'
+      path: '/team/$team'
+      fullPath: '/dashboard/team/$team'
+      preLoaderRoute: typeof DashboardTeamTeamIndexImport
+      parentRoute: typeof DashboardLayoutImport
     }
   }
 }
@@ -123,13 +237,48 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
   AuthLayoutRouteChildren,
 )
 
+interface DashboardLayoutRouteChildren {
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardAuditlogsIndexRoute: typeof DashboardAuditlogsIndexRoute
+  DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
+  DashboardInventoryIndexRoute: typeof DashboardInventoryIndexRoute
+  DashboardTeamIndexRoute: typeof DashboardTeamIndexRoute
+  DashboardAuditlogsAuditlogsIndexRoute: typeof DashboardAuditlogsAuditlogsIndexRoute
+  DashboardCategoriesCategoriesIndexRoute: typeof DashboardCategoriesCategoriesIndexRoute
+  DashboardTeamTeamIndexRoute: typeof DashboardTeamTeamIndexRoute
+}
+
+const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardAuditlogsIndexRoute: DashboardAuditlogsIndexRoute,
+  DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
+  DashboardInventoryIndexRoute: DashboardInventoryIndexRoute,
+  DashboardTeamIndexRoute: DashboardTeamIndexRoute,
+  DashboardAuditlogsAuditlogsIndexRoute: DashboardAuditlogsAuditlogsIndexRoute,
+  DashboardCategoriesCategoriesIndexRoute:
+    DashboardCategoriesCategoriesIndexRoute,
+  DashboardTeamTeamIndexRoute: DashboardTeamTeamIndexRoute,
+}
+
+const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
+  DashboardLayoutRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthLayoutRouteWithChildren
+  '/dashboard': typeof DashboardLayoutRouteWithChildren
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
-  '/inventory': typeof InventoryIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/auditlogs': typeof DashboardAuditlogsIndexRoute
+  '/dashboard/categories': typeof DashboardCategoriesIndexRoute
+  '/dashboard/inventory': typeof DashboardInventoryIndexRoute
+  '/dashboard/team': typeof DashboardTeamIndexRoute
+  '/dashboard/auditlogs/$auditlogs': typeof DashboardAuditlogsAuditlogsIndexRoute
+  '/dashboard/categories/$categories': typeof DashboardCategoriesCategoriesIndexRoute
+  '/dashboard/team/$team': typeof DashboardTeamTeamIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -137,17 +286,32 @@ export interface FileRoutesByTo {
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth': typeof AuthIndexRoute
-  '/inventory': typeof InventoryIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/dashboard/auditlogs': typeof DashboardAuditlogsIndexRoute
+  '/dashboard/categories': typeof DashboardCategoriesIndexRoute
+  '/dashboard/inventory': typeof DashboardInventoryIndexRoute
+  '/dashboard/team': typeof DashboardTeamIndexRoute
+  '/dashboard/auditlogs/$auditlogs': typeof DashboardAuditlogsAuditlogsIndexRoute
+  '/dashboard/categories/$categories': typeof DashboardCategoriesCategoriesIndexRoute
+  '/dashboard/team/$team': typeof DashboardTeamTeamIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthLayoutRouteWithChildren
+  '/dashboard': typeof DashboardLayoutRouteWithChildren
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
-  '/inventory/': typeof InventoryIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/dashboard/auditlogs/': typeof DashboardAuditlogsIndexRoute
+  '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
+  '/dashboard/inventory/': typeof DashboardInventoryIndexRoute
+  '/dashboard/team/': typeof DashboardTeamIndexRoute
+  '/dashboard/auditlogs/$auditlogs/': typeof DashboardAuditlogsAuditlogsIndexRoute
+  '/dashboard/categories/$categories/': typeof DashboardCategoriesCategoriesIndexRoute
+  '/dashboard/team/$team/': typeof DashboardTeamTeamIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -155,33 +319,61 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/dashboard'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth/'
-    | '/inventory'
+    | '/dashboard/'
+    | '/dashboard/auditlogs'
+    | '/dashboard/categories'
+    | '/dashboard/inventory'
+    | '/dashboard/team'
+    | '/dashboard/auditlogs/$auditlogs'
+    | '/dashboard/categories/$categories'
+    | '/dashboard/team/$team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/signup' | '/auth/verify-email' | '/auth' | '/inventory'
+  to:
+    | '/'
+    | '/auth/signup'
+    | '/auth/verify-email'
+    | '/auth'
+    | '/dashboard'
+    | '/dashboard/auditlogs'
+    | '/dashboard/categories'
+    | '/dashboard/inventory'
+    | '/dashboard/team'
+    | '/dashboard/auditlogs/$auditlogs'
+    | '/dashboard/categories/$categories'
+    | '/dashboard/team/$team'
   id:
     | '__root__'
     | '/'
     | '/auth'
+    | '/dashboard'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth/'
-    | '/inventory/'
+    | '/dashboard/'
+    | '/dashboard/auditlogs/'
+    | '/dashboard/categories/'
+    | '/dashboard/inventory/'
+    | '/dashboard/team/'
+    | '/dashboard/auditlogs/$auditlogs/'
+    | '/dashboard/categories/$categories/'
+    | '/dashboard/team/$team/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
-  InventoryIndexRoute: typeof InventoryIndexRoute
+  DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthLayoutRoute: AuthLayoutRouteWithChildren,
-  InventoryIndexRoute: InventoryIndexRoute,
+  DashboardLayoutRoute: DashboardLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -196,7 +388,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/auth",
-        "/inventory/"
+        "/dashboard"
       ]
     },
     "/": {
@@ -208,6 +400,19 @@ export const routeTree = rootRoute
         "/auth/signup",
         "/auth/verify-email",
         "/auth/"
+      ]
+    },
+    "/dashboard": {
+      "filePath": "dashboard/layout.tsx",
+      "children": [
+        "/dashboard/",
+        "/dashboard/auditlogs/",
+        "/dashboard/categories/",
+        "/dashboard/inventory/",
+        "/dashboard/team/",
+        "/dashboard/auditlogs/$auditlogs/",
+        "/dashboard/categories/$categories/",
+        "/dashboard/team/$team/"
       ]
     },
     "/auth/signup": {
@@ -222,8 +427,37 @@ export const routeTree = rootRoute
       "filePath": "auth/index.tsx",
       "parent": "/auth"
     },
-    "/inventory/": {
-      "filePath": "inventory/index.tsx"
+    "/dashboard/": {
+      "filePath": "dashboard/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/auditlogs/": {
+      "filePath": "dashboard/auditlogs/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/categories/": {
+      "filePath": "dashboard/categories/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/inventory/": {
+      "filePath": "dashboard/inventory/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/team/": {
+      "filePath": "dashboard/team/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/auditlogs/$auditlogs/": {
+      "filePath": "dashboard/auditlogs/$auditlogs/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/categories/$categories/": {
+      "filePath": "dashboard/categories/$categories/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/team/$team/": {
+      "filePath": "dashboard/team/$team/index.tsx",
+      "parent": "/dashboard"
     }
   }
 }
