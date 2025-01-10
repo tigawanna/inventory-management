@@ -1,0 +1,16 @@
+meta {
+  name: verify-email
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:5000/api/v1/auth/verify-email?email=denniskinuthiaw@gmail.com
+  body: none
+  auth: none
+}
+
+params:query {
+  email: denniskinuthiaw@gmail.com
+  ~token: 4b860e8bc28139d6
+}
