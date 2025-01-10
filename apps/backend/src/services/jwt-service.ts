@@ -41,17 +41,19 @@ const refreshTokebCookieKey = "kjz-rft";
 export async function createAccessToken(
   res: Response,
   payload: UserJWTPayload,
+  superUser: boolean = false,
 ) {
   const { ACCESS_TOKEN_SECRET } = envVariables;
   const fiftenMinutesInSeconds = Math.floor(Date.now() / 1000) + 60 * 15; // 15 minutes
-      const sanitizedPayload = {
-        id: payload.id,
-        email: payload.email,
-        role: payload.role,
-        name: payload.name,
-      };
+  const fiveDaysInSeconds = 5 * 24 * 60 * 60;
+  const sanitizedPayload = {
+    id: payload.id,
+    email: payload.email,
+    role: payload.role,
+    name: payload.name,
+  };
   const accessToken = await sign(
-    { ...sanitizedPayload, exp: fiftenMinutesInSeconds },
+    { ...sanitizedPayload, exp: superUser ? fiveDaysInSeconds : fiftenMinutesInSeconds },
     ACCESS_TOKEN_SECRET,
   );
   res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
@@ -77,14 +79,14 @@ export async function createRefreshToken(
 ) {
   const { REFRESH_TOKEN_SECRET } = envVariables;
   const { refreshTokenVersion } = await bumpUserTokenVersion(payload.id);
-  const twelveDaysInSeconds = 5 * 24 * 60 * 60;
+  const twelveDaysInSeconds =  12 * 24 * 60 * 60;
   const expriesin = Math.floor(Date.now() / 1000) + twelveDaysInSeconds;
-    const sanitizedPayload = {
-      id: payload.id,
-      email: payload.email,
-      role: payload.role,
-      name: payload.name,
-    };
+  const sanitizedPayload = {
+    id: payload.id,
+    email: payload.email,
+    role: payload.role,
+    name: payload.name,
+  };
   const refreshToken = await sign(
     { ...sanitizedPayload, refreshTokenVersion, exp: expriesin },
     REFRESH_TOKEN_SECRET,
@@ -186,8 +188,9 @@ export async function invalidateRefreshToken(req: Request, res: Response) {
 export async function generateUserAuthTokens(
   res: Response,
   userPayload: UserJWTPayload,
+  superUser: boolean = false
 ) {
-  const accessToken = await createAccessToken(res, userPayload);
+  const accessToken = await createAccessToken(res, userPayload, superUser);
   const refreshToken = await createRefreshToken(res, userPayload);
   return { accessToken, refreshToken };
 }

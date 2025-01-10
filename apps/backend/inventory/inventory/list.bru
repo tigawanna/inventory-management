@@ -7,5 +7,13 @@ meta {
 get {
   url: http://localhost:5000/api/v1/items
   body: none
-  auth: none
+  auth: bearer
+}
+
+headers {
+  : 
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxOTQ0MTcwLWY0NzEtN2M2ZS05ODVhLTZiNzczYzhiN2FhMCIsImVtYWlsIjoiZGVubmlza2ludXRoaWF3QGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsIm5hbWUiOiJuYW1lIDEiLCJleHAiOjE3MzY1MjgxNTgsImlhdCI6MTczNjUyNzI1OH0.C7nI8Xz9ESIGLhn0nm83vvAP7AAaxgmSM8fGC_CR0IQ"
 }

@@ -1,0 +1,27 @@
+meta {
+  name: update
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:5000/api/v1/items/0194431e-b01f-7b61-8da3-25a7eb8310f8
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxOTQ0MWE2LTNkZDEtNzI4MC05ZjVmLTRmOWFjMGY0NjVjZiIsInVwZGF0ZWRfYXQiOm51bGwsImNyZWF0ZWRfYXQiOiIyMDI1LTAxLTA3VDE5OjQzOjIxLjQ0OVoiLCJuYW1lIjoiZGVubmlzIiwiZW1haWwiOiJkZW5uaXNraW51dGhpYXdAZ21haWwuY29tIiwiYXZhdGFyVXJsIjpudWxsLCJyb2xlIjoiYWRtaW4iLCJyZWZyZXNoVG9rZW5WZXJzaW9uIjoxLCJpc0VtYWlsVmVyaWZpZWQiOnRydWUsImV4cCI6MTczNjI5MzMzNywiaWF0IjoxNzM2MjkyNDM3fQ.hYw5GMgxPy5lqVPXhhY0VudxU6uZnqJ-wlfzLTGOnYE
+}
+
+body:json {
+  {
+          "name": "dummy_record_3",
+          "description": "dummy record 3",
+          "quantity": 0,
+          "price": "2000",
+          "categoryId": "category_id_1",
+          "sku": "dummy_3",
+          "isActive": true
+      }
+}

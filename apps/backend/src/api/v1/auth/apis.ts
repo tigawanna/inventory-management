@@ -1,23 +1,25 @@
 import express from "express";
 import { AuthService } from "@/services/auth-service.ts";
 import { verifyUserTokenRoute, meRoute, refreshTokenRoute, logoutRoute } from "./identity.ts";
-import { loginUserRoute } from "./signin.ts";
+import { loginSuperUserRoute, loginUserRoute } from "./signin.ts";
 import { forgotPasswordRoute, resetPasswordRoute } from "./password.ts";
 import { registerUserRoute } from "./signup.ts";
 
 const router = express.Router();
 const authService = new AuthService();
-// login
+// signin
 loginUserRoute(router, authService);
-// register
+// super-signin
+loginSuperUserRoute(router, authService);
+// signup
 registerUserRoute(router, authService);
-// verify
+// verify-email
 verifyUserTokenRoute(router, authService);
 // me
 meRoute(router, authService);
-// forgot password
+// forgot-password
 forgotPasswordRoute(router, authService);
-// reset password
+// reset-password
 resetPasswordRoute(router, authService);
 // refresh token 
 refreshTokenRoute(router, authService);

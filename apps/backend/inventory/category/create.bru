@@ -1,0 +1,26 @@
+meta {
+  name: create
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:5000/api/v1/items
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxOTQ0MWE2LTNkZDEtNzI4MC05ZjVmLTRmOWFjMGY0NjVjZiIsInVwZGF0ZWRfYXQiOm51bGwsImNyZWF0ZWRfYXQiOiIyMDI1LTAxLTA3VDE5OjQzOjIxLjQ0OVoiLCJuYW1lIjoiZGVubmlzIiwiZW1haWwiOiJkZW5uaXNraW51dGhpYXdAZ21haWwuY29tIiwiYXZhdGFyVXJsIjpudWxsLCJyb2xlIjoiYWRtaW4iLCJyZWZyZXNoVG9rZW5WZXJzaW9uIjoxLCJpc0VtYWlsVmVyaWZpZWQiOnRydWUsImV4cCI6MTczNjI5MzMzNywiaWF0IjoxNzM2MjkyNDM3fQ.hYw5GMgxPy5lqVPXhhY0VudxU6uZnqJ-wlfzLTGOnYE
+}
+
+body:json {
+  {
+  
+          "quantity": 0,
+          "price": "2000",
+          "categoryId": "category_id_1",
+          "sku": "dummy_3",
+          "isActive": true
+      }
+}
