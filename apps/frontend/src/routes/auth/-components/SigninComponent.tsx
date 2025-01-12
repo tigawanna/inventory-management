@@ -36,28 +36,30 @@ export function SigninComponent({}: SigninComponentProps) {
       return signInUser(body);
     },
     onSuccess(data) {
-      if(data.error){
+      if (data.error) {
         makeHotToast({
           title: "Something went wrong",
           description: data.error.message,
           variant: "error",
           duration: 10000,
         });
-        return
+        return;
       }
       makeHotToast({
         title: "signed in",
-        description:"",
+        description: "",
         variant: "success",
         duration: 2000,
       });
-      
-      if(!data.record?.isEmailVerified){
 
-        return navigate({ to:"/dashboard" });
+      if (!data.record?.isEmailVerified) {
+        return navigate({
+          to: "/auth/verify-email",
+          search: { email: data.record?.email, returnTo },
+        });
       }
       qc.invalidateQueries(viewerqueryOptions());
-      navigate({ to:"/dashboard" });
+      navigate({ to: "/dashboard" });
       // qc.setQueryData(["viewer"], () => data.record);
       if (typeof window !== "undefined") {
         location.reload();
@@ -77,26 +79,27 @@ export function SigninComponent({}: SigninComponentProps) {
     ...formOpts,
     onSubmit: async ({ value }) => {
       await mutation.mutate({
-        body:value as any
+        body: value as any,
       });
     },
   });
-  const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<string, Array<string>>
-    useEffect(() => {
-      mutationError &&
-        Object?.entries((mutationError))?.forEach(
-          ([key, value]) => {
-            form.setFieldMeta(key as any, (prev) => {
-              return {
-                ...prev,
-                errorMap: {
-                  onChange: value?.join(", "),
-                },
-              };
-            });
-          },
-        );
-    }, [mutationError]);
+  const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<
+    string,
+    Array<string>
+  >;
+  useEffect(() => {
+    mutationError &&
+      Object?.entries(mutationError)?.forEach(([key, value]) => {
+        form.setFieldMeta(key as any, (prev) => {
+          return {
+            ...prev,
+            errorMap: {
+              onChange: value?.join(", "),
+            },
+          };
+        });
+      });
+  }, [mutationError]);
   return (
     <div className="flex h-full w-full items-center justify-evenly gap-2 p-5">
       <img
@@ -188,7 +191,7 @@ export function SigninComponent({}: SigninComponentProps) {
           >
             Sign up
           </Link>
-          <RequestPasswordReset returnTo={returnTo}/>
+          <RequestPasswordReset returnTo={returnTo} />
         </div>
       </form>
     </div>

@@ -83,7 +83,6 @@ export class InventoryService {
       action: AuditAction.CREATE,
       entityType: EntityType.INVENTORY,
       entityId: item[0].id,
-      // @ts-expect-error
       newData: data,
       ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
     },req);

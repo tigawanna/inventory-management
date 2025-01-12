@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
@@ -7,7 +7,7 @@ import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { verifyEmail } from "@/lib/api/users";
-import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
+import { RequestEmailVerification } from "./RequestEmailVerification";
 
 interface VerifyEmailComponentProps {}
 
@@ -23,6 +23,7 @@ const formOpts = formOptions<VerifyUserEmailFields>({
 
 export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
  const qc = useQueryClient();
+ const {returnTo,email} = useSearch({ from: "/auth/verify-email" });
   const navigate = useNavigate({ from: "/auth/verify-email" });
   const mutation = useMutation( {
     mutationFn: async ({ body }: { body: VerifyUserEmailFields }) => {
@@ -44,13 +45,13 @@ export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
         duration: 1000,
       });
 
-      qc.invalidateQueries(viewerqueryOptions());
+      // qc.invalidateQueries(viewerqueryOptions());
       // qc.setQueryData(["viewer"], () => data);
 
       navigate({ to:"/auth",search:{returnTo:"/"}});
-      if (typeof window !== "undefined") {
-        location.reload();
-      }
+      // if (typeof window !== "undefined") {
+      //   location.reload();
+      // }
     },
     onError(error) {
       makeHotToast({
@@ -106,6 +107,7 @@ export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
               );
             }}
           />
+          <RequestEmailVerification returnTo={returnTo} email={email??""} />
         </div>
         <MutationButton
           label="Sign in"

@@ -34,6 +34,7 @@ const authEndponts = {
   "refresh-token": "/api/v1/auth/refresh-token",
   "forgot-password": "/api/v1/auth/forgot-password",
   "reset-password": "/api/v1/auth/reset-password",
+  "request-reset": "/api/v1/auth/request-email-verification",
 } as const;
 
 export interface AuthEnpointsEroor{
@@ -151,6 +152,34 @@ export async function verifyEmail(token: string) {
     };
   }
 }
+export async function requestEmailVerification(email: string) {
+  try {
+    const res = await fetch(baseUrl + authEndponts["verify-email"], {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email } as ForgotPasswordRequest),
+    });
+    if (!res.ok) {
+      return {
+        record: null,
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
+      };
+    }
+    return { record: (await res.json()) as InventoryUser, error: null };
+  } catch (error) {
+    return {
+      record: null,
+      error: error as AuthEnpointsEroor,
+    };
+  }
+  
+}
 
 export async function logoutUser() {
   try {
@@ -189,7 +218,7 @@ interface ForgotPasswordRequest {
 
 export async function requestPasswordReset(email: string) {
   try {
-    const res = await fetch(baseUrl + authEndponts["forgot-password"], {
+    const res = await fetch(baseUrl + authEndponts["request-reset"], {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

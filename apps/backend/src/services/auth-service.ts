@@ -6,7 +6,11 @@ import { randomBytes } from "crypto";
 import { db } from "@/db/client.ts";
 import { passwordResets, usersTable } from "@/db/schema/users.ts";
 import { EmailService } from "./email/email-service.ts";
-import { AuditAction, AuditLogService, EntityType } from "./audit-log.service.ts";
+import {
+  AuditAction,
+  AuditLogService,
+  EntityType,
+} from "./audit-log.service.ts";
 import type { Request } from "express";
 export class AuthService {
   private readonly JWT_SECRET = process.env.JWT_SECRET!;
@@ -30,7 +34,10 @@ export class AuthService {
     return userProfile;
   }
 
-  async register(data: { email: string; password: string; name: string },req: Request) {
+  async register(
+    data: { email: string; password: string; name: string },
+    req: Request,
+  ) {
     const hashedPassword = await hash(data.password, this.SALT_ROUNDS);
     const verificationToken = randomBytes(4).toString("hex");
     const newUser = await db
@@ -43,13 +50,16 @@ export class AuthService {
       .returning();
 
     // Audit log the registration
-    await this.auditLogService.create({
-      userId: newUser[0].id,
-      action: AuditAction.CREATE,
-      entityType: EntityType.USER,
-      entityId: newUser[0].id,
-      newData: { email: data.email, name: data.name },
-    },req);
+    await this.auditLogService.create(
+      {
+        userId: newUser[0].id,
+        action: AuditAction.CREATE,
+        entityType: EntityType.USER,
+        entityId: newUser[0].id,
+        newData: { email: data.email, name: data.name },
+      },
+      req,
+    );
 
     await this.emailService.sendEmail({
       mail_to: data.email,
@@ -60,7 +70,7 @@ export class AuthService {
     return newUser[0];
   }
 
-  async login(data: { email: string; password: string },req: Request) {
+  async login(data: { email: string; password: string }, req: Request) {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.email, data.email),
     });
@@ -71,7 +81,22 @@ export class AuthService {
     await this.auditLogService.logLogin(user.id, req);
     return user;
   }
-
+  async requestVerifyEmail(email: string) {
+    const user = await db.query.usersTable.findFirst({
+      where: eq(usersTable.email, email),
+    });
+    if (!user) throw new Error("User not found");
+    const verificationToken = randomBytes(4).toString("hex");
+    await this.emailService.sendEmail({
+      mail_to: email,
+      token: verificationToken,
+      type: "verifyemail",
+    });
+    await db
+      .update(usersTable)
+      .set({ verificationToken })
+      .where(eq(usersTable.id, user.id));
+  }
   async verifyEmail(token?: string, email?: string) {
     const getUserByEmailOrToken = async (email?: string, token?: string) => {
       if (email) {
@@ -94,10 +119,14 @@ export class AuthService {
         token: verificationToken,
         type: "verifyemail",
       });
-      throw new Error("Please check your email to verify your account");
+      await db
+        .update(usersTable)
+        .set({ verificationToken })
+        .where(eq(usersTable.id, user.id));
+      return;
+      // throw new Error("Please check your email to verify your account");
     }
-
-    const user = await getUserByEmailOrToken(token);
+    const user = await getUserByEmailOrToken(undefined,token);
     if (!user) throw new Error("Invalid verification token");
     return db
       .update(usersTable)

@@ -8,10 +8,10 @@ interface inventoryQueryOptionPropss extends ListInventoryParams {
 export function inventoryListQueryOptions({
   keyword,
   page = 1,
-  categoryId="",
   limit = 10,
   order = "desc",
   sort = "name",
+  categoryId="",
 }: inventoryQueryOptionPropss) {
   return queryOptions({
     queryKey: ["inventory_list", keyword, page, categoryId, limit, order, sort],

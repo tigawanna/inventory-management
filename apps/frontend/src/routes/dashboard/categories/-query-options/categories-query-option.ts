@@ -1,44 +1,46 @@
- 
+import { categoryApi, ListCategoryQueryParams } from "@/lib/api/category";
 import { queryOptions } from "@tanstack/react-query";
 
-
-interface categoriesQueryOptionPropss {
+interface categoriesQueryOptionPropss extends ListCategoryQueryParams {
   keyword: string;
-    page?: number;
 }
-export function categoriesListQueryOptions({ keyword, page=1 }: categoriesQueryOptionPropss) {
+export function categoriesListQueryOptions({
+  keyword,
+  page = "1",
+  limit = "10",
+  order = "desc",
+  sort = "name",
+}: categoriesQueryOptionPropss) {
   return queryOptions({
-    queryKey: ["categories_list", keyword,page],
-    queryFn: () => {
-      return new Promise<{
-          page: number;
-          perPage: number;
-          totaleItems: number;
-          totalPages: number;
-        items: Array<Record<string, any> & { id: string }>;
-      }>((res) => {
-        setTimeout(() => {
-          const resArray = Array.from({ length: 30 }, (_, i) => ({
-            id: "categories_id_"+i,
-          }));
-          res({
-            page,
-            perPage: 10,
-            totaleItems: 30,
-            totalPages: 3,
-             items: resArray
-            .slice((page - 1) * 10, page * 10)
-            .filter((item) =>item.id.includes(keyword))
-          });
-        }, 1000);
+    queryKey: ["categories_list", keyword, page, limit, order, sort],
+    queryFn: async () => {
+      const { record, error } = await categoryApi.list({
+        limit: "10",
+        page,
+        order: "desc",
+        search: keyword,
+        sort: "name",
       });
+      if (error) {
+        return {
+          page,
+          perPage: 10,
+          totaleItems: 0,
+          totalPages: 0,
+          items: [],
+        };
+      }
+      return record;
     },
+    staleTime: 1000,
   });
 }
 interface oneCategoriesQueryOptionPropss {
   categories: string;
 }
-export function oneCategoriesQueryOptions({ categories }: oneCategoriesQueryOptionPropss) {
+export function oneCategoriesQueryOptions({
+  categories,
+}: oneCategoriesQueryOptionPropss) {
   return queryOptions({
     queryKey: ["one_categories", categories],
     queryFn: () => {
@@ -52,4 +54,3 @@ export function oneCategoriesQueryOptions({ categories }: oneCategoriesQueryOpti
     },
   });
 }
-  

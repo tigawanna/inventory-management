@@ -29,7 +29,7 @@ export async function bumpUserTokenVersion(userId: string) {
   const user = await db.query.usersTable.findFirst({
     where: eq(usersTable.id, userId),
   });
-  if (!user) throw new Error("User not found");
+  if (!user) return
   const newUser = await db
     .update(usersTable)
     .set({ refreshTokenVersion: (user?.refreshTokenVersion ?? 1) + 1 })

@@ -27,8 +27,8 @@ export interface CreateInventoryItem {
 export interface ListInventoryParams {
   page?: number;
   limit?: number;
-  sort?: "name" | "quantity" | "price";
   order?: "asc" | "desc";
+  sort?: "name" | "quantity" | "price";
   search?: string;
   categoryId?: string;
 }

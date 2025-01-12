@@ -1,6 +1,5 @@
 import { authenticate } from "@/middleware/auth.ts";
 import { errorCodes } from "@/schemas/shared-schema.ts";
-import type { UserJWTPayload } from "@/schemas/user-schema.ts";
 import type { AuthService } from "@/services/auth-service.ts";
 import {
   clearAccessTokenCookie,
@@ -12,7 +11,41 @@ import { parseZodError } from "@/utils/zod-errors.ts";
 import type { Router } from "express";
 import { z } from "zod";
 
-export function verifyUserTokenRoute(router: Router, authService: AuthService) {
+
+export function requestEmailVerificayionRoute(router: Router, authService: AuthService) {
+  const registerSchema = z.object({
+    email: z.string().email(),
+  });
+
+  router.post("/request-email-verification", async (req, res) => {
+    const { success, data, error } = registerSchema.safeParse(req.body);
+    if (!success) {
+      return res.status(400).json({
+        message: "invalid fields",
+        data: parseZodError(error),
+        error: error?.flatten(),
+      });
+    }
+    try {
+      const createdUser = await authService.requestVerifyEmail(data.email);
+      res.status(201);
+      res.json({
+        message: "verification email sent",
+        data: createdUser,
+      });
+    } catch (err: any) {
+      res.status(400);
+      res.json({
+        message: "Email verification failed",
+        error: err?.message,
+      });
+    }
+  });
+  return router;
+}
+
+
+export function verifyEmailRoute(router: Router, authService: AuthService) {
   const verifyQuerySchema = z.object({
     token: z.string().min(1).optional(),
     email: z.string().email().optional(),
