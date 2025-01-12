@@ -1,5 +1,5 @@
 import { authenticate } from "@/middleware/auth.ts";
-import { errorCodes } from "@/schemas/error-schema.ts";
+import { errorCodes } from "@/schemas/shared-schema.ts";
 import type { UserJWTPayload } from "@/schemas/user-schema.ts";
 import type { AuthService } from "@/services/auth-service.ts";
 import {

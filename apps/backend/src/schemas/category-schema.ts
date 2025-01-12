@@ -5,6 +5,7 @@ import {
 } from "drizzle-zod";
 import { categoryTable } from "@/db/schema/inventory.ts";
 import { z } from "zod";
+import { genericQueryParamsSchema } from "./shared-schema.ts";
 
 export const categorySelectSchema = createSelectSchema(categoryTable);
 export const categoryInsertSchema = createInsertSchema(categoryTable);
@@ -18,17 +19,11 @@ export type ListCategoryQueryParams = z.infer<
   typeof listcategoryQueryParamsSchema
 >;
 
-
-
 const sortBy = ["name", "description", "created_at"] as const satisfies Array<
   keyof CategoryItem
 >;
-export const listcategoryQueryParamsSchema = z.object({
-  page: z.string().default("1"),
-  limit: z.string().default("10"),
+export const listcategoryQueryParamsSchema = genericQueryParamsSchema.extend({
   sort: z.enum(sortBy).optional(),
-  order: z.enum(["asc", "desc"]).default("desc"),
-  search: z.string().optional(),
 });
 
 export const viewcategoryParamsSchema = z.object({

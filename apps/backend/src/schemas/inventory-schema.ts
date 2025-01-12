@@ -5,29 +5,34 @@ import {
 } from "drizzle-zod";
 import { inventoryTable, categoryTable } from "@/db/schema/inventory.ts";
 import { z } from "zod";
+import { genericQueryParamsSchema } from "./shared-schema.ts";
 
 
 export const inventorySelectSchema = createSelectSchema(inventoryTable);
 export const inventoryInsertSchema = createInsertSchema(inventoryTable);
 export const inventoryUpdateSchema = createUpdateSchema(inventoryTable);
 
-export const listInventoryQueryParamsSchema = z.object({
-  page: z.string().default('1'),
-  limit: z.string().default('10'),
-  sort: z.enum(["name", "price", "quantity"]).optional(),
-  order: z.enum(["asc", "desc"]).default("asc"),
-  search: z.string().optional(),
+
+export type InventoryItem = z.infer<typeof inventorySelectSchema>;
+export type updateInventory = z.infer<typeof inventoryUpdateSchema>
+export type createInventory = z.infer<typeof inventoryInsertSchema>
+
+const sortBy = ["name", "price", "quantity"] as const satisfies Array<
+  keyof InventoryItem
+>;
+
+export const listInventoryQueryParamsSchema = genericQueryParamsSchema.extend({
+  sort: z.enum(sortBy).optional(),
   categoryId: z.string().optional(),
 });
 
 export const viewInventoryParamsSchema = z.object({
-    id:z.string()
-})
+  id: z.string(),
+});
 
-export type listInventoryQueryParams = z.infer<typeof listInventoryQueryParamsSchema>
-export type listInventory = z.infer<typeof inventorySelectSchema>;
-export type updateInventory = z.infer<typeof inventoryUpdateSchema>
-export type createInventory = z.infer<typeof inventoryInsertSchema>
+export type listInventoryQueryParams = z.infer<
+  typeof listInventoryQueryParamsSchema
+>;
 export type viewInventoryParams = z.infer<typeof viewInventoryParamsSchema>
 
 

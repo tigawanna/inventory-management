@@ -1,5 +1,5 @@
 import { db } from "@/db/client.ts";
-import { auditLogs } from "@/db/schema/users.ts";
+import { auditLogsTable } from "@/db/schema/users.ts";
 import { eq,and,desc } from "drizzle-orm";
 
 export enum AuditAction {
@@ -30,28 +30,28 @@ interface AuditLogData {
 
 export class AuditLogService {
   async create(data: AuditLogData) {
-    return db.insert(auditLogs).values(data).returning();
+    return db.insert(auditLogsTable).values(data).returning();
   }
 
   async findByEntity(entityType: EntityType, entityId: string) {
     return db
       .select()
-      .from(auditLogs)
+      .from(auditLogsTable)
       .where(
         and(
-          eq(auditLogs.entityType, entityType),
-          eq(auditLogs.entityId, entityId)
+          eq(auditLogsTable.entityType, entityType),
+          eq(auditLogsTable.entityId, entityId)
         )
       )
-      .orderBy(desc(auditLogs.created_at));
+      .orderBy(desc(auditLogsTable.created_at));
   }
 
   async findByUser(userId: string) {
     return db
       .select()
-      .from(auditLogs)
-      .where(eq(auditLogs.userId, userId))
-      .orderBy(desc(auditLogs.created_at));
+      .from(auditLogsTable)
+      .where(eq(auditLogsTable.userId, userId))
+      .orderBy(desc(auditLogsTable.created_at));
   }
 
   async createChangeLog({

@@ -17,7 +17,7 @@ export const usersTable = pgTable("users", {
   isEmailVerified: boolean().default(false),
 });
 
-export const auditLogs = pgTable("audit_logs", {
+export const auditLogsTable = pgTable("audit_logs", {
   ...commonColumns,
   userId: text("user_id").references(() => usersTable.id),
   action: text("action").notNull(),

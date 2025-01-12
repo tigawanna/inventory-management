@@ -6,7 +6,6 @@ import {
   viewcategoryParamsSchema,
 } from "@/schemas/category-schema.ts";
 import { CategoryService } from "@/services/category-service.ts";
-
 import { parseZodError } from "@/utils/zod-errors.ts";
 import express from "express";
 

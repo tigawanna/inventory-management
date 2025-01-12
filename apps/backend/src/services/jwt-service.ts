@@ -5,7 +5,7 @@ import type { CookieOptions, Response, Request } from "express";
 import { bumpUserTokenVersion, findUserByID } from "./user-servoce.ts";
 import { type UserJWTPayload } from "@/schemas/user-schema.ts";
 import { compare, hash } from "bcrypt";
-import { errorCodes } from "@/schemas/error-schema.ts";
+import { errorCodes } from "@/schemas/shared-schema.ts";
 
 const refreshCookieOptions: CookieOptions = {
   httpOnly: true,

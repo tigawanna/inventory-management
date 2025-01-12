@@ -7,7 +7,7 @@ import {
   verifyRefreshToken,
 } from "@/services/jwt-service.ts";
 import type { UserJWTPayload } from "@/schemas/user-schema.ts";
-import { errorCodes } from "@/schemas/error-schema.ts";
+import { errorCodes } from "@/schemas/shared-schema.ts";
 
 /**
  * Middleware to authenticate a user.
