@@ -7,7 +7,7 @@ import { db } from "@/db/client.ts";
 import { passwordResets, usersTable } from "@/db/schema/users.ts";
 import { EmailService } from "./email/email-service.ts";
 import { AuditAction, AuditLogService, EntityType } from "./audit-log.service.ts";
-
+import type { Request } from "express";
 export class AuthService {
   private readonly JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -30,7 +30,7 @@ export class AuthService {
     return userProfile;
   }
 
-  async register(data: { email: string; password: string; name: string }) {
+  async register(data: { email: string; password: string; name: string },req: Request) {
     const hashedPassword = await hash(data.password, this.SALT_ROUNDS);
     const verificationToken = randomBytes(4).toString("hex");
     const newUser = await db
@@ -49,7 +49,7 @@ export class AuthService {
       entityType: EntityType.USER,
       entityId: newUser[0].id,
       newData: { email: data.email, name: data.name },
-    });
+    },req);
 
     await this.emailService.sendEmail({
       mail_to: data.email,
@@ -60,7 +60,7 @@ export class AuthService {
     return newUser[0];
   }
 
-  async login(data: { email: string; password: string }) {
+  async login(data: { email: string; password: string },req: Request) {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.email, data.email),
     });
@@ -68,7 +68,7 @@ export class AuthService {
     if (!user) throw new Error("Invalid credentials");
     const isValid = await compare(data.password, user.password);
     if (!isValid) throw new Error("Invalid credentials");
-    await this.auditLogService.logLogin(user.id);
+    await this.auditLogService.logLogin(user.id, req);
     return user;
   }
 

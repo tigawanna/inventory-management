@@ -83,9 +83,10 @@ export class InventoryService {
       action: AuditAction.CREATE,
       entityType: EntityType.INVENTORY,
       entityId: item[0].id,
+      // @ts-expect-error
       newData: data,
       ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
-    });
+    },req);
     return item[0];
   }
 
@@ -105,7 +106,7 @@ export class InventoryService {
       entityId: id,
       newData: item,
       ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
-    });
+    },req);
     return item[0];
   }
 
@@ -121,7 +122,7 @@ export class InventoryService {
         entityId: id,
         newData: item,
         ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
-      });
+      },req);
       return item[0];
     }
     const item = await db
@@ -135,7 +136,7 @@ export class InventoryService {
       entityId: id,
       newData: item,
       ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
-    });
+    },req);
     return item[0];
   }
 

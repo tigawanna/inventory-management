@@ -7,7 +7,7 @@ import type {
   listInventoryQueryParamsSchema,
 } from "@/schemas/inventory-schema.ts";
 import { EntityType } from "./audit-log.service.ts";
-import { and, eq, ilike, or } from "drizzle-orm";
+import { and,  ilike } from "drizzle-orm";
 
 export class InventoryService extends BaseCrudService<
   typeof inventoryTable,

@@ -79,15 +79,18 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
       .values(data as any)
       .returning();
 
-    await this.auditLogService.create({
-      userId: req.user.id,
-      action: AuditAction.CREATE,
-      entityType: this.entityType,
-      entityId: item[0].id,
-      // @ts-expect-error
-      newData: data,
-      ipAddress: req.ip,
-    });
+    await this.auditLogService.create(
+      {
+        userId: req.user.id,
+        action: AuditAction.CREATE,
+        entityType: this.entityType,
+        entityId: item[0].id,
+        // @ts-expect-error
+        newData: data,
+        ipAddress: req.ip,
+      },
+      req,
+    );
 
     return item[0];
   }
@@ -102,14 +105,17 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
       .where(eq(this.table?.id, id))
       .returning();
 
-    await this.auditLogService.createChangeLog({
-      userId: req.user.id,
-      entityType: this.entityType,
-      entityId: id,
-      oldData: oldItem,
-      newData: data,
-      ipAddress: req.ip,
-    });
+    await this.auditLogService.createChangeLog(
+      {
+        userId: req.user.id,
+        entityType: this.entityType,
+        entityId: id,
+        oldData: oldItem,
+        newData: data,
+        ipAddress: req.ip,
+      },
+      req,
+    );
     // @ts-expect-error
     return item[0];
   }
@@ -123,14 +129,17 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
       .where(eq(this.table.id, id))
       .returning();
 
-    await this.auditLogService.create({
-      userId: req.user.id,
-      action: AuditAction.DELETE,
-      entityType: this.entityType,
-      entityId: id,
-      oldData: oldItem,
-      ipAddress: req.ip,
-    });
+    await this.auditLogService.create(
+      {
+        userId: req.user.id,
+        action: AuditAction.DELETE,
+        entityType: this.entityType,
+        entityId: id,
+        oldData: oldItem,
+        ipAddress: req.ip,
+      },
+      req,
+    );
 
     return item[0];
   }

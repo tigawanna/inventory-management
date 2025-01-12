@@ -21,7 +21,7 @@ router.post("/signup", async (req, res) => {
     });
   }
   try {
-    const createdUser = await authService.register(data);
+    const createdUser = await authService.register(data,req);
     res.status(201);
     res.json({
       message: "user created",

@@ -23,14 +23,13 @@ router.post("/signin", async (req, res) => {
     });
   }
   try {
-    const loggedInUser = await authService.login(data);
+    const loggedInUser = await authService.login(data,req);
     const {
       refreshToken: oldRefreshToken,
       password,
       verificationToken,
       ...publicUser
     } = loggedInUser;
-    // TODO explore more reliable email services
     // if (!loggedInUser.isEmailVerified) {
     //   res.status(400);
     //   return res.json({
@@ -49,10 +48,10 @@ router.post("/signin", async (req, res) => {
         accessToken,
         refreshToken,
         user: loggedInUser,
+        action:""
       },
     });
   } catch (err: any) {
-    console.log("== error  == ",err)
     res.status(400);
     return res.json({
       message: "user login failed",
@@ -81,7 +80,7 @@ router.post("/super-signin", async (req, res) => {
     });
   }
   try {
-    const loggedInUser = await authService.login(data);
+    const loggedInUser = await authService.login(data,req);
     const {
       refreshToken: oldRefreshToken,
       password,
