@@ -11,9 +11,9 @@ const refreshCookieOptions: CookieOptions = {
   httpOnly: true,
   secure: true,
   sameSite: "none",
-
   path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7 days
+  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // expires in 7 days
+  // maxAge: 7 * 24 * 60 * 60 * 1000, // expires in 7 days
 } as const;
 
 const accessTokencookieOptions: CookieOptions = {
@@ -21,7 +21,8 @@ const accessTokencookieOptions: CookieOptions = {
   secure:true,
   sameSite: "none",
   path: "/",
-  maxAge: 12 * 60 * 1000, // expires in 12 minutes
+  expires: new Date(Date.now() + 12 * 60 * 1000), // expires in 12 minutes
+  // maxAge: 12 * 60 * 1000, // expires in 12 minutes
 } as const;
 
 const accessTokebCookieKey = "jwt";
@@ -45,7 +46,7 @@ export async function createAccessToken(
 ) {
   const { ACCESS_TOKEN_SECRET } = envVariables;
   const fiftenMinutesInSeconds = Math.floor(Date.now() / 1000) + 60 * 15; // 15 minutes
-  const fiveDaysInSeconds = 5 * 24 * 60 * 60;
+  const fiveDaysInSeconds = Math.floor(Date.now() / 1000) + 5 * 24 * 60 * 60; // 5 days
   const sanitizedPayload = {
     id: payload.id,
     email: payload.email,
@@ -141,8 +142,14 @@ export async function verifyRefreshToken(req: Request, res: Response) {
 }
 
 export async function verifyAccessToken(accesToken: string) {
-  const payload = await verify(accesToken, envVariables.ACCESS_TOKEN_SECRET);
-  return payload as UserJWTPayload;
+  try {
+    const payload = await verify(accesToken, envVariables.ACCESS_TOKEN_SECRET);
+    return payload as UserJWTPayload;  
+  } catch (error) {
+    console.error("============== access token jwt parse error from: verifyAccessToken ==============");
+    console.table({error});
+    return
+  }
 }
 
 /**
@@ -190,6 +197,7 @@ export async function generateUserAuthTokens(
   userPayload: UserJWTPayload,
   superUser: boolean = false
 ) {
+  console.log("=== generateUserAuthTokens == ",superUser);
   const accessToken = await createAccessToken(res, userPayload, superUser);
   const refreshToken = await createRefreshToken(res, userPayload);
   return { accessToken, refreshToken };
@@ -226,7 +234,6 @@ export async function getAccessTokenFromCokkieOrHeaders(req: Request) {
     }
     return;
   } catch (error) {
-
     return;
   }
 }

@@ -2,6 +2,8 @@ import express from "express";
 import authRoute from "./auth/apis.ts";
 import inventoryRoute from "./inventory/index.ts";
 import categoryRoute from "./category/index.ts";
+import usersRoute from "./users/index.ts";
+import auditLogsRoute from "./audit/index.ts";
 import mailRoute from "./mail/index.ts";
 import { apiReference } from "@scalar/express-api-reference";
 import fs from "fs/promises";
@@ -36,6 +38,8 @@ router.use(
 router.use("/auth", authRoute);
 router.use("/items", inventoryRoute);
 router.use("/category", categoryRoute);
+router.use("/audit-logs", auditLogsRoute);
+router.use("/users", usersRoute);
 router.use("/mail", mailRoute);
 
 export default router;

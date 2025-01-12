@@ -1,13 +1,10 @@
 import { authenticate, authenticateAdminOnly } from "@/middleware/auth.ts";
 import {
 auditLogInsertSchema,
-  auditLogUpdateSchema,
-  auditLogSelectSchema,
   listAuditLogQueryParamsSchema,
   viewAuditLogParamsSchema
 } from "@/schemas/audit-log-service.ts";
-import { AuditLogService } from "@/services/audit-log.service.ts";
-import { InventoryService } from "@/services/inventory-service.ts";
+import { AuditLogService } from "@/services/audit-logs-crud.service.ts"
 import { parseZodError } from "@/utils/zod-errors.ts";
 import express from "express";
 

@@ -1,14 +1,7 @@
 import { db } from "@/db/client.ts";
 import { auditLogsTable } from "@/db/schema/users.ts";
-import { eq, and, desc, ilike } from "drizzle-orm";
-import { BaseCrudService } from "./generic-crud-service.ts";
-import type { z } from "zod";
-import type {
-  auditLogInsertSchema,
-  auditLogUpdateSchema,
-  listAuditLogQueryParamsSchema,
-} from "@/schemas/audit-log-service.ts";
-import { type Request } from "express";
+import { eq,and,desc } from "drizzle-orm";
+import type { Request } from "express";
 export enum AuditAction {
   CREATE = "CREATE",
   UPDATE = "UPDATE",
@@ -16,13 +9,13 @@ export enum AuditAction {
   LOGIN = "LOGIN",
   LOGOUT = "LOGOUT",
   PASSWORD_RESET = "PASSWORD_RESET",
-  EMAIL_VERIFY = "EMAIL_VERIFY",
+  EMAIL_VERIFY = "EMAIL_VERIFY"
 }
 
 export enum EntityType {
   USER = "USER",
   INVENTORY = "INVENTORY",
-  CATEGORY = "CATEGORY",
+  CATEGORY = "CATEGORY"
 }
 
 interface AuditLogData {
@@ -35,26 +28,10 @@ interface AuditLogData {
   ipAddress?: string;
 }
 
-export class AuditLogService extends BaseCrudService<
-  typeof auditLogsTable,
-  z.infer<typeof auditLogInsertSchema>,
-  z.infer<typeof auditLogUpdateSchema>
-> {
-  constructor() {
-    super(auditLogsTable, EntityType.INVENTORY);
+export class AuditLogService {
+  async create(data: AuditLogData, req: Request) {
+    return db.insert(auditLogsTable).values(data).returning();
   }
-  async findAll(query: z.infer<typeof listAuditLogQueryParamsSchema>) {
-    const { search, ...paginationQuery } = query;
-    const conditions = and(
-      search ? ilike(auditLogsTable.entityType, `%${search}%`) : undefined,
-    );
-
-    return super.findAll(paginationQuery, conditions);
-  }
-
-  // async create(data: AuditLogData) {
-  //   return db.insert(auditLogsTable).values(data).returning();
-  // }
 
   async findByEntity(entityType: EntityType, entityId: string) {
     return db
@@ -104,13 +81,16 @@ export class AuditLogService extends BaseCrudService<
 
   async logLogin(userId: string, req: Request) {
     const ipAddress = req.headers?.["x-forwarded-for"]?.[0] ?? "";
-    return this.create({
-      userId,
-      action: AuditAction.LOGIN,
-      entityType: EntityType.USER,
-      entityId: userId,
-      ipAddress,
-    }, req);
+    return this.create(
+      {
+        userId,
+        action: AuditAction.LOGIN,
+        entityType: EntityType.USER,
+        entityId: userId,
+        ipAddress,
+      },
+      req,
+    );
   }
 
   async logLogout(userId: string, req: Request) {
