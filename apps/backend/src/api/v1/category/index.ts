@@ -1,4 +1,4 @@
-import { authenticate, authenticateAdminOnly } from "@/middleware/auth.ts";
+import { authenticate } from "@/middleware/auth.ts";
 import {
   listcategoryQueryParamsSchema,
   categoryInsertSchema,
@@ -34,7 +34,7 @@ router.get("/:id", authenticate, async (req, res) => {
   return res.json(item);
 });
 // create
-router.post("/", authenticateAdminOnly, async (req, res) => {
+router.post("/", (...args)=>authenticate(...args,true), async (req, res) => {
   const { success, data, error } = categoryInsertSchema.safeParse(req.body);
   if (!success || !data) {
     return res.status(400).json({
@@ -59,7 +59,7 @@ router.post("/", authenticateAdminOnly, async (req, res) => {
   }
 });
 // update
-router.put("/:id", authenticateAdminOnly, async (req, res) => {
+router.put("/:id", (...args)=>authenticate(...args,true), async (req, res) => {
   const { success, data, error } = viewcategoryParamsSchema.safeParse(
     req.params,
   );
@@ -82,7 +82,7 @@ router.put("/:id", authenticateAdminOnly, async (req, res) => {
   return res.json(item);
 });
 // delete
-router.delete("/:id", authenticateAdminOnly, async (req, res) => {
+router.delete("/:id", (...args)=>authenticate(...args,true), async (req, res) => {
   const { success, data, error } = viewcategoryParamsSchema.safeParse(
     req.params,
   );

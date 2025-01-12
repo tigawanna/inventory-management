@@ -1,4 +1,4 @@
-import { authenticate, authenticateAdminOnly } from "@/middleware/auth.ts";
+import { authenticate } from "@/middleware/auth.ts";
 import {
     listUserQueryParamsSchema,
   userInsertSchema,
@@ -10,7 +10,7 @@ import { parseZodError } from "@/utils/zod-errors.ts";
 import express from "express";
 
 const router = express.Router();
-router.use(authenticateAdminOnly)
+router.use((...args)=>authenticate(...args,true));
 const userService = new UsersService();
 //  list
 router.get("/", authenticate, async (req, res) => {
@@ -35,71 +35,79 @@ router.get("/:id", authenticate, async (req, res) => {
   return res.json(item);
 });
 // create
-router.post("/", authenticateAdminOnly, async (req, res) => {
-  const { success, data, error } = userInsertSchema.safeParse(req.body);
-  if (!success || !data) {
-    return res.status(400).json({
-      message: "invalid fields",
-      data: parseZodError(error),
-      error: error?.flatten(),
-    });
-  }
-  try {
-    const item = await userService.create(data, req);
-    res.status(201).json(item);
-  } catch (error) {
-    res.status(400);
-    if (error instanceof Error) {
-      return res.json({
-        message: "users creation failed",
-        error: error?.message,
-        data: error?.message,
+router.post(
+  "/",
+  (...args) => authenticate(...args, true),
+  async (req, res) => {
+    const { success, data, error } = userInsertSchema.safeParse(req.body);
+    if (!success || !data) {
+      return res.status(400).json({
+        message: "invalid fields",
+        data: parseZodError(error),
+        error: error?.flatten(),
       });
     }
-    return res.json({ message: "users creation failed", error });
-  }
-});
+    try {
+      const item = await userService.create(data, req);
+      res.status(201).json(item);
+    } catch (error) {
+      res.status(400);
+      if (error instanceof Error) {
+        return res.json({
+          message: "users creation failed",
+          error: error?.message,
+          data: error?.message,
+        });
+      }
+      return res.json({ message: "users creation failed", error });
+    }
+  },
+);
 // update
-router.put("/:id", authenticateAdminOnly, async (req, res) => {
-  const { success, data, error } = viewUserParamsSchema.safeParse(
-    req.params,
-  );
-  if (!success || !data) {
-    return res.status(400).json({
-      message: "invalid param",
-      data: parseZodError(error),
-      error: error?.flatten(),
-    });
-  }
-  const body = userUpdateSchema.safeParse(req.body);
-  if (!body.success || !body.data) {
-    return res.status(400).json({
-      message: "invalid fields",
-      error: body.error?.flatten(),
-    });
-  }
-  const item = await userService.update(data.id, body.data, req);
-  if (!item) return res.status(404).json({ message: "Item not found" });
-  return res.json(item);
-});
+router.put(
+  "/:id",
+  (...args) => authenticate(...args, true),
+  async (req, res) => {
+    const { success, data, error } = viewUserParamsSchema.safeParse(req.params);
+    if (!success || !data) {
+      return res.status(400).json({
+        message: "invalid param",
+        data: parseZodError(error),
+        error: error?.flatten(),
+      });
+    }
+    const body = userUpdateSchema.safeParse(req.body);
+    if (!body.success || !body.data) {
+      return res.status(400).json({
+        message: "invalid fields",
+        error: body.error?.flatten(),
+      });
+    }
+    const item = await userService.update(data.id, body.data, req);
+    if (!item) return res.status(404).json({ message: "Item not found" });
+    return res.json(item);
+  },
+);
 // delete
-router.delete("/:id", authenticateAdminOnly, async (req, res) => {
-  const { success, data, error } = viewUserParamsSchema.safeParse(
-    req.params,
-  );
-  if (!success || !data) {
-    return res.status(400).json({
-      message: "invalid param",
-      data: parseZodError(error),
-      error: error?.flatten(),
-    });
-  }
-  const item = await userService.delete(data.id, req);
-  if (!item) {
-    return res.status(404).json({ message: "Item not found" });
-  }
+router.delete(
+  "/:id",
+  (...args) => authenticate(...args, true),
+  async (req, res) => {
+    const { success, data, error } = viewUserParamsSchema.safeParse(req.params);
+    if (!success || !data) {
+      return res.status(400).json({
+        message: "invalid param",
+        data: parseZodError(error),
+        error: error?.flatten(),
+      });
+    }
+    const item = await userService.delete(data.id, req);
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
 
-  return res.json({ message: "Item deleted successfully" });
-});
+    return res.json({ message: "Item deleted successfully" });
+  },
+);
 
 export default router;

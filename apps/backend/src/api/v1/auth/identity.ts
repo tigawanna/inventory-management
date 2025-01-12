@@ -76,9 +76,12 @@ export function refreshTokenRoute(router: Router, authService: AuthService) {
   router.get("/refresh-token", async (req, res) => {
     try {
       const user = await verifyRefreshToken(req, res);
+      if(user.error) {
+        return res.status(403).json(user.error);
+      }
       const { accessToken, refreshToken } = await generateUserAuthTokens(
         res,
-        user as UserJWTPayload,
+        user.result,
       );
       res.status(200);
       return res.json({ user, accessToken, refreshToken });

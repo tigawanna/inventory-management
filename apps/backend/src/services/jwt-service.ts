@@ -18,7 +18,7 @@ const refreshCookieOptions: CookieOptions = {
 
 const accessTokencookieOptions: CookieOptions = {
   httpOnly: true,
-  secure:true,
+  secure: true,
   sameSite: "none",
   path: "/",
   expires: new Date(Date.now() + 12 * 60 * 1000), // expires in 12 minutes
@@ -52,12 +52,17 @@ export async function createAccessToken(
     email: payload.email,
     role: payload.role,
     name: payload.name,
+    refreshTokenVersion: payload.refreshTokenVersion,
   };
   const accessToken = await sign(
-    { ...sanitizedPayload, exp: superUser ? fiveDaysInSeconds : fiftenMinutesInSeconds },
+    {
+      ...sanitizedPayload,
+      exp: superUser ? fiveDaysInSeconds : fiftenMinutesInSeconds,
+    },
     ACCESS_TOKEN_SECRET,
   );
-  res.clearCookie(accessTokebCookieKey, accessTokencookieOptions);
+  const { expires, ...clearCookieOptions } = accessTokencookieOptions;
+  res.clearCookie(accessTokebCookieKey, clearCookieOptions);
   res.cookie(accessTokebCookieKey, accessToken, accessTokencookieOptions);
   return accessToken;
 }
@@ -79,76 +84,89 @@ export async function createRefreshToken(
   payload: UserJWTPayload,
 ) {
   const { REFRESH_TOKEN_SECRET } = envVariables;
-  const { refreshTokenVersion } = await bumpUserTokenVersion(payload.id);
-  const twelveDaysInSeconds =  12 * 24 * 60 * 60;
+  // const { refreshTokenVersion } = await bumpUserTokenVersion(payload.id);
+  const twelveDaysInSeconds = 12 * 24 * 60 * 60;
   const expriesin = Math.floor(Date.now() / 1000) + twelveDaysInSeconds;
   const sanitizedPayload = {
     id: payload.id,
     email: payload.email,
     role: payload.role,
     name: payload.name,
+    refreshTokenVersion: payload.refreshTokenVersion,
   };
   const refreshToken = await sign(
-    { ...sanitizedPayload, refreshTokenVersion, exp: expriesin },
+    { ...sanitizedPayload, exp: expriesin },
     REFRESH_TOKEN_SECRET,
   );
   //   setCookie(c, refreshTokebCookieKey, refreshToken, { path: "/", httpOnly: true });
-  res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
+  const { expires, ...clearCookieOptions } = refreshCookieOptions;
+  res.clearCookie(refreshTokebCookieKey, clearCookieOptions);
   res.cookie(refreshTokebCookieKey, refreshToken, refreshCookieOptions);
   return refreshToken;
 }
 
-/**
- * Verifies the refresh token stored in the request cookie, and returns the verified payload.
- * @param req Express request object
- * @param res Express response object
- * @returns {UserJWTPayload} The verified refresh token payload
- * @throws {JsonWebTokenError} If the refresh token is invalid
- * @throws {Response} If the refresh token is not found or outdated, with status 401 or 403 respectively
- */
 export async function verifyRefreshToken(req: Request, res: Response) {
   const { REFRESH_TOKEN_SECRET } = envVariables;
   const refreshTtoken = req.cookies?.[refreshTokebCookieKey];
   if (!refreshTtoken) {
-    res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
-    res.status(401);
-    return res.json({
-      error: "Unauthorized",
-      message: "Missing credentials",
-      code: errorCodes.loginRequired,
-    });
+    // const { expires, ...clearCookieOptions } = refreshCookieOptions;
+    // res.clearCookie(refreshTokebCookieKey, clearCookieOptions);
+    // res.status(401);
+    // res.json({
+    //   error: "Unauthorized",
+    //   message: "Missing credentials",
+    //   code: errorCodes.loginRequired,
+    // });
+    return {
+      result: null,
+      error: {
+        error: "Unauthorized",
+        message: "Missing credentials",
+        code: errorCodes.loginRequired,
+      },
+    };
   }
   const refreshTokenPayload = (await verify(
     refreshTtoken,
     REFRESH_TOKEN_SECRET,
   )) as UserJWTPayload;
   const matchingUser = await findUserByID(refreshTokenPayload.id);
+
+  if (!matchingUser) {
+    return {
+      result: null,
+      error: {
+        error: "Unauthorized",
+        message: "Invalid credentials",
+        code: errorCodes.loginRequired,
+      },
+    };
+  }
   // check for outdated refresh token
   if (
-    !matchingUser ||
     matchingUser.refreshTokenVersion !== refreshTokenPayload.refreshTokenVersion
   ) {
-    res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
-    res.status(403);
-    return res.json({
-      error: "Unauthorized",
-      message: "Invalid credentials",
-      code: errorCodes.loginRequired,
-    });
+    console.log("invalid refesh token ", matchingUser);
+    return {
+      result: null,
+      error: {
+        error: "Unauthorized",
+        message: "Invalid credentials",
+        code: errorCodes.loginRequired,
+      },
+    };
   }
   const { password, verificationToken, refreshToken, ...newuserPayload } =
     matchingUser;
-  return newuserPayload;
+  return { error: null, result: newuserPayload };
 }
 
 export async function verifyAccessToken(accesToken: string) {
   try {
     const payload = await verify(accesToken, envVariables.ACCESS_TOKEN_SECRET);
-    return payload as UserJWTPayload;  
+    return payload as UserJWTPayload;
   } catch (error) {
-    console.error("============== access token jwt parse error from: verifyAccessToken ==============");
-    console.table({error});
-    return
+    return;
   }
 }
 
@@ -162,53 +180,42 @@ export async function verifyAccessToken(accesToken: string) {
  */
 export async function refreshAccessToken(req: Request, res: Response) {
   const refreshTokenPayload = await verifyRefreshToken(req, res);
+  if (!refreshTokenPayload) return;
   const { ACCESS_TOKEN_SECRET } = envVariables;
   const newAccessToken = await sign(refreshTokenPayload, ACCESS_TOKEN_SECRET);
   return newAccessToken;
 }
 
-/**
- * Invalidates the refresh token stored in the request cookie, by bumping the user's refreshTokenVersion in the database and clearing the cookie.
- * @param req Express request object
- * @param res Express response object
- */
-export async function invalidateRefreshToken(req: Request, res: Response) {
-  const refreshTokenPayload = await verifyRefreshToken(req, res);
-  if ("id" in refreshTokenPayload && "tokenVerion" in refreshTokenPayload) {
-    await bumpUserTokenVersion(refreshTokenPayload.id);
-    res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
-  }
-}
 
-/**
- * Generates authentication tokens (access token and refresh token) for a user on Signup.
- *
- * This function creates a new access token and refresh token for the user
- * specified in the `userPayload`, and sets the refresh token as a cookie
- * on the response object `res`.
- *
- * @param res - Express response object to set the refresh token cookie
- * @param userPayload - The payload containing user data for token generation
- * @returns An object containing the generated access token and refresh token
- */
+// export async function invalidateRefreshToken(req: Request, res: Response) {
+//   const refreshTokenPayload = await verifyRefreshToken(req, res);
+//   if (!refreshTokenPayload) return;
+//   if (refreshTokenPayload.result) {
+//     await bumpUserTokenVersion(refreshTokenPayload.result.id);
+//     res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
+//   }
+// }
+
+
 
 export async function generateUserAuthTokens(
   res: Response,
   userPayload: UserJWTPayload,
-  superUser: boolean = false
+  superUser: boolean = false,
 ) {
-  console.log("=== generateUserAuthTokens == ",superUser);
   const accessToken = await createAccessToken(res, userPayload, superUser);
   const refreshToken = await createRefreshToken(res, userPayload);
   return { accessToken, refreshToken };
 }
 
 export async function clearAccessTokenCookie(res: Response) {
-  res.clearCookie(accessTokebCookieKey, accessTokencookieOptions);
+  const { expires, ...clearCookieOptions } = accessTokencookieOptions;
+  res.clearCookie(accessTokebCookieKey, clearCookieOptions);
 }
 export async function clearRefreshTokenCookie(res: Response, userid: string) {
   await bumpUserTokenVersion(userid);
-  res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
+  const { expires, ...clearCookieOptions } = refreshCookieOptions;
+  res.clearCookie(refreshTokebCookieKey, clearCookieOptions);
 }
 export async function hashPassword(password: string) {
   return hash(password, 10);

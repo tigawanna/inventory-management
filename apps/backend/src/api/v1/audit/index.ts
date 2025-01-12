@@ -1,4 +1,4 @@
-import { authenticate, authenticateAdminOnly } from "@/middleware/auth.ts";
+import { authenticate } from "@/middleware/auth.ts";
 import {
 auditLogInsertSchema,
   listAuditLogQueryParamsSchema,
@@ -9,6 +9,7 @@ import { parseZodError } from "@/utils/zod-errors.ts";
 import express from "express";
 
 const router = express.Router();
+router.use((...args) => authenticate(...args, true));
 const auditlogService = new AuditLogService()
 //  list
 router.get("/", authenticate, async (req, res) => {
@@ -33,7 +34,7 @@ router.get("/:id", authenticate, async (req, res) => {
   return res.json(item);
 });
 // create
-router.post("/", authenticateAdminOnly, async (req, res) => {
+router.post("/", async (req, res) => {
   const { success, data, error } = auditLogInsertSchema.safeParse(req.body);
   if (!success || !data) {
     return res.status(400).json({
@@ -58,7 +59,7 @@ router.post("/", authenticateAdminOnly, async (req, res) => {
   }
 });
 // update
-router.put("/:id", authenticateAdminOnly, async (req, res) => {
+router.put("/:id", async (req, res) => {
   const { success, data, error } = viewAuditLogParamsSchema.safeParse(
     req.params,
   );
@@ -81,7 +82,7 @@ router.put("/:id", authenticateAdminOnly, async (req, res) => {
   return res.json(item);
 });
 // delete
-router.delete("/:id", authenticateAdminOnly, async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { success, data, error } = viewAuditLogParamsSchema.safeParse(
     req.params,
   );
