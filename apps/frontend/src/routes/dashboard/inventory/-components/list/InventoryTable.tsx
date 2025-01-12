@@ -32,6 +32,7 @@ export function InventoryTable({ keyword="" }: InventoryTableProps) {
     { label: "SKU", accessor: "sku" },
     { label: "Year", accessor: "price" },
     { label: "price", accessor: "price" },
+    { label: "Category", accessor: "categoryId" },
     { label: "Created", accessor: "created_at" },
   ];
   const { page, updatePage } = usePageSearchQuery("/dashboard/inventory");
@@ -58,7 +59,7 @@ export function InventoryTable({ keyword="" }: InventoryTableProps) {
   }
   const role = viewer?.role;
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full flex flex-col gap-5 overflow-x-auto">
       <table className="table table-zebra table-lg w-full">
         <thead>
           <tr>

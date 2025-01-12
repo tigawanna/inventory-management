@@ -8,7 +8,7 @@ interface inventoryQueryOptionPropss extends ListInventoryParams {
 export function inventoryListQueryOptions({
   keyword,
   page = 1,
-  categoryId,
+  categoryId="",
   limit = 10,
   order = "desc",
   sort = "name",
@@ -38,6 +38,8 @@ export function inventoryListQueryOptions({
       //  }
       return items.record;
     },
+    staleTime: 1000,
+    
   });
 }
 interface oneInventoryQueryOptionPropss {

@@ -5,7 +5,7 @@ import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { signInUser } from "@/lib/api/users";
@@ -76,6 +76,22 @@ export function SigninComponent({}: SigninComponentProps) {
       });
     },
   });
+  const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<string, Array<string>>
+    useEffect(() => {
+      mutationError &&
+        Object?.entries((mutationError))?.forEach(
+          ([key, value]) => {
+            form.setFieldMeta(key as any, (prev) => {
+              return {
+                ...prev,
+                errorMap: {
+                  onChange: value?.join(", "),
+                },
+              };
+            });
+          },
+        );
+    }, [mutationError]);
   return (
     <div className="flex h-full w-full items-center justify-evenly gap-2 p-5">
       <img

@@ -7,7 +7,7 @@ import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { CreateInventoryForm } from "./form/create";
 import { InventoryList } from "./list/InventoryList";
 import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
-import { InventoryOrderSelect, InventorySortSelect } from "./list/InventorySortSelect";
+import { InventoryCategoriesSelect, InventoryOrderSelect, InventorySortSelect } from "./list/InventorySortSelect";
 import { InventoryTable } from "./list/InventoryTable";
 import { GeneriicTableSkeleton } from "@/components/wrappers/GeneriicTableSkeleton";
 
@@ -32,7 +32,8 @@ export function InventoryPage({}: InventoryPageProps) {
           </div>
         }
         searchBox={
-          <div className="flex w-[99%] gap-2">
+          <div className="flex w-[99%] flex-wrap gap-2 ">
+          <div className="flex flex-grow md:max-w-[40%] gap-2">
             <SearchBox
               inputProps={{
                 placeholder: "Search by name",
@@ -42,13 +43,17 @@ export function InventoryPage({}: InventoryPageProps) {
               setKeyword={setKeyword}
               keyword={keyword}
             />
-            <InventorySortSelect />
-            <InventoryOrderSelect />
+            </div>
+            <InventoryCategoriesSelect />
+              <InventorySortSelect />
+              <InventoryOrderSelect />
+            {/* <div className="flex flex-wrap flex-grow gap-2">
+            </div> */}
           </div>
         }
       />
 
-      <div className="m-3 flex h-full w-full  p-5">
+      <div className="m-3 flex h-full w-full p-5">
         <div className="hidden w-full max-w-[99vw] lg:flex">
           <Suspense fallback={<GeneriicTableSkeleton />}>
             <InventoryTable keyword={keyword} />

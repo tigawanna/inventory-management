@@ -21,14 +21,14 @@ export function InventorySortSelect({}: InventorySortSelectProps) {
       onValueChange={(value: any) => {
         if (value) {
           if (value === "default") {
-            navigate({ search: { sort: undefined, ...rest }, replace: true });
+            navigate({ search: { sort: undefined, ...rest } });
           } else {
-            navigate({ search: { sort: value, ...rest }, replace: true });
+            navigate({ search: { sort: value, ...rest } });
           }
         }
       }}
     >
-      <SelectTrigger className="">
+      <SelectTrigger className="w-fit">
         <SelectValue placeholder="Sort by" />
       </SelectTrigger>
       <SelectContent>
@@ -63,7 +63,7 @@ export function InventoryOrderSelect({}: InventorySortSelectProps) {
         }
       }}
     >
-      <SelectTrigger className="">
+      <SelectTrigger className="w-fit">
         <SelectValue placeholder="Order by" />
       </SelectTrigger>
       <SelectContent>
@@ -84,29 +84,32 @@ export function InventoryOrderSelect({}: InventorySortSelectProps) {
 
 
 interface InventoryCategoriesSelectProps {
-  onCategoryChange:(cat:string)=>void
+
 }
 
-export function InventoryCategoriesSelect({onCategoryChange}: InventoryCategoriesSelectProps) {
-
-  const [category,setCategory] = useState("category_1_id")
-  const categories = ["category_id_1", "category_id_2", "category_id_3"];
+export function InventoryCategoriesSelect({}: InventoryCategoriesSelectProps) {
+  const { categoryId, ...rest } = useSearch({ from: "/dashboard/inventory/" });
+  const navigate = useNavigate({ from: "/dashboard/inventory" });
+  const categories = ["All","category_id_1", "category_id_2", "category_id_3"];
   return (
     <Select
-      value={category}
+      value={categoryId}
       onValueChange={(value: any) => {
         if (value) {
-          setCategory(value)
-          onCategoryChange(value)
+          if (value === "All") {
+            navigate({ search: { categoryId: "", ...rest }, replace: true });
+          } else {
+            navigate({ search: { categoryId: value, ...rest } });
+          }
         }
       }}
     >
-      <SelectTrigger className="">
-        <SelectValue placeholder="Sort by" />
+      <SelectTrigger className="w-fit">
+        <SelectValue placeholder="Category ID" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>{category}</SelectLabel>
+          <SelectLabel>{categoryId}</SelectLabel>
           {categories.map((type) => {
             return (
               <SelectItem key={type} value={type}>

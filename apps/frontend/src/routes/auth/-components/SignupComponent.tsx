@@ -1,14 +1,14 @@
 import { formOptions, useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
-import {  useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
-import {  signUpUser } from "@/lib/api/users";
+import { signUpUser } from "@/lib/api/users";
 
 interface SignupComponentProps {}
 
@@ -16,7 +16,7 @@ interface CreateuserFields {
   name: string;
   email: string;
   password: string;
-  passwordConfirm:string;
+  passwordConfirm: string;
 }
 
 const formOpts = formOptions<CreateuserFields>({
@@ -24,7 +24,7 @@ const formOpts = formOptions<CreateuserFields>({
     email: "",
     name: "",
     password: "",
-    passwordConfirm:""
+    passwordConfirm: "",
   },
 });
 
@@ -38,16 +38,27 @@ export function SignupComponent({}: SignupComponentProps) {
 
   const mutation = useMutation({
     mutationFn: async ({ body }: { body: CreateuserFields }) => {
-      return signUpUser({...body,"role":"user"});
+      return signUpUser({ ...body, role: "user" });
     },
     onSuccess(data) {
+      if (data.error) {
+        return makeHotToast({
+          title: "Something went wrong",
+          description: `${data.error.message}`,
+          duration: 10000,
+          variant: "error",
+        });
+      }
       makeHotToast({
         title: "signed up",
         description: `Welcome`,
         variant: "success",
       });
       qc.invalidateQueries(viewerqueryOptions());
-      navigate({ to: "/auth", search: { returnTo: "/auth/verify-email?" } });
+      navigate({
+        to: "/auth/verify-email",
+        search: { returnTo: "/auth/verify-email" },
+      });
     },
     onError(error) {
       makeHotToast({
@@ -66,6 +77,22 @@ export function SignupComponent({}: SignupComponentProps) {
       });
     },
   });
+  const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<string, Array<string>>
+    useEffect(() => {
+      mutationError &&
+        Object?.entries((mutationError))?.forEach(
+          ([key, value]) => {
+            form.setFieldMeta(key as any, (prev) => {
+              return {
+                ...prev,
+                errorMap: {
+                  onChange: value?.join(", "),
+                },
+              };
+            });
+          },
+        );
+    }, [mutationError]);
 
   return (
     <div className="flex h-full w-full items-center justify-evenly gap-2 p-5">
@@ -138,7 +165,7 @@ export function SignupComponent({}: SignupComponentProps) {
                   fieldKey="password"
                   inputOptions={{
                     type: showPassword ? "text" : "password",
-                    minLength:8,
+                    minLength: 8,
                     onBlur: field.handleBlur,
                     onChange: (e) => field.handleChange(e.target.value),
                   }}

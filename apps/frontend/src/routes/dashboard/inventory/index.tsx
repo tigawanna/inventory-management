@@ -9,6 +9,7 @@ const searchparams = z.object({
   limit: z.number().optional(),
   sort: z.enum(['name', 'quantity', 'price']).optional(),
   order: z.enum(['asc', 'desc']).default('desc').optional(),
+  categoryId: z.string().optional(),
 })
 
 export const Route = createFileRoute('/dashboard/inventory/')({
