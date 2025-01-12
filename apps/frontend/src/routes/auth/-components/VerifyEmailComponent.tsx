@@ -11,11 +11,11 @@ import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 
 interface VerifyEmailComponentProps {}
 
-interface UsersigninFields {
+interface VerifyUserEmailFields {
   token:string;
 }
 
-const formOpts = formOptions<UsersigninFields>({
+const formOpts = formOptions<VerifyUserEmailFields>({
   defaultValues: {
     token: "",
   },
@@ -25,7 +25,7 @@ export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
  const qc = useQueryClient();
   const navigate = useNavigate({ from: "/auth/verify-email" });
   const mutation = useMutation( {
-    mutationFn: async ({ body }: { body: UsersigninFields }) => {
+    mutationFn: async ({ body }: { body: VerifyUserEmailFields }) => {
       return verifyEmail(body.token);
     },
     onSuccess(data) {
@@ -94,7 +94,7 @@ export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
             }}
             children={(field) => {
               return (
-                <TextFormField<UsersigninFields>
+                <TextFormField<VerifyUserEmailFields>
                   field={field}
                   fieldKey="token"
                   fieldlabel="token from your eamil"

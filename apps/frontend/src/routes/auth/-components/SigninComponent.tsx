@@ -10,6 +10,7 @@ import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { signInUser } from "@/lib/api/users";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
+import { RequestPasswordReset } from "./RequestPasswordReset";
 
 interface SigninComponentProps {}
 
@@ -183,6 +184,7 @@ export function SigninComponent({}: SigninComponentProps) {
           >
             Sign up
           </Link>
+          <RequestPasswordReset/>
         </div>
       </form>
     </div>

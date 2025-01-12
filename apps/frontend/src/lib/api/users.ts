@@ -177,3 +177,68 @@ export async function logoutUser() {
     };
   }
 }
+
+interface ResetPasswordRequest {
+  token: string;
+  password: string;
+}
+
+interface ForgotPasswordRequest {
+  email: string;
+}
+
+export async function requestPasswordReset(email: string) {
+  try {
+    const res = await fetch(baseUrl + authEndponts["forgot-password"], {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ email } as ForgotPasswordRequest),
+    });
+    if (!res.ok) {
+      return {
+        record: null,
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
+      };
+    }
+    return { record: await res.json(), error: null };
+  } catch (error) {
+    return {
+      record: null,
+      error: error as AuthEnpointsEroor,
+    };
+  }
+}
+
+export async function resetPassword(token: string, password: string) {
+  try {
+    const res = await fetch(baseUrl + authEndponts["reset-password"], {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ token, password } as ResetPasswordRequest),
+    });
+    if (!res.ok) {
+      return {
+        record: null,
+        error: await res
+          .json()
+          .then((res) => res)
+          .catch(() => {
+            return { message: res.statusText };
+          }),
+      };
+    }
+    return { record: await res.json(), error: null };
+  } catch (error) {
+    return {
+      record: null,
+      error: error as AuthEnpointsEroor,
+    };
+  }
+}

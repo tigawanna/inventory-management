@@ -1,5 +1,5 @@
 import { envVariables } from "@/env.ts";
-import { sendEmailwithSMTP } from "@/services/email/brevo-nodemailer.ts";
+import { sendEmailwithBrevo } from "@/services/email/brevo-nodemailer.ts";
 import { parseZodError } from "@/utils/zod-errors.ts";
 import express from "express";
 import { z } from "zod";
@@ -21,9 +21,7 @@ router.post("/brevo", async (req, res) => {
       error: error?.flatten(),
     });
   }
-  const { EMAIL_FROM } = envVariables;
-  const mailerResponse = await sendEmailwithSMTP({
-    mail_from: EMAIL_FROM,
+  const mailerResponse = await sendEmailwithBrevo({
     mail_to: data.email,
     subject: data.subject,
     body: data.body,

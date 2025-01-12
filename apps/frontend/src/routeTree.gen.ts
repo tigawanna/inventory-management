@@ -18,6 +18,7 @@ import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
 import { Route as AuthVerifyEmailImport } from './routes/auth/verify-email'
 import { Route as AuthSignupImport } from './routes/auth/signup'
+import { Route as AuthForgortPasswordImport } from './routes/auth/forgort-password'
 import { Route as DashboardTeamLayoutImport } from './routes/dashboard/team/layout'
 import { Route as DashboardCategoriesLayoutImport } from './routes/dashboard/categories/layout'
 import { Route as DashboardAuditlogsLayoutImport } from './routes/dashboard/auditlogs/layout'
@@ -68,6 +69,12 @@ const AuthVerifyEmailRoute = AuthVerifyEmailImport.update({
 const AuthSignupRoute = AuthSignupImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthForgortPasswordRoute = AuthForgortPasswordImport.update({
+  id: '/forgort-password',
+  path: '/forgort-password',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
@@ -165,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTeamLayoutImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/auth/forgort-password': {
+      id: '/auth/forgort-password'
+      path: '/forgort-password'
+      fullPath: '/auth/forgort-password'
+      preLoaderRoute: typeof AuthForgortPasswordImport
+      parentRoute: typeof AuthLayoutImport
+    }
     '/auth/signup': {
       id: '/auth/signup'
       path: '/signup'
@@ -234,12 +248,14 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthLayoutRouteChildren {
+  AuthForgortPasswordRoute: typeof AuthForgortPasswordRoute
   AuthSignupRoute: typeof AuthSignupRoute
   AuthVerifyEmailRoute: typeof AuthVerifyEmailRoute
   AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthForgortPasswordRoute: AuthForgortPasswordRoute,
   AuthSignupRoute: AuthSignupRoute,
   AuthVerifyEmailRoute: AuthVerifyEmailRoute,
   AuthIndexRoute: AuthIndexRoute,
@@ -317,6 +333,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/auditlogs': typeof DashboardAuditlogsLayoutRouteWithChildren
   '/dashboard/categories': typeof DashboardCategoriesLayoutRouteWithChildren
   '/dashboard/team': typeof DashboardTeamLayoutRouteWithChildren
+  '/auth/forgort-password': typeof AuthForgortPasswordRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
@@ -330,6 +347,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth/forgort-password': typeof AuthForgortPasswordRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth': typeof AuthIndexRoute
@@ -349,6 +367,7 @@ export interface FileRoutesById {
   '/dashboard/auditlogs': typeof DashboardAuditlogsLayoutRouteWithChildren
   '/dashboard/categories': typeof DashboardCategoriesLayoutRouteWithChildren
   '/dashboard/team': typeof DashboardTeamLayoutRouteWithChildren
+  '/auth/forgort-password': typeof AuthForgortPasswordRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
@@ -369,6 +388,7 @@ export interface FileRouteTypes {
     | '/dashboard/auditlogs'
     | '/dashboard/categories'
     | '/dashboard/team'
+    | '/auth/forgort-password'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth/'
@@ -381,6 +401,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth/forgort-password'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth'
@@ -398,6 +419,7 @@ export interface FileRouteTypes {
     | '/dashboard/auditlogs'
     | '/dashboard/categories'
     | '/dashboard/team'
+    | '/auth/forgort-password'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth/'
@@ -443,6 +465,7 @@ export const routeTree = rootRoute
     "/auth": {
       "filePath": "auth/layout.tsx",
       "children": [
+        "/auth/forgort-password",
         "/auth/signup",
         "/auth/verify-email",
         "/auth/"
@@ -479,6 +502,10 @@ export const routeTree = rootRoute
         "/dashboard/team/$team",
         "/dashboard/team/"
       ]
+    },
+    "/auth/forgort-password": {
+      "filePath": "auth/forgort-password.tsx",
+      "parent": "/auth"
     },
     "/auth/signup": {
       "filePath": "auth/signup.tsx",

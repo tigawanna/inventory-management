@@ -10,14 +10,12 @@ export interface SendMailResponse {
 
 export interface SendEmailVersionProps {
   mail_to: string;
-  mail_from: string;
   subject: string;
   body: string;
 }
-export async function sendEmailwithSMTP({
+export async function sendEmailwithBrevo({
   subject,
   body,
-  mail_from,
   mail_to,
 }: SendEmailVersionProps) {
   const { BREVO_USER, BREVO_API_KEY,EMAIL_FROM } = envVariables;
@@ -31,8 +29,7 @@ export async function sendEmailwithSMTP({
   });
   const mailOptions = {
     subject,
-    from: "inventory@mail.tigawanna.vip",
-    // from: "denniskinuthiaw@gmail.com",
+    from: EMAIL_FROM,
     to: mail_to,
     text: body,
   };
