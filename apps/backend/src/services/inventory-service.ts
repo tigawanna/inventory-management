@@ -21,7 +21,6 @@ export class InventoryService extends BaseCrudService<
   // Override or add custom methods
   async findAll(query: z.infer<typeof listInventoryQueryParamsSchema>) {
     const { search, categoryId, ...paginationQuery } = query;
-    console.log({ categoryId, search });
     const conditions = and(
       //   eq(inventoryTable.isActive, true),
       search ? ilike(inventoryTable.name, `%${search}%`) : undefined,

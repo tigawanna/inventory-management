@@ -42,22 +42,24 @@ export function InventoryList({ keyword = "" }: InventoryListProps) {
           return (
             <li
               key={item.id}
-              className="h flex w-[95%] items-center flex-grow justify-center gap-2 rounded-xl bg-base-300 p-4 sm:w-[45%] lg:w-[30%]"
+              data-active={item.isActive??"false"}
+              className="flex w-[95%] items-center data-[active=false]:brightness-75 flex-grow justify-center gap-2 rounded-xl bg-base-300 p-4 sm:w-[45%] lg:w-[30%]"
             >
               <div className="flex h-full w-full flex-col justify-between gap-2">
                 <div className="flex h-full w-full justify-between gap-2">
                   <h1 className="text-2xl font-bold">{item.name}</h1>
                   <UpdateInventoryform item={item} />
                 </div>
+                {!item.isActive&&<div className="badge badge-primary badge-outline brightness-105">Soft deleted</div>}
                 <p>{item.description}</p>
                 <div className="flex flex-wrap justify-between gap-2">
                   <div>Price: {item.price}</div>
-                  <div>Quan: {item.quantity}</div>
+                  <div>Quantity: {item.quantity}</div>
                 </div>
                 <div className="flex flex-wrap justify-between gap-2 text-sm">
                   <div>{item.categoryId}</div>
                   <div>SKU: {item.sku}</div>
-                  <DeleteInventoryForm id={item.id} />
+                  <DeleteInventoryForm id={item.id} hardDelete={!item.isActive} />
                 </div>
               </div>
             </li>

@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { DiaDrawer } from "@/components/wrappers/DiaDrawer";
-import {  Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { makeHotToast } from "@/components/toasters";
 import { useMutation } from "@tanstack/react-query";
-import {  deleteInventoryItem } from "@/lib/api/inventory";
+import { deleteInventoryItem } from "@/lib/api/inventory";
 
-export function DeleteInventoryForm({id}: {id: string}) {
+export function DeleteInventoryForm({
+  id,
+  hardDelete = false,
+}: {
+  id: string;
+  hardDelete?: boolean;
+}) {
   const [open, setOpen] = useState(false);
 
   const mutation = useMutation({
@@ -23,7 +29,7 @@ export function DeleteInventoryForm({id}: {id: string}) {
       }
       makeHotToast({
         title: "Inventory deleted",
-        description: "Inventory has been deleted successfully",
+        description: `Inventory has been ${hardDelete ? "permanently" : ""} deleted successfully`,
         variant: "success",
       });
       setOpen(false);
@@ -44,19 +50,30 @@ export function DeleteInventoryForm({id}: {id: string}) {
       open={open}
       setOpen={setOpen}
       title="Delete Inventory"
-      description="Delete inventory item"
-      trigger={<Trash className="text-error" />}
+      description={`${hardDelete ? "Permanently" : ""} Delete inventory item`}
+      trigger={
+        hardDelete ? (
+        <button className=" flex justify-center items-center gap-2 btn btn-sm btn-error  btn-outline ">
+            <span className="">hard delete</span>
+          <Trash className="h-4" />
+        </button>
+        )
+      :<Trash className="text-error" />
+    }
     >
       <div className="flex h-full max-h-[80vh] w-full flex-col gap-2 overflow-auto">
         <form className="w-full">
-          <h1 className=" ">Are you sure you want to delete this inventory</h1>
-          <div className="flex gap-5 justify-end items-end w-full pt-5">
+          <h1 className=" ">
+            Are you sure you want to {hardDelete ? "permanently" : ""} delete
+            this inventory
+          </h1>
+          <div className="flex w-full items-end justify-end gap-5 pt-5">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 setOpen(false);
               }}
-              className="btn btn-accent btn-outline"
+              className="btn btn-outline btn-accent"
             >
               Cancel
             </button>
