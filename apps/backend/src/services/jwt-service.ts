@@ -109,14 +109,6 @@ export async function verifyRefreshToken(req: Request, res: Response) {
   const { REFRESH_TOKEN_SECRET } = envVariables;
   const refreshTtoken = req.cookies?.[refreshTokebCookieKey];
   if (!refreshTtoken) {
-    // const { expires, ...clearCookieOptions } = refreshCookieOptions;
-    // res.clearCookie(refreshTokebCookieKey, clearCookieOptions);
-    // res.status(401);
-    // res.json({
-    //   error: "Unauthorized",
-    //   message: "Missing credentials",
-    //   code: errorCodes.loginRequired,
-    // });
     return {
       result: null,
       error: {
@@ -185,17 +177,6 @@ export async function refreshAccessToken(req: Request, res: Response) {
   const newAccessToken = await sign(refreshTokenPayload, ACCESS_TOKEN_SECRET);
   return newAccessToken;
 }
-
-
-// export async function invalidateRefreshToken(req: Request, res: Response) {
-//   const refreshTokenPayload = await verifyRefreshToken(req, res);
-//   if (!refreshTokenPayload) return;
-//   if (refreshTokenPayload.result) {
-//     await bumpUserTokenVersion(refreshTokenPayload.result.id);
-//     res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
-//   }
-// }
-
 
 
 export async function generateUserAuthTokens(

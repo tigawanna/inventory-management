@@ -50,7 +50,7 @@ export const authenticate = async (
     const userFromRefreshToken = await verifyRefreshToken(req, res);
     if (userFromRefreshToken.error) {
       await clearAccessTokenCookie(res);
-      await clearRefreshTokenCookie(res, req.user.id);
+      await clearRefreshTokenCookie(res, req?.user?.id);
       return res.status(403).json(userFromRefreshToken.error);
     }
     if (!userFromRefreshToken.result) {

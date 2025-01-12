@@ -157,9 +157,7 @@ const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<string
                   <label htmlFor={"category"} className="text-sm">
                     category
                   </label>
-                  <InventoryCategoriesSelect
-                    onCategoryChange={field.handleChange}
-                  />
+                  <InventoryCategoriesSelect/>
                 </div>
               );
             }}

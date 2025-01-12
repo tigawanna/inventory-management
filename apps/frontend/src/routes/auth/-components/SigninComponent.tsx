@@ -52,6 +52,10 @@ export function SigninComponent({}: SigninComponentProps) {
         duration: 2000,
       });
       
+      if(!data.record?.isEmailVerified){
+
+        return navigate({ to:"/dashboard" });
+      }
       qc.invalidateQueries(viewerqueryOptions());
       navigate({ to:"/dashboard" });
       // qc.setQueryData(["viewer"], () => data.record);
@@ -184,7 +188,7 @@ export function SigninComponent({}: SigninComponentProps) {
           >
             Sign up
           </Link>
-          <RequestPasswordReset/>
+          <RequestPasswordReset returnTo={returnTo}/>
         </div>
       </form>
     </div>

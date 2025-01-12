@@ -10,12 +10,15 @@ import { makeHotToast } from "@/components/toasters";
 import { requestPasswordReset } from "@/lib/api/users";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
+import { ValidRoutes } from "@/lib/tanstack/router/router-types";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
-interface RequestPasswordResetProps {}
+interface RequestPasswordResetProps {
+    returnTo:string
+}
 interface RequestPasswordresetFields {
   email: string;
 }
@@ -23,9 +26,10 @@ interface RequestPasswordresetFields {
 const formOpts = formOptions<RequestPasswordresetFields>({
   defaultValues: {
     email: "",
+
   },
 });
-export function RequestPasswordReset({}: RequestPasswordResetProps) {
+export function RequestPasswordReset({returnTo}: RequestPasswordResetProps) {
   const navigate = useNavigate({ from: "/auth" });
   const mutation = useMutation({
     mutationFn: async ({ body }: { body: RequestPasswordresetFields }) => {
@@ -47,7 +51,7 @@ export function RequestPasswordReset({}: RequestPasswordResetProps) {
         duration: 1000,
       });
 
-      navigate({ to: "/auth/forgort-password" });
+      navigate({ to: "/auth/forgort-password",search:{returnTo} });
     //   if (typeof window !== "undefined") {
     //     location.reload();
     //   }
