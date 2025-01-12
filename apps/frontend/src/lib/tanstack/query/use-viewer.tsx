@@ -45,7 +45,9 @@ export function viewerqueryOptions() {
       //     });
       //   }, 1000);
       // });
-      return await getCurrentUser();
+      const currentUserResponse = await getCurrentUser()
+      console.log(currentUserResponse)
+      return currentUserResponse;
     },
     staleTime: 12 * 60 * 1000,
   };

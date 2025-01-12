@@ -5,6 +5,7 @@ export interface SendMailResponse {
   message: string;
   error: boolean;
   success: boolean;
+  info: any;
 }
 
 export interface SendEmailVersionProps {
@@ -30,7 +31,8 @@ export async function sendEmailwithSMTP({
   });
   const mailOptions = {
     subject,
-    from: mail_from,
+    from: "inventory@mail.tigawanna.vip",
+    // from: "denniskinuthiaw@gmail.com",
     to: mail_to,
     text: body,
   };
@@ -42,11 +44,13 @@ export async function sendEmailwithSMTP({
           resolve({
             message: "Something went wrong",
             error: info,
+            info,
             success: false,
           });
         } else {
           resolve({
             message: "Successfully sent, Thank you!",
+            info,
             error: false,
             success: true,
           });

@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/brevo", async (req, res) => {
   const { success, data, error } = z
     .object({
       email: z.string().email(),

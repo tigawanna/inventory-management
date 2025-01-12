@@ -56,7 +56,7 @@ export async function createAccessToken(
     { ...sanitizedPayload, exp: superUser ? fiveDaysInSeconds : fiftenMinutesInSeconds },
     ACCESS_TOKEN_SECRET,
   );
-  res.clearCookie(refreshTokebCookieKey, refreshCookieOptions);
+  res.clearCookie(accessTokebCookieKey, accessTokencookieOptions);
   res.cookie(accessTokebCookieKey, accessToken, accessTokencookieOptions);
   return accessToken;
 }
