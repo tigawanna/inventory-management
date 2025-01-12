@@ -2,7 +2,7 @@ import { envVariables } from "@/env.ts";
 import jwt from "jsonwebtoken";
 const { sign, verify } = jwt;
 import type { CookieOptions, Response, Request } from "express";
-import { bumpUserTokenVersion, findUserByID } from "./user-servoce.ts";
+import { bumpUserTokenVersion, findUserByID } from "./user-auth-servoce.ts";
 import { type UserJWTPayload } from "@/schemas/user-schema.ts";
 import { compare, hash } from "bcrypt";
 import { errorCodes } from "@/schemas/shared-schema.ts";

@@ -30,6 +30,7 @@ export type UserItem = z.infer<typeof userSelectSchema>;
 export type UpdateUserFields = z.infer<typeof userUpdateSchema>;
 export type CreateUserFields = z.infer<typeof userInsertSchema>;
 export type ViewUserParams = z.infer<typeof viewUserParamsSchema>;
+
 const sortBy = ["name", "email", "created_at"] as const satisfies Array<
   keyof UserItem
 >;
