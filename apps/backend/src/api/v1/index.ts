@@ -37,7 +37,7 @@ router.use(
 
 router.use("/auth", authRoute);
 router.use("/items", inventoryRoute);
-router.use("/category", categoryRoute);
+router.use("/categories", categoryRoute);
 router.use("/audit-logs", auditLogsRoute);
 router.use("/users", usersRoute);
 router.use("/mail", mailRoute);

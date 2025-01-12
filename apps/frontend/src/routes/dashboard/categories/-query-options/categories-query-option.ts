@@ -1,3 +1,4 @@
+import { makeHotToast } from "@/components/toasters";
 import { categoryApi, ListCategoryQueryParams } from "@/lib/api/category";
 import { queryOptions } from "@tanstack/react-query";
 
@@ -22,6 +23,11 @@ export function categoriesListQueryOptions({
         sort: "name",
       });
       if (error) {
+        makeHotToast({
+          title: "something went wrong fetching categories",
+          description: error.message,
+          variant: "error",
+        })
         return {
           page,
           perPage: 10,
