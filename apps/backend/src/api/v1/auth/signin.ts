@@ -30,13 +30,14 @@ router.post("/signin", async (req, res) => {
       verificationToken,
       ...publicUser
     } = loggedInUser;
-    // if (!loggedInUser.isEmailVerified) {
-    //   res.status(400);
-    //   return res.json({
-    //     message: "user email not verified",
-    //     data: publicUser,
-    //   });
-    // }
+    if (!loggedInUser.isEmailVerified) {
+      res.status(400);
+      return res.json({
+        message: "user email not verified",
+        data: publicUser,
+        action:"verify-email"
+      });
+    }
     const { accessToken, refreshToken } = await generateUserAuthTokens(
       res,
       publicUser,

@@ -45,17 +45,26 @@ export function SigninComponent({}: SigninComponentProps) {
         });
         return;
       }
+      const user = data.record?.data?.user;
+      if(!user){
+        makeHotToast({
+          title: "Something went wrong",
+          description: data.error.message,
+          variant: "error",
+          duration: 10000,
+        });
+        return 
+      }
       makeHotToast({
         title: "signed in",
         description: "",
         variant: "success",
         duration: 2000,
       });
-
-      if (!data.record?.isEmailVerified) {
+      if (!user.isEmailVerified) {
         return navigate({
           to: "/auth/verify-email",
-          search: { email: data.record?.email, returnTo },
+          search: { email: user.email ,returnTo },
         });
       }
       qc.invalidateQueries(viewerqueryOptions());

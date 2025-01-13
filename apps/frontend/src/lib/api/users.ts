@@ -43,6 +43,13 @@ export interface AuthEnpointsEroor{
   code?:string
 }
 
+export interface UserSigninResponse {
+  data: {
+    accessToken: string;
+    refreshToken: string;
+    user: InventoryUser;
+  }
+}
 const baseUrl = import.meta.env.VITE_API_URL;
 export async function getCurrentUser() {
   try {
@@ -115,7 +122,7 @@ export async function signInUser(user: LoginInventoryUser) {
           }),
       };
     }
-    return { record: (await res.json()) as InventoryUser, error: null };
+    return { record: (await res.json()) as UserSigninResponse, error: null };
   } catch (error) {
     return {
       record: null,
