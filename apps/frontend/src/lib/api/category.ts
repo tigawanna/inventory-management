@@ -1,18 +1,18 @@
 import { BaseCrudApi, ListQueryParams } from "./base";
 
 
-interface CategoryItem {
+export interface CategoryItem {
   id: string;
   name: string;
   description: string | null;
-  updated_at: Date | null;
-  created_at: Date | null;
+  updated_at: string | null;
+  created_at: string | null;
 }
 interface CreateCategoryItem {
   name: string;
   description?: string | null | undefined;
-  updated_at?: Date | null | undefined;
-  created_at?: Date | null | undefined;
+  updated_at?: string | null | undefined;
+  created_at?: string | null | undefined;
 }
 export const categorySortBy = ["name", "description", "created_at"] as const satisfies Array<keyof CategoryItem>
 

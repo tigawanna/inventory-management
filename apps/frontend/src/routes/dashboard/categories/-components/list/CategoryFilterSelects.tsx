@@ -9,11 +9,11 @@ import {
   SelectValue,
 } from "@/components/shadcn/ui/select";
 
-interface InventorySortSelectProps {}
+interface CategorySortSelectProps {}
 
-export function InventorySortSelect({}: InventorySortSelectProps) {
-  const navigate = useNavigate({ from: "/dashboard/inventory" });
-  const { sort, ...rest } = useSearch({ from: "/dashboard/inventory/" });
+export function CategorySortSelect({}: CategorySortSelectProps) {
+  const navigate = useNavigate({ from: "/dashboard/categories/" });
+  const { sort, ...rest } = useSearch({ from: "/dashboard/categories/" });
   const paymentTypes = ["name", "quantity", "price", "default"] as const;
   return (
     <Select
@@ -46,9 +46,9 @@ export function InventorySortSelect({}: InventorySortSelectProps) {
     </Select>
   );
 }
-export function InventoryOrderSelect({}: InventorySortSelectProps) {
-  const { order, ...rest } = useSearch({ from: "/dashboard/inventory/" });
-  const navigate = useNavigate({ from: "/dashboard/inventory" });
+export function CategoryOrderSelect({}: CategorySortSelectProps) {
+  const { order, ...rest } = useSearch({ from: "/dashboard/categories/" });
+  const navigate = useNavigate({ from: "/dashboard/categories/" });
   const paymentTypes = ["desc", "asc"] as const;
   return (
     <Select
@@ -83,42 +83,3 @@ export function InventoryOrderSelect({}: InventorySortSelectProps) {
 }
 
 
-interface InventoryCategoriesSelectProps {
-
-}
-
-export function InventoryCategoriesSelect({}: InventoryCategoriesSelectProps) {
-  const { categoryId, ...rest } = useSearch({ from: "/dashboard/inventory/" });
-  const navigate = useNavigate({ from: "/dashboard/inventory" });
-  const categories = ["All","category_id_1", "category_id_2", "category_id_3"];
-  return (
-    <Select
-      value={categoryId}
-      onValueChange={(value: any) => {
-        if (value) {
-          if (value === "All") {
-            navigate({ search: { categoryId: "", ...rest }, replace: true });
-          } else {
-            navigate({ search: { categoryId: value, ...rest } });
-          }
-        }
-      }}
-    >
-      <SelectTrigger className="w-fit">
-        <SelectValue placeholder="Category ID" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>{categoryId}</SelectLabel>
-          {categories.map((type) => {
-            return (
-              <SelectItem key={type} value={type}>
-                {type}
-              </SelectItem>
-            );
-          })}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  );
-}

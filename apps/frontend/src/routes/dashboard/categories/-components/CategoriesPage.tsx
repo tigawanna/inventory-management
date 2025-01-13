@@ -7,6 +7,8 @@ import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { CreateCategoriesForm } from "./form/create";
 import { CategoriesList } from "./list/CategoriesList";
 import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
+import { CategoriesContainer } from "./list/CategoriesContainer";
+import { ResponsiveSuspenseFallbacks } from "@/components/wrappers/ResponsiveSuspenseFallbacks";
 
 interface CategoriesPageProps {
 }
@@ -15,8 +17,11 @@ export function CategoriesPage({}: CategoriesPageProps) {
   const { debouncedValue, isDebouncing, keyword, setKeyword } =
     usePageSearchQuery("/dashboard/categories");
   return (
-    <div className="min-h-screen flex h-full w-full gap-5 flex-col items-center ">
-      <Helmet title="Collabs | categories" description="The list of Collabs | categories" />
+    <div className="flex h-full min-h-screen w-full flex-col items-center gap-5">
+      <Helmet
+        title="Collabs | categories"
+        description="The list of Collabs | categories"
+      />
       <ListPageHeader
         title="Categories"
         formTrigger={<CreateCategoriesForm />}
@@ -33,9 +38,9 @@ export function CategoriesPage({}: CategoriesPageProps) {
         }
       />
 
-     <div className="m-3 flex h-full w-full items-center justify-center p-5">
-        <Suspense fallback={<CardsListSuspenseFallback />}>
-          <CategoriesList keyword={keyword} />
+      <div className="m-3 flex h-full w-full items-center justify-center p-5">
+        <Suspense fallback={<ResponsiveSuspenseFallbacks />}>
+          <CategoriesContainer keyword={keyword} />
         </Suspense>
       </div>
     </div>
