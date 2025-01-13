@@ -5,11 +5,9 @@ import { ListPageHeader } from "@/components/wrappers/ListPageHeader";
 import { Helmet } from "@/components/wrappers/custom-helmet";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { CreateInventoryForm } from "./form/create";
-import { InventoryList } from "./list/InventoryList";
 import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
 import { InventoryCategoriesSelect, InventoryOrderSelect, InventorySortSelect } from "./list/InventorySortSelect";
-import { InventoryTable } from "./list/InventoryTable";
-import { GeneriicTableSkeleton } from "@/components/wrappers/GeneriicTableSkeleton";
+import { InventoriesContainer } from "./list/InventoriesContainer";
 
 
 interface InventoryPageProps {
@@ -54,16 +52,9 @@ export function InventoryPage({}: InventoryPageProps) {
       />
 
       <div className="m-3 flex h-full w-full p-5">
-        <div className="hidden w-full max-w-[99vw] lg:flex">
-          <Suspense fallback={<GeneriicTableSkeleton />}>
-            <InventoryTable keyword={keyword} />
-          </Suspense>
-        </div>
-        <div className="flex w-full lg:hidden">
-          <Suspense fallback={<CardsListSuspenseFallback />}>
-            <InventoryList keyword={keyword} />
-          </Suspense>
-        </div>
+        <Suspense fallback={<CardsListSuspenseFallback />}>
+        <InventoriesContainer keyword={keyword} />
+        </Suspense>
       </div>
     </div>
   );
