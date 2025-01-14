@@ -1,12 +1,12 @@
-import { envVariables } from "@/env.ts";
-import { sendEmailwithBrevo } from "@/services/email/brevo-nodemailer.ts";
+import { authenticate } from "@/middleware/auth.ts";
+import { sendEmailwithBrevo } from "@/services/email-service.ts";
 import { parseZodError } from "@/utils/zod-errors.ts";
 import express from "express";
 import { z } from "zod";
 
 const router = express.Router();
 
-router.post("/brevo", async (req, res) => {
+router.post("/brevo",(...args)=>authenticate(...args,true),async (req, res) => {
   const { success, data, error } = z
     .object({
       email: z.string().email(),

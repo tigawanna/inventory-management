@@ -5,12 +5,8 @@ const { verify } = jwt;
 import { randomBytes } from "crypto";
 import { db } from "@/db/client.ts";
 import { passwordResets, usersTable } from "@/db/schema/users.ts";
-import { EmailService } from "./email/email-service.ts";
-import {
-  AuditAction,
-  AuditLogService,
-  EntityType,
-} from "./audit-log.service.ts";
+import { EmailService } from "./email-service.ts";
+import { auditAction, AuditLogService, entityType,} from "./audit-log.service.ts";
 import type { Request } from "express";
 export class AuthService {
   private readonly JWT_SECRET = process.env.JWT_SECRET!;
@@ -53,8 +49,8 @@ export class AuthService {
     await this.auditLogService.create(
       {
         userId: newUser[0].id,
-        action: AuditAction.CREATE,
-        entityType: EntityType.USER,
+        action: auditAction.CREATE,
+        entityType: entityType.USER,
         entityId: newUser[0].id,
         newData: { email: data.email, name: data.name },
       },

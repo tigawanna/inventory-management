@@ -8,9 +8,9 @@ import type {
   listInventoryQueryParamsSchema,
 } from "@/schemas/inventory-schema.ts";
 import {
-  AuditAction,
+  auditAction,
   AuditLogService,
-  EntityType,
+  entityType,
 } from "./audit-log.service.ts";
 import { type Request } from "express";
 export class InventoryService {
@@ -80,8 +80,8 @@ export class InventoryService {
     const item = await db.insert(inventoryTable).values(data).returning();
     await this.auditLogService.create({
       userId: req.user.id,
-      action: AuditAction.CREATE,
-      entityType: EntityType.INVENTORY,
+      action: auditAction.CREATE,
+      entityType: entityType.INVENTORY,
       entityId: item[0].id,
       newData: data,
       ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
@@ -101,7 +101,7 @@ export class InventoryService {
       .returning();
     await this.auditLogService.createChangeLog({
       userId: req.user.id,
-      entityType: EntityType.INVENTORY,
+      entityType: entityType.INVENTORY,
       entityId: id,
       newData: item,
       ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
@@ -117,7 +117,7 @@ export class InventoryService {
         .returning();
       await this.auditLogService.createChangeLog({
         userId: req.user.id,
-        entityType: EntityType.INVENTORY,
+        entityType: entityType.INVENTORY,
         entityId: id,
         newData: item,
         ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",
@@ -131,7 +131,7 @@ export class InventoryService {
       .returning();
     await this.auditLogService.createChangeLog({
       userId: req.user.id,
-      entityType: EntityType.INVENTORY,
+      entityType: entityType.INVENTORY,
       entityId: id,
       newData: item,
       ipAddress: req.headers?.["x-forwarded-for"]?.[0] ?? "",

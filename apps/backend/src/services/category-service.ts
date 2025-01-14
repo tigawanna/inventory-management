@@ -6,7 +6,7 @@ import type {
   categoryInsertSchema,
   listcategoryQueryParamsSchema,
 } from "@/schemas/category-schema.ts";
-import { EntityType } from "./audit-log.service.ts";
+import { entityType } from "./audit-log.service.ts";
 import { and, eq, ilike } from "drizzle-orm";
 
 export class CategoryService extends BaseCrudService<
@@ -15,7 +15,7 @@ export class CategoryService extends BaseCrudService<
   z.infer<typeof categoryUpdateSchema>
 > {
   constructor() {
-    super(categoryTable, EntityType.INVENTORY);
+    super(categoryTable, entityType.INVENTORY);
   }
 
   // Override or add custom methods

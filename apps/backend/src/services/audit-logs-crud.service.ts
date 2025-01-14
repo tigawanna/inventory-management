@@ -8,22 +8,22 @@ import type {
   listAuditLogQueryParamsSchema,
 } from "@/schemas/audit-log-service.ts";
 import { BaseCrudService } from "./generic-crud-service.ts";
-export enum AuditAction {
-  CREATE = "CREATE",
-  UPDATE = "UPDATE",
-  DELETE = "DELETE",
-  LOGIN = "LOGIN",
-  LOGOUT = "LOGOUT",
-  PASSWORD_RESET = "PASSWORD_RESET",
-  EMAIL_VERIFY = "EMAIL_VERIFY",
-}
-
-export enum EntityType {
-  USER = "USER",
-  INVENTORY = "INVENTORY",
-  CATEGORY = "CATEGORY",
-}
-
+export const auditAction = {
+  CREATE: "CREATE",
+  UPDATE: "UPDATE",
+  DELETE: "DELETE",
+  LOGIN: "LOGIN",
+  LOGOUT: "LOGOUT",
+  PASSWORD_RESET: "PASSWORD_RESET",
+  EMAIL_VERIFY: "EMAIL_VERIFY",
+} as const;
+export type AuditAction = keyof typeof auditAction;
+export const entityType = {
+  USER: "USER",
+  INVENTORY: "INVENTORY",
+  CATEGORY: "CATEGORY",
+} as const;
+export type EntityType = keyof typeof entityType;
 interface AuditLogData {
   userId: string;
   action: AuditAction;
@@ -40,7 +40,7 @@ export class AuditLogService extends BaseCrudService<
   z.infer<typeof auditLogUpdateSchema>
 > {
   constructor() {
-    super(auditLogsTable, EntityType.INVENTORY);
+    super(auditLogsTable, entityType.INVENTORY);
   }
   async findAll(query: z.infer<typeof listAuditLogQueryParamsSchema>) {
     const { search, ...paginationQuery } = query;

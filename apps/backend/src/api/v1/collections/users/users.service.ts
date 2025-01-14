@@ -1,6 +1,4 @@
 import type { z } from "zod";
-import { BaseCrudService } from "./generic-crud-service.ts";;
-import { entityType } from "./audit-log.service.ts";
 import { and, ilike, or } from "drizzle-orm";
 import { usersTable } from "@/db/schema/users.ts";
 import type {
@@ -8,6 +6,9 @@ import type {
   userInsertSchema,
   userUpdateSchema,
 } from "@/schemas/user-schema.ts";
+import { entityType } from "@/services/audit-log.service.ts";
+import { BaseCrudService } from "@/services/generic-crud-service.ts";
+
 
 export class UsersService extends BaseCrudService<
   typeof usersTable,
