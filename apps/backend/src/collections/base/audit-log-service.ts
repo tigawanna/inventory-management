@@ -1,6 +1,6 @@
 import { db } from "@/db/client.ts";
 import { auditLogsTable } from "@/db/schema/users.ts";
-import { eq,and,desc } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import type { Request } from "express";
 
 export const auditAction = {
