@@ -1,5 +1,3 @@
-import { envVariables } from "@/env.ts";
-import { validate } from "@/middleware/auth.ts";
 import type { AuthService } from "@/services/auth-service.ts";
 import { generateUserAuthTokens } from "@/services/jwt-service.ts";
 import { parseZodError } from "@/utils/zod-errors.ts";

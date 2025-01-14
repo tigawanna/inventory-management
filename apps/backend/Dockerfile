@@ -1,23 +1,60 @@
-# Use an official Node.js image as the base
-FROM node:23-alpine
+ARG NODE_VERSION=23
+ARG PROJECT="backend"
+ARG PORT=5000
 
-# Set the working directory to /app
-WORKDIR /backend
+# Alpine image
+FROM node:${NODE_VERSION}-alpine AS base
+RUN apk update
+RUN apk add --no-cache gcompat
 
-# Copy the package*.json files to the working directory
-COPY package*.json ./
+# Setup pnpm and turbo on the alpine base
+RUN npm install pnpm turbo --global
+RUN pnpm config set store-dir ~/.pnpm-store
 
-# Install the dependencies
-RUN npm install
+# Prune projects
+FROM base AS pruner
+ARG PROJECT
 
-# Copy the application code to the working directory
+WORKDIR /app
 COPY . .
+RUN turbo prune --scope=${PROJECT} --docker
 
-# Build the TypeScript code
-RUN npm run build
+# Build the project
+FROM base AS builder
+ARG PROJECT
 
-# Expose the port the API will run on
-EXPOSE 5000
+WORKDIR /app
 
-# Run the command to start the API when the container launches
-CMD ["npm", "start"]
+# Copy lockfile and package.json's of isolated subworkspace
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
+COPY --from=pruner /app/out/json/ .
+
+# First install dependencies
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install --frozen-lockfile
+
+# Copy source code
+COPY --from=pruner /app/out/full/ .
+
+RUN turbo build --filter=${PROJECT}
+RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm prune --prod --no-optional
+RUN rm -rf ./**/*/src
+
+# Final image
+FROM alpine:latest AS runner
+ARG PROJECT
+ARG PORT
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nodejs
+USER nodejs
+
+WORKDIR /app
+COPY --from=builder --chown=nodejs:nodejs /app .
+WORKDIR /app/apps/${PROJECT}
+
+ENV PORT=${PORT}
+ENV NODE_ENV=production
+EXPOSE ${PORT}
+
+CMD ["node", "dist/index.cjs"]
