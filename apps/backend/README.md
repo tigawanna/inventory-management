@@ -10,7 +10,7 @@ documnetation is on `/api/v1/ui`
 
  ### using docker 
 
-```sh
+```Dockerfile
  # Build image
 docker build -t inventory-api -f apps/backend/Dockerfile .
 

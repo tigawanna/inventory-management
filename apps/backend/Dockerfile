@@ -41,10 +41,14 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm prune --prod --no-optio
 RUN rm -rf ./**/*/src
 
 # Final image
-FROM alpine:latest AS runner
+FROM node:${NODE_VERSION}-alpine AS runner
 ARG PROJECT
 ARG PORT
 
+# Install only needed dependencies
+RUN apk add --no-cache gcompat
+
+# Create non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
 USER nodejs
