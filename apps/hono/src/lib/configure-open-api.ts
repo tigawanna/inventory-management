@@ -7,7 +7,7 @@ export function configureOpenAPI(app: AppOpenAPI) {
     openapi: "3.0.0",
     info: {
       version: packageJSON.version,
-      title: "Tasks API",
+      title: "Inventory API",
     },
   });
 

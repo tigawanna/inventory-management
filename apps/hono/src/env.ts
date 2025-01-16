@@ -4,12 +4,11 @@ import { expand } from "dotenv-expand";
 import path from "node:path";
 import { z } from "zod";
 
-expand(config({
-  path: path.resolve(
-    process.cwd(),
-    process.env.NODE_ENV === "test" ? ".env.test" : ".env",
-  ),
-}));
+expand(
+  config({
+    path: path.resolve(process.cwd(), process.env.NODE_ENV === "test" ? ".env.test" : ".env"),
+  })
+);
 
 const EnvSchema = z
   .object({
@@ -49,4 +48,5 @@ if (error) {
   process.exit(1);
 }
 
-export default env!;
+const envVariables = env!;
+export { envVariables };

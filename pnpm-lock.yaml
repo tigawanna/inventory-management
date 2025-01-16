@@ -433,6 +433,9 @@ importers:
       '@hono/zod-openapi':
         specifier: ^0.18.3
         version: 0.18.3(hono@4.6.16)(zod@3.24.1)
+      '@neondatabase/serverless':
+        specifier: ^0.10.4
+        version: 0.10.4
       '@scalar/hono-api-reference':
         specifier: ^0.5.165
         version: 0.5.165(hono@4.6.16)
@@ -454,6 +457,9 @@ importers:
       hono-pino:
         specifier: ^0.7.0
         version: 0.7.0(hono@4.6.16)(pino@9.6.0)
+      pg:
+        specifier: ^8.13.1
+        version: 8.13.1
       pino:
         specifier: ^9.6.0
         version: 9.6.0
@@ -463,6 +469,9 @@ importers:
       stoker:
         specifier: ^1.4.2
         version: 1.4.2(@asteasolutions/zod-to-openapi@7.3.0(zod@3.24.1))(@hono/zod-openapi@0.18.3(hono@4.6.16)(zod@3.24.1))(hono@4.6.16)(openapi3-ts@4.4.0)
+      uuidv7:
+        specifier: ^1.0.2
+        version: 1.0.2
       zod:
         specifier: ^3.23.8
         version: 3.24.1
@@ -473,6 +482,9 @@ importers:
       '@types/node':
         specifier: ^20.11.17
         version: 20.17.12
+      '@types/pg':
+        specifier: ^8.11.10
+        version: 8.11.10
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3

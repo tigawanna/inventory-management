@@ -1,13 +1,20 @@
 import { pinoLogger as logger } from "hono-pino";
 import pino from "pino";
 import pretty from "pino-pretty";
-import env from "@/env";
+import { envVariables } from "@/env";
 
 export function pinoLogger() {
   return logger({
-    pino: pino({
-      level: env.LOG_LEVEL || "info",
-    }, env.NODE_ENV === "production" ? undefined : pretty()),
+    pino: pino(
+      {
+        level: envVariables.LOG_LEVEL || "info",
+      },
+      envVariables.NODE_ENV === "production"
+        ? undefined
+        : pretty({
+            colorize: true,
+          })
+    ),
     http: {
       reqId: () => crypto.randomUUID(),
     },
