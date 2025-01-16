@@ -1,12 +1,15 @@
-import * as usersSchema from "./schema/users";
-import * as inventorySchema from "./schema/inventory";
 import type { Logger } from "drizzle-orm/logger";
-import { formatSqlQuery } from "./helpers/query-logger";
-import { envVariables } from "@/env";
+
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 import { drizzle as pgDrizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
+
+import { envVariables } from "@/env";
+
+import { formatSqlQuery } from "./helpers/query-logger";
+import * as inventorySchema from "./schema/inventory";
+import * as usersSchema from "./schema/users";
 
 class MyLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {
@@ -38,10 +41,11 @@ async function createLocalPool() {
       console.log("Successfully connected to local database");
       client.release();
       return pool;
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`Connection attempt ${i + 1} failed:`, error);
       if (i < RETRY_ATTEMPTS - 1) {
-        await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY));
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
       }
     }
   }
@@ -63,7 +67,6 @@ export async function createDB() {
     schema: { ...inventorySchema, ...usersSchema },
   });
 }
-
 
 export const db = await createDB().catch((error) => {
   console.error("Failed to initialize database:", error);

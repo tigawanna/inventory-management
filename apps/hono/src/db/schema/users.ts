@@ -1,4 +1,5 @@
-import { pgTable, text, pgEnum, jsonb, integer, timestamp, boolean } from "drizzle-orm/pg-core";
+import { boolean, integer, jsonb, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+
 import { commonColumns } from "../helpers/columns";
 
 export const roles = ["admin", "user"] as const;
@@ -37,4 +38,3 @@ export const passwordResets = pgTable("password_resets", {
   expiresAt: timestamp("expires_at").notNull(),
   isUsed: boolean("is_used").default(false),
 });
-

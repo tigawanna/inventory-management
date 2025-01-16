@@ -1,6 +1,9 @@
+import type { SQL } from "drizzle-orm";
+import type { PgTable } from "drizzle-orm/pg-core";
+
+import { asc, desc, eq, sql } from "drizzle-orm";
+
 import { db } from "@/db/client";
-import { eq, SQL, desc, asc, sql } from "drizzle-orm";
-import { type PgTable } from "drizzle-orm/pg-core";
 
 export interface PaginatedQuery {
   page: string;
@@ -11,7 +14,6 @@ export interface PaginatedQuery {
 
 export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
   protected table: T;
-
 
   constructor(table: T) {
     this.table = table;

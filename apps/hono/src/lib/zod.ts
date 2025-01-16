@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { z } from "zod";
 
 // deno-lint-ignore no-explicit-any
 export function parseZodError(errorResponse: z.ZodError<any>) {

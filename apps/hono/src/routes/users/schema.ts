@@ -1,8 +1,8 @@
-import { usersTable } from "@/db/schema/users";
-import { genericQueryParamsSchema } from "@/shared/schema";
-import { createSelectSchema, createInsertSchema, createUpdateSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 
+import { usersTable } from "@/db/schema/users";
+import { genericQueryParamsSchema } from "@/shared/schema";
 
 export const userSelectSchema = createSelectSchema(usersTable);
 export const userInsertSchema = createInsertSchema(usersTable);

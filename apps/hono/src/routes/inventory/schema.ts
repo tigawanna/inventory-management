@@ -1,6 +1,7 @@
-import { createSelectSchema, createInsertSchema, createUpdateSchema } from "drizzle-zod";
-import { inventoryTable, categoryTable } from "@/db/schema/inventory";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
+
+import { categoryTable, inventoryTable } from "@/db/schema/inventory";
 import { genericQueryParamsSchema } from "@/shared/schema";
 
 export const inventorySelectSchema = createSelectSchema(inventoryTable);

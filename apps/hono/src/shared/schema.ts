@@ -1,4 +1,4 @@
-import { z, ZodArray } from "zod";
+import { z } from "zod";
 
 export const genericQueryParamsSchema = z.object({
   page: z.string().default("1"),
@@ -32,8 +32,8 @@ export const errorSchema = z.object({
         z.object({
           code: z.string(),
           message: z.string(),
-        })
-      )
+        }),
+      ),
     )
     .optional(),
 });

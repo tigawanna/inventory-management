@@ -1,6 +1,7 @@
 import { serve } from "@hono/node-server";
+
 import app from "./app";
-import {envVariables} from "./env";
+import { envVariables } from "./env";
 
 const port = envVariables.PORT;
 // eslint-disable-next-line no-console

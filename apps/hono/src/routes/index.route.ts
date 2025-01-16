@@ -2,9 +2,9 @@ import { createRoute } from "@hono/zod-openapi";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import { jsonContent } from "stoker/openapi/helpers";
 import { createMessageObjectSchema } from "stoker/openapi/schemas";
+
 import { createRouter } from "@/lib/create-app";
-import { getCurrentContext } from "@/middlewares/context-middleware";
-import { getConnInfo } from "@hono/node-server/conninfo";
+
 const router = createRouter().openapi(
   createRoute({
     tags: ["Index"],
@@ -13,7 +13,7 @@ const router = createRouter().openapi(
     responses: {
       [HttpStatusCodes.OK]: jsonContent(
         createMessageObjectSchema("Welcome"),
-        "Welcome to  the invemtpry api"
+        "Welcome to  the invemtpry api",
       ),
     },
   }),
@@ -22,9 +22,9 @@ const router = createRouter().openapi(
       {
         message: "Welcome to the Inventory API",
       },
-      HttpStatusCodes.OK
+      HttpStatusCodes.OK,
     );
-  }
+  },
 );
 
 export default router;

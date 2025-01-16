@@ -63,5 +63,3 @@ export function formatSqlQuery(query: string): string {
 
   return formattedQuery;
 }
-
-

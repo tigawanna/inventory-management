@@ -1,6 +1,7 @@
 import { pinoLogger as logger } from "hono-pino";
 import pino from "pino";
 import pretty from "pino-pretty";
+
 import { envVariables } from "@/env";
 
 export function pinoLogger() {
@@ -13,7 +14,7 @@ export function pinoLogger() {
         ? undefined
         : pretty({
             colorize: true,
-          })
+          }),
     ),
     http: {
       reqId: () => crypto.randomUUID(),

@@ -1,5 +1,7 @@
-import type { Request, Response, NextFunction } from "express";
-import { ZodError, ZodSchema } from "zod";
+import type { NextFunction, Request, Response } from "express";
+import type { ZodSchema } from "zod";
+
+import { errorCodes } from "@/schemas/shared-schema.ts";
 import {
   clearAccessTokenCookie,
   clearRefreshTokenCookie,
@@ -8,7 +10,7 @@ import {
   isRefreshTokenCokkiePresent,
   verifyRefreshToken,
 } from "@/services/jwt-service.ts";
-import { errorCodes } from "@/schemas/shared-schema.ts";
+import { ZodError } from "zod";
 
 /**
  * Middleware to authenticate a user.
@@ -32,12 +34,7 @@ import { errorCodes } from "@/schemas/shared-schema.ts";
  * ```
  *
  */
-export const authenticate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  adminOnly = false,
-) => {
+export async function authenticate(req: Request, res: Response, next: NextFunction, adminOnly = false) {
   const decodedUser = await getAccessTokenFromCokkieOrHeaders(req);
   if (!decodedUser) {
     const refreshTokenPresent = isRefreshTokenCokkiePresent(req);
@@ -60,9 +57,9 @@ export const authenticate = async (
         .json({ message: "Unauthorized", code: errorCodes.adminRequired });
     }
     if (
-      adminOnly &&
-      userFromRefreshToken?.result.role &&
-      userFromRefreshToken?.result.role !== "admin"
+      adminOnly
+      && userFromRefreshToken?.result.role
+      && userFromRefreshToken?.result.role !== "admin"
     ) {
       await clearAccessTokenCookie(res);
       await clearRefreshTokenCookie(res, req.user.id);
@@ -76,7 +73,7 @@ export const authenticate = async (
   }
   req.user = decodedUser;
   return next();
-};
+}
 
 // export const authenticateAdminOnly = async (
 //   req: Request,
@@ -130,12 +127,13 @@ export const authenticate = async (
 //   return next();
 // };
 
-export const validate = (schema: ZodSchema) => {
+export function validate(schema: ZodSchema) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.parseAsync(req.body);
       next();
-    } catch (error) {
+    }
+    catch (error) {
       if (error instanceof ZodError) {
         res.status(400).json({ error: error.flatten() });
       }
@@ -145,4 +143,4 @@ export const validate = (schema: ZodSchema) => {
       res.status(400).json({ error });
     }
   };
-};
+}

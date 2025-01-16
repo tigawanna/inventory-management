@@ -1,7 +1,8 @@
-import { pgTable, integer, decimal, boolean, text } from "drizzle-orm/pg-core";
-import { uuidv7 } from "uuidv7";
-import { commonColumns } from "../helpers/columns";
 import { relations } from "drizzle-orm";
+import { boolean, decimal, integer, pgTable, text } from "drizzle-orm/pg-core";
+import { uuidv7 } from "uuidv7";
+
+import { commonColumns } from "../helpers/columns";
 
 export const categoryTable = pgTable("categories", {
   ...commonColumns,

@@ -1,7 +1,9 @@
-import { AppBindings } from "@/lib/types";
-import { Context } from "hono";
-import { getCookie, getSignedCookie, setCookie, setSignedCookie, deleteCookie } from "hono/cookie";
-import { CookieOptions } from "hono/utils/cookie";
+import type { Context } from "hono";
+import type { CookieOptions } from "hono/utils/cookie";
+
+import { deleteCookie, getCookie, setCookie } from "hono/cookie";
+
+import type { AppBindings } from "@/lib/types";
 
 const refreshCookieOptions: CookieOptions = {
   httpOnly: true,
@@ -40,6 +42,7 @@ export function getAccessTokenFromCookieOrHeaders(c: Context<AppBindings, "/", {
   const cookieAccessToken = getCookie(c, accessTokebCookieKey);
   return cookieAccessToken;
 }
+
 export function setRefreshTokenCookie(jc: Context<AppBindings, "/", {}>, token: string) {
   deleteCookie(jc, refreshTokebCookieKey);
   setCookie(jc, refreshTokebCookieKey, token, refreshCookieOptions);

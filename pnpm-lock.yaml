@@ -503,6 +503,9 @@ importers:
       eslint-plugin-format:
         specifier: ^1.0.1
         version: 1.0.1(eslint@9.18.0(jiti@1.21.7))
+      prettier:
+        specifier: ^3.4.2
+        version: 3.4.2
       tsc-alias:
         specifier: ^1.8.10
         version: 1.8.10

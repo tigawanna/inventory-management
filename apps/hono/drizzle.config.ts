@@ -1,7 +1,7 @@
-import { envVariables } from "@/env";
-import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
+import "dotenv/config";
 
+import { envVariables } from "@/env";
 
 export default defineConfig({
   out: "./src/db/migrations",

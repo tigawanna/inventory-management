@@ -1,5 +1,6 @@
-import { timestamp, text } from "drizzle-orm/pg-core";
+import { text, timestamp } from "drizzle-orm/pg-core";
 import { uuidv7 } from "uuidv7";
+
 export const commonColumns = {
   id: text()
     .$defaultFn(() => uuidv7())
