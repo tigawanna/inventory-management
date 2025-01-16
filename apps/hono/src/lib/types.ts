@@ -4,7 +4,9 @@ import type { PinoLogger } from "hono-pino";
 export interface AppBindings {
   Variables: {
     logger: PinoLogger;
+    message:string;
   };
+
 };
 
 export type AppOpenAPI = OpenAPIHono<AppBindings>;
