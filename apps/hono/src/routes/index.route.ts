@@ -18,11 +18,6 @@ const router = createRouter().openapi(
     },
   }),
   async (c) => {
-    const globalContext = await getCurrentContext();
-    // const connInfo = getConnInfo(c);
-    // console.log({  connInfo });
-    const message = c.get("message");
-    console.log({ message });
     return c.json(
       {
         message: "Welcome to the Inventory API",

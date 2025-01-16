@@ -1,5 +1,5 @@
-import { db } from "@/db/client.ts";
-import { usersTable } from "@/db/schema/users.ts";
+import { db } from "@/db/client";
+import { usersTable } from "@/db/schema/users";
 import { eq } from "drizzle-orm";
 
 export async function findUserByID(id: string) {
