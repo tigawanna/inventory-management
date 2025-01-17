@@ -13,36 +13,42 @@ export const errorCodes = {
   adminRequired: "admin-required",
   parametersRequired: "parameters-required",
   queryParametersRequired: "query-parametersRequired-required",
-  patloadRequired: "patload-required",
+  payloadRequired: "payload-required",
+  internalServererror: "internal-server-error",
 } as const;
 
 const errorCodesArray = [
   errorCodes.loginRequired,
   errorCodes.adminRequired,
   errorCodes.parametersRequired,
+  errorCodes.queryParametersRequired,
+  errorCodes.payloadRequired,
+  errorCodes.internalServererror,
 ] as const;
 
 export const errorSchema = z.object({
   message: z.string(),
   code: z.enum(errorCodesArray).optional(),
-  data: z
-    .array(
-      z.record(
-        z.string(),
-        z.object({
-          code: z.string(),
-          message: z.string(),
-        }),
-      ),
-    )
+  data: z.record(
+    z.string(),
+    z.object({
+      code: z.string(),
+      message: z.string(),
+    }),
+  )
     .optional(),
 });
 
 export type ErrorSchema = z.infer<typeof errorSchema>;
 
 export const baseListResponseSchema = z.object({
-    page:z.coerce.number(),
-    perPage: z.coerce.number(),
-    totalItems: z.coerce.number(),
-    totalPages: z.coerce.number(),
+  page: z.coerce.number(),
+  perPage: z.coerce.number(),
+  totalItems: z.coerce.number(),
+  totalPages: z.coerce.number(),
+});
+
+export const baseResponseSchema = z.object({
+  result: z.any().nullable(),
+  error: errorSchema.nullable(),
 });
