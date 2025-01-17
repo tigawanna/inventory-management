@@ -1,7 +1,10 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { contextStorage } from "hono/context-storage";
+import { requestId } from "hono/request-id";
 import { notFound, serveEmojiFavicon } from "stoker/middlewares";
 import { defaultHook } from "stoker/openapi";
 
+import { authenticateUserMiddleware } from "@/middlewares/auth-middl-ware";
 import { onHonoError } from "@/middlewares/error-middleware";
 import { pinoLogger } from "@/middlewares/loggermiddleware";
 
@@ -16,8 +19,13 @@ export function createRouter() {
 
 export function createApp() {
   const app = createRouter();
-  app.use(serveEmojiFavicon("📝"));
+  app.use(requestId());
   app.use(pinoLogger());
+  app.use(contextStorage());
+  app.use(async (c, next) => {
+    await authenticateUserMiddleware(c, next);
+  });
+  app.use(serveEmojiFavicon("📝"));
   app.notFound(notFound);
   app.onError(onHonoError);
   return app;

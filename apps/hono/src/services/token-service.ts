@@ -8,12 +8,12 @@ import type { UserJWTPayload } from "@/routes/users/schema";
 
 import { envVariables } from "@/env";
 
+import { verifyRefreshTokenAndrefreshAccessToken } from "../shared/utils/refresh-if-possible-util";
 import {
   getAccessTokenFromCookieOrHeaders,
   setAccessTokenCookie,
   setRefreshTokenCookie,
 } from "./cookie-service";
-import { verifyRefreshTokenAndrefreshAccessToken } from "./refresh-if-possible-util";
 
 export async function createAccessToken(
   c: Context<AppBindings, "/", {}>,
@@ -58,26 +58,24 @@ export async function createRefreshToken(
     name: payload.name,
     refreshTokenVersion: payload.refreshTokenVersion,
   };
-  const refreshToken = await sign({ ...sanitizedPayload, exp: expriesin }, REFRESH_TOKEN_SECRET);
+  const refreshToken = await sign(
+    { ...sanitizedPayload, exp: expriesin },
+    REFRESH_TOKEN_SECRET,
+  );
   setRefreshTokenCookie(c, refreshToken);
   c.var.logger.info("createRefreshToken: Refresh token created");
   return refreshToken;
 }
 
 export async function verifiedAccessToken(c: Context<AppBindings, "/", {}>) {
-  try {
-    const accessToken = getAccessTokenFromCookieOrHeaders(c);
-    if (!accessToken) {
-      c.var.logger.error("verifyAccessToken: Missing access token");
-      return;
-    }
-    const payload = await verify(accessToken, envVariables.ACCESS_TOKEN_SECRET);
-    c.var.logger.info("verifyAccessToken: Access token verified");
-    return payload as UserJWTPayload;
+  const accessToken = getAccessTokenFromCookieOrHeaders(c);
+  if (!accessToken) {
+    c.var.logger.error("verifiedAccessToken : Missing access token");
+    return;
   }
-  catch (error) {
-    c.var.logger.error("verifyAccessToken: Invalid access token", error);
-  }
+  const payload = await verify(accessToken, envVariables.ACCESS_TOKEN_SECRET);
+  c.var.logger.info("verifiedAccessToken : Access token verified");
+  return payload as UserJWTPayload;
 }
 
 export async function refreshAccessToken(c: Context<AppBindings, "/", {}>) {
