@@ -13,6 +13,7 @@ import {
   setAccessTokenCookie,
   setRefreshTokenCookie,
 } from "./cookie-service";
+import { verifyRefreshTokenAndrefreshAccessToken } from "./refresh-if-possible-util";
 
 export async function createAccessToken(
   c: Context<AppBindings, "/", {}>,
@@ -80,13 +81,8 @@ export async function verifiedAccessToken(c: Context<AppBindings, "/", {}>) {
 }
 
 export async function refreshAccessToken(c: Context<AppBindings, "/", {}>) {
-  const refreshTokenPayload = await verifyRefreshToken(c);
-  if (!refreshTokenPayload)
-    return;
-  const { ACCESS_TOKEN_SECRET } = envVariables;
-  const newAccessToken = await sign(refreshTokenPayload, ACCESS_TOKEN_SECRET);
-  c.var.logger.info("refreshAccessToken: Access token refreshed");
-  return newAccessToken;
+  const refreshTokenPayload = await verifyRefreshTokenAndrefreshAccessToken(c);
+  return refreshTokenPayload;
 }
 
 export async function generateUserAuthTokens(

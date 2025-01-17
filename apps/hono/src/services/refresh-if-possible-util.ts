@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 
-import { verify } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 
 import type { AppBindings } from "@/lib/types";
 import type { UserJWTPayload } from "@/routes/users/schema";
@@ -8,12 +8,12 @@ import type { UserJWTPayload } from "@/routes/users/schema";
 import { envVariables } from "@/env";
 import { errorCodes } from "@/shared/schema";
 
-import { getRefreshTokenFromCookie } from "./cookie-service";
+import { getRefreshTokenFromCookie, setAccessTokenCookie } from "./cookie-service";
 import { findUserByID } from "./user-auth-servoce";
 
-export async function verifyRefreshToken(
+export async function verifyRefreshTokenAndrefreshAccessToken(
   c: Context<AppBindings, "/", {}>,
-  role: UserJWTPayload["role"],
+  role: UserJWTPayload["role"]="user",
 ) {
   const { REFRESH_TOKEN_SECRET } = envVariables;
   const refreshTtoken = getRefreshTokenFromCookie(c);
@@ -28,8 +28,8 @@ export async function verifyRefreshToken(
       },
     });
   }
-  const refreshTokenPayload
-    = (await verify(refreshTtoken, REFRESH_TOKEN_SECRET)) as UserJWTPayload;
+  const refreshTokenPayload =
+    (await verify(refreshTtoken, REFRESH_TOKEN_SECRET)) as UserJWTPayload;
   const matchingUser = await findUserByID(refreshTokenPayload.id);
   if (!matchingUser) {
     c.var.logger.error(
@@ -60,8 +60,8 @@ export async function verifyRefreshToken(
       },
     });
   }
-  const { password, verificationToken, refreshToken, ...newuserPayload }
-    = matchingUser;
+  const { password, verificationToken, refreshToken, ...newuserPayload } =
+    matchingUser;
   if (newuserPayload.role !== role) {
     c.var.logger.error(
       `verifyRefreshToken: User role does not match requested role: ${matchingUser.role} != ${role}`,
@@ -75,5 +75,11 @@ export async function verifyRefreshToken(
       },
     });
   }
-  return { error: null, result: newuserPayload };
+  // return { error: null, result: newuserPayload };
+  const { ACCESS_TOKEN_SECRET } = envVariables;
+  const newAccessToken = await sign(refreshTokenPayload, ACCESS_TOKEN_SECRET);
+  c.var.logger.info("refreshAccessToken: Access token refreshed");
+  setAccessTokenCookie(c, newAccessToken);
+  c.var.logger.info("refreshAccessToken: Access token set in cookie");
+  return {newAccessToken, refreshTokenPayload};
 }
