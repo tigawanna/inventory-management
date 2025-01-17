@@ -5,6 +5,7 @@ import { notFound, serveEmojiFavicon } from "stoker/middlewares";
 import { defaultHook } from "stoker/openapi";
 
 import { authenticateUserMiddleware } from "@/middlewares/auth-middl-ware";
+import { corsHeaders } from "@/middlewares/cors-middlewares";
 import { onHonoError } from "@/middlewares/error-middleware";
 import { pinoLogger } from "@/middlewares/loggermiddleware";
 
@@ -21,6 +22,7 @@ export function createApp() {
   const app = createRouter();
   app.use(requestId());
   app.use(pinoLogger());
+  app.use((c,next)=>corsHeaders(c,next))
   app.use(contextStorage());
   app.use(async (c, next) => {
     await authenticateUserMiddleware(c, next);

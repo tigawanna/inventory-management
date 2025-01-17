@@ -1,9 +1,5 @@
-import { contextStorage } from "hono/context-storage";
-import { requestId } from 'hono/request-id';
-
 import { configureOpenAPI } from "./lib/configure-open-api";
 import { createApp } from "./lib/create-app";
-import { authenticateUserMiddleware } from "./middlewares/auth-middl-ware";
 import { allroutes } from "./routes/all-routes";
 
 const app = createApp();
