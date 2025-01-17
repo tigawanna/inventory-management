@@ -24,9 +24,9 @@ export function createApp() {
   app.use(pinoLogger());
   app.use((c,next)=>corsHeaders(c,next))
   app.use(contextStorage());
-  app.use(async (c, next) => {
-    await authenticateUserMiddleware(c, next);
-  });
+  // app.use(async (c, next) => {
+  //   await authenticateUserMiddleware(c, next);
+  // });
   app.use(serveEmojiFavicon("📝"));
   app.notFound(notFound);
   app.onError(onHonoError);

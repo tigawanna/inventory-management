@@ -1,6 +1,6 @@
+import { allroutes } from "./api/api-routes";
 import { configureOpenAPI } from "./lib/configure-open-api";
 import { createApp } from "./lib/create-app";
-import { allroutes } from "./routes/all-routes";
 
 const app = createApp();
 

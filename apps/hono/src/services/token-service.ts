@@ -4,7 +4,7 @@ import { compare, hash } from "bcrypt";
 import { sign, verify } from "hono/jwt";
 
 import type { AppBindings } from "@/lib/types";
-import type { UserJWTPayload } from "@/routes/users/schema";
+import type { UserJWTPayload } from "@/api/v1/users/schema";
 
 import { envVariables } from "@/env";
 

@@ -1,7 +1,7 @@
 import type { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
 import type { PinoLogger } from "hono-pino";
 
-import type { UserJWTPayload } from "@/routes/users/schema";
+import type { UserJWTPayload } from "@/api/v1/users/schema";
 
 export interface AppBindings {
   Variables: {

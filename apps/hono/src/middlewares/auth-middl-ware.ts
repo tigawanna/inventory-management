@@ -2,8 +2,8 @@ import type { Context, Next } from "hono";
 
 import { sign } from "hono/jwt";
 
+import type { UserJWTPayload } from "@/api/v1/users/schema";
 import type { AppBindings } from "@/lib/types";
-import type { UserJWTPayload } from "@/routes/users/schema";
 
 import { envVariables } from "@/env";
 import {

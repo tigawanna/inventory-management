@@ -3,7 +3,7 @@ import type { Context } from "hono";
 import { verify } from "hono/jwt";
 
 import type { AppBindings } from "@/lib/types";
-import type { UserJWTPayload } from "@/routes/users/schema";
+import type { UserJWTPayload } from "@/api/v1/users/schema";
 
 import { envVariables } from "@/env";
 import { errorCodes } from "@/shared/schema";
