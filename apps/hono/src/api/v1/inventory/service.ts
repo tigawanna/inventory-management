@@ -3,6 +3,7 @@ import type { z } from "zod";
 import { and, ilike } from "drizzle-orm";
 
 import { inventoryTable } from "@/db/schema/inventory";
+import { entityType } from "@/services/audit-log.service";
 import { BaseCrudService } from "@/services/base-crud-service";
 
 import type {
@@ -17,7 +18,7 @@ export class InventoryService extends BaseCrudService<
   z.infer<typeof inventoryUpdateSchema>
 > {
   constructor() {
-    super(inventoryTable);
+    super(inventoryTable, entityType.INVENTORY);
   }
 
   // Override or add custom methods

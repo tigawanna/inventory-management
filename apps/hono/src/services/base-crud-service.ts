@@ -24,13 +24,11 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   protected table: T;
   protected entityType: EntityType;
   private auditLogService: AuditLogService;
-  private ctx: Context<AppBindings, any, {}>;
 
   constructor(table: T, entityType: EntityType) {
     this.table = table;
     this.entityType = entityType;
     this.auditLogService = new AuditLogService();
-    this.ctx = getContext<AppBindings>();
   }
 
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>) {
@@ -53,6 +51,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     // Add sorting
     if (sort) {
       dbQuery.orderBy(
+        // TODO : extend type PgTable with a narrower type which always has an ID column
         // @ts-expect-error : the type is too genrric but shape matches
         order === "desc" ? desc(this.table[sort]) : asc(this.table[sort]),
       );
@@ -73,6 +72,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     const item = await db
       .select()
       .from(this.table)
+    // TODO : extend type PgTable with a narrower type which always has an ID column
       // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table.id, id))
       .limit(1);
@@ -81,6 +81,8 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   }
 
   async create(data: CreateDTO) {
+    const ctx = getContext<AppBindings>();
+    const userId = ctx.var.viewer.id;
     const item = await db
       .insert(this.table)
       .values(data as any)
@@ -88,7 +90,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
 
     await this.auditLogService.create(
       {
-        userId: this.ctx.var.viewer.id,
+        userId,
         action: auditAction.CREATE,
         entityType: this.entityType,
         entityId: item[0].id,
@@ -102,17 +104,19 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
 
   async update(id: string, data: Partial<UpdateDTO>) {
     const oldItem = await this.findById(id);
-
+    const ctx = getContext<AppBindings>();
+    const userId = ctx.var.viewer.id;
     const item = await db
       .update(this.table)
       .set(data as any)
+    // TODO : extend type PgTable with a narrower type which always has an ID column
       // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table?.id, id))
       .returning();
 
     await this.auditLogService.createChangeLog(
       {
-        userId: this.ctx.var.viewer.id,
+        userId,
         entityType: this.entityType,
         entityId: id,
         oldData: oldItem,
@@ -125,6 +129,8 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
 
   async delete(id: string) {
     const oldItem = await this.findById(id);
+    const ctx = getContext<AppBindings>();
+    const userId = ctx.var.viewer.id;
     const item = await db
       .delete(this.table)
       // @ts-expect-error the type is too genrric but shape matches
@@ -133,7 +139,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
 
     await this.auditLogService.create(
       {
-        userId: this.ctx.var.viewer.id,
+        userId,
         action: auditAction.DELETE,
         entityType: this.entityType,
         entityId: id,
@@ -153,7 +159,8 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       // @ts-expect-error : the type is too genrric but shape matches
       .select({ id: this.table.id })
       .from(this.table)
-
+    // TODO : extend type PgTable with a narrower type which always has an ID column
+    // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table.id, id))
       .limit(1);
 

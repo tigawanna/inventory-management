@@ -3,8 +3,12 @@ import { jsonContent } from "stoker/openapi/helpers";
 import { z } from "zod";
 
 import HttpStatusCodes from "@/lib/status-codes";
+import { baseListResponseSchema } from "@/shared/schema";
 
-import { inventorySelectSchema } from "./schema";
+import {
+  inventorySelectSchema,
+  listInventoryQueryParamsSchema,
+} from "./schema";
 
 const tags = ["Inventory"];
 
@@ -12,8 +16,14 @@ export const list = createRoute({
   path: "/inventory",
   method: "get",
   tags,
+  request: {
+    query: listInventoryQueryParamsSchema,
+  },
   responses: {
-    [HttpStatusCodes.OK]: jsonContent(z.array(inventorySelectSchema), "The inventory list"),
+    [HttpStatusCodes.OK]: jsonContent(
+      baseListResponseSchema.extend({ items: z.array(inventorySelectSchema) }),
+      "The inventory list",
+    ),
   },
 });
 

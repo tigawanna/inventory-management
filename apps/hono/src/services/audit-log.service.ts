@@ -36,14 +36,6 @@ interface AuditLogData {
 }
 
 export class AuditLogService {
-  private ctx: Context<AppBindings, any, {}>;
-
-  constructor() {
-    this.ctx = getContext<AppBindings>();
-  }
-  getIpAddress() {
-    return this.ctx.env.incoming.socket?.remoteAddress;
-  }
   async create(data: AuditLogData) {
     return db.insert(auditLogsTable).values(data).returning();
   }
@@ -93,7 +85,8 @@ export class AuditLogService {
   }
 
   async logLogin(userId: string) {
-    const ipAddress = this.getIpAddress()
+    const ctx = getContext<AppBindings>();
+    const ipAddress = ctx.env.incoming.socket?.remoteAddress;
     return this.create(
       {
         userId,
@@ -106,7 +99,8 @@ export class AuditLogService {
   }
 
   async logLogout(userId: string) {
-       const ipAddress = this.getIpAddress()
+    const ctx = getContext<AppBindings>();
+    const ipAddress = ctx.env.incoming.socket?.remoteAddress;
     return this.create(
       {
         userId,

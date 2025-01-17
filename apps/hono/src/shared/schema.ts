@@ -39,3 +39,10 @@ export const errorSchema = z.object({
 });
 
 export type ErrorSchema = z.infer<typeof errorSchema>;
+
+export const baseListResponseSchema = z.object({
+    page:z.coerce.number(),
+    perPage: z.coerce.number(),
+    totalItems: z.coerce.number(),
+    totalPages: z.coerce.number(),
+});
