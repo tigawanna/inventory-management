@@ -39,7 +39,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
     // Add sorting
     if (sort) {
       dbQuery.orderBy(
-        // @ts-expect-error
+        // @ts-expect-error : the type is too genrric but shape matches
         order === "desc" ? desc(this.table[sort]) : asc(this.table[sort]),
       );
     }
@@ -59,14 +59,14 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
     const item = await db
       .select()
       .from(this.table)
-      // @ts-expect-error
+      // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table.id, id))
       .limit(1);
 
     return item[0];
   }
 
-  async create(data: CreateDTO, req: Request) {
+  async create(data: CreateDTO) {
     const item = await db
       .insert(this.table)
       .values(data as any)
@@ -88,13 +88,13 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
     return item[0];
   }
 
-  async update(id: string, data: Partial<UpdateDTO>, req: Request) {
+  async update(id: string, data: Partial<UpdateDTO>) {
     const oldItem = await this.findById(id);
 
     const item = await db
       .update(this.table)
       .set(data as any)
-      // @ts-expect-error
+      // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table?.id, id))
       .returning();
 
@@ -109,16 +109,15 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
     //   },
     //   req,
     // );
-    // @ts-expect-error
+    // @ts-expect-error : the type is too genrric but shape matches
     return item[0];
   }
 
-  async delete(id: string, req: Request) {
+  async delete(id: string) {
     const oldItem = await this.findById(id);
-
     const item = await db
       .delete(this.table)
-      // @ts-expect-error
+      // @ts-expect-error the type is too genrric but shape matches
       .where(eq(this.table.id, id))
       .returning();
 
@@ -137,16 +136,16 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
     return item[0];
   }
 
-  async softDelete(id: string, req: Request) {
-    return this.update(id, { isActive: false } as any, req);
+  async softDelete(id: string) {
+    return this.update(id, { isActive: false } as any);
   }
 
   async exists(id: string): Promise<boolean> {
     const item = await db
-      // @ts-expect-error
+      // @ts-expect-error : the type is too genrric but shape matches
       .select({ id: this.table.id })
       .from(this.table)
-      // @ts-expect-error
+      // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table.id, id))
       .limit(1);
 

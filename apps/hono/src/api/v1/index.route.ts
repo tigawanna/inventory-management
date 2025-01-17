@@ -9,11 +9,11 @@ const router = createRouter().openapi(
   createRoute({
     tags: ["Index"],
     method: "get",
-    path: "/api",
+    path: "/api/v1",
     responses: {
       [HttpStatusCodes.OK]: jsonContent(
         createMessageObjectSchema("Welcome"),
-        "Welcome to  the invemtpry api",
+        "Welcome to  the V1 of invemtpry api",
       ),
     },
   }),
