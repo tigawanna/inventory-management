@@ -1,9 +1,17 @@
 import type { SQL } from "drizzle-orm";
 import type { PgTable } from "drizzle-orm/pg-core";
+import type { Context } from "hono";
 
 import { asc, desc, eq, sql } from "drizzle-orm";
+import { getContext } from "hono/context-storage";
+
+import type { AppBindings } from "@/lib/types";
 
 import { db } from "@/db/client";
+
+import type { EntityType } from "./audit-log.service";
+
+import { auditAction, AuditLogService } from "./audit-log.service";
 
 export interface PaginatedQuery {
   page: string;
@@ -12,11 +20,17 @@ export interface PaginatedQuery {
   order?: "asc" | "desc";
 }
 
-export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
+export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<string, any>, UpdateDTO extends Record<string, any>> {
   protected table: T;
+  protected entityType: EntityType;
+  private auditLogService: AuditLogService;
+  private ctx: Context<AppBindings, any, {}>;
 
-  constructor(table: T) {
+  constructor(table: T, entityType: EntityType) {
     this.table = table;
+    this.entityType = entityType;
+    this.auditLogService = new AuditLogService();
+    this.ctx = getContext<AppBindings>();
   }
 
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>) {
@@ -72,18 +86,16 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
       .values(data as any)
       .returning();
 
-    // await this.auditLogService.create(
-    //   {
-    //     userId: req.user.id,
-    //     action: auditAction.CREATE,
-    //     entityType: this.entityType,
-    //     entityId: item[0].id,
-    //     // @ts-expect-error
-    //     newData: data,
-    //     ipAddress: req.ip,
-    //   },
-    //   req,
-    // );
+    await this.auditLogService.create(
+      {
+        userId: this.ctx.var.viewer.id,
+        action: auditAction.CREATE,
+        entityType: this.entityType,
+        entityId: item[0].id,
+        newData: data,
+
+      },
+    );
 
     return item[0];
   }
@@ -98,17 +110,15 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
       .where(eq(this.table?.id, id))
       .returning();
 
-    // await this.auditLogService.createChangeLog(
-    //   {
-    //     userId: req.user.id,
-    //     entityType: this.entityType,
-    //     entityId: id,
-    //     oldData: oldItem,
-    //     newData: data,
-    //     ipAddress: req.ip,
-    //   },
-    //   req,
-    // );
+    await this.auditLogService.createChangeLog(
+      {
+        userId: this.ctx.var.viewer.id,
+        entityType: this.entityType,
+        entityId: id,
+        oldData: oldItem,
+        newData: data,
+      },
+    );
     // @ts-expect-error : the type is too genrric but shape matches
     return item[0];
   }
@@ -121,17 +131,15 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
       .where(eq(this.table.id, id))
       .returning();
 
-    // await this.auditLogService.create(
-    //   {
-    //     userId: req.user.id,
-    //     action: auditAction.DELETE,
-    //     entityType: this.entityType,
-    //     entityId: id,
-    //     oldData: oldItem,
-    //     ipAddress: req.ip,
-    //   },
-    //   req,
-    // );
+    await this.auditLogService.create(
+      {
+        userId: this.ctx.var.viewer.id,
+        action: auditAction.DELETE,
+        entityType: this.entityType,
+        entityId: id,
+        oldData: oldItem,
+      },
+    );
 
     return item[0];
   }
@@ -145,7 +153,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
       // @ts-expect-error : the type is too genrric but shape matches
       .select({ id: this.table.id })
       .from(this.table)
-      // @ts-expect-error : the type is too genrric but shape matches
+
       .where(eq(this.table.id, id))
       .limit(1);
 

@@ -93,7 +93,7 @@ export class AuditLogService {
   }
 
   async logLogin(userId: string) {
-    const ipAddress = this.ctx.env.incoming.socket?.remoteAddress;
+    const ipAddress = this.getIpAddress()
     return this.create(
       {
         userId,
@@ -106,7 +106,7 @@ export class AuditLogService {
   }
 
   async logLogout(userId: string) {
-    const ipAddress = this.ctx.env.incoming.socket?.remoteAddress;
+       const ipAddress = this.getIpAddress()
     return this.create(
       {
         userId,
