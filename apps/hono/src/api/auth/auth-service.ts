@@ -1,19 +1,13 @@
-import type { Request } from "express";
-
 import { compare, hash } from "bcrypt";
 import { eq } from "drizzle-orm";
-import jwt from "jsonwebtoken";
-import { randomBytes } from "node:crypto";
+import { randomBytes, verify } from "node:crypto";
 
-import { db } from "@/db/client.ts";
-import { passwordResets, usersTable } from "@/db/schema/users.ts";
-
-import { auditAction, AuditLogService, entityType } from "./audit-log.service.ts";
-import { EmailService } from "./email-service.ts";
-
+import { db } from "@/db/client";
+import { passwordResets, usersTable } from "@/db/schema/users";
+import { auditAction, AuditLogService, entityType } from "@/services/audit-log.service";
+import { EmailService } from "@/services/email-service";
 
 export class AuthService {
-
   private readonly SALT_ROUNDS = 10;
   private emailService: EmailService;
   private auditLogService: AuditLogService;
@@ -36,7 +30,6 @@ export class AuthService {
 
   async register(
     data: { email: string; password: string; name: string },
-    req: Request,
   ) {
     const hashedPassword = await hash(data.password, this.SALT_ROUNDS);
     const verificationToken = randomBytes(4).toString("hex");
@@ -58,7 +51,6 @@ export class AuthService {
         entityId: newUser[0].id,
         newData: { email: data.email, name: data.name },
       },
-      req,
     );
 
     await this.emailService.sendEmail({
@@ -70,7 +62,7 @@ export class AuthService {
     return newUser[0];
   }
 
-  async login(data: { email: string; password: string }, req: Request) {
+  async login(data: { email: string; password: string }) {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.email, data.email),
     });
@@ -80,7 +72,7 @@ export class AuthService {
     const isValid = await compare(data.password, user.password);
     if (!isValid)
       throw new Error("Invalid credentials");
-    await this.auditLogService.logLogin(user.id, req);
+    await this.auditLogService.logLogin(user.id);
     return user;
   }
 
@@ -143,16 +135,6 @@ export class AuthService {
       })
       .where(eq(usersTable.id, user.id))
       .returning();
-  }
-
-  async validateToken(token: string) {
-    try {
-      const payload = verify(token, this.JWT_SECRET);
-      return payload;
-    }
-    catch {
-      throw new Error("Invalid token");
-    }
   }
 
   async changePassword(
