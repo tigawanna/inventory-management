@@ -460,6 +460,9 @@ importers:
       hono-pino:
         specifier: link:/home/dennis/Desktop/code/clone/hono-pino
         version: link:../../../code/clone/hono-pino
+      nodemailer:
+        specifier: ^6.9.16
+        version: 6.9.16
       pg:
         specifier: ^8.13.1
         version: 8.13.1
@@ -488,6 +491,9 @@ importers:
       '@types/node':
         specifier: ^20.11.17
         version: 20.17.12
+      '@types/nodemailer':
+        specifier: ^6.4.17
+        version: 6.4.17
       '@types/pg':
         specifier: ^8.11.10
         version: 8.11.10
