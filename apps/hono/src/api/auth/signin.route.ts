@@ -16,7 +16,7 @@ import { AuthService } from "./auth-service";
 const tags = ["Auth"];
 
 export const signinUserRoute = createRoute({
-  path: "/",
+  path: "/signin",
   method: "post",
   tags,
   request: {
@@ -34,23 +34,23 @@ export const signinUserRoute = createRoute({
         result: userSelectSchema,
         error: z.null().optional(),
       }),
-      "User created successfully",
+      "User signin successfully",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "Error creating user",
+      "User signin validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "Error creating user",
+      "User signin internal error",
     ),
   },
 });
 
-export type AuthRoute = typeof signinUserRoute;
+export type SigninRoute = typeof signinUserRoute;
 
 const authService = new AuthService();
-export const signinUserHandler: AppRouteHandler<AuthRoute> = async (c) => {
+export const signinUserHandler: AppRouteHandler<SigninRoute> = async (c) => {
   try {
     const newUser = await authService.login(c.req.valid("json"));
     return c.json({
@@ -60,7 +60,7 @@ export const signinUserHandler: AppRouteHandler<AuthRoute> = async (c) => {
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("user signin error:", error.message);
+      c.var.logger.error("User signin validation error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -71,7 +71,7 @@ export const signinUserHandler: AppRouteHandler<AuthRoute> = async (c) => {
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("user signin internal inventory error:", error.name);
+      c.var.logger.error("User signin internal error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -81,7 +81,7 @@ export const signinUserHandler: AppRouteHandler<AuthRoute> = async (c) => {
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
     if (error instanceof DrizzleError) {
-      c.var.logger.error("drizzle user signin error:", error);
+      c.var.logger.error("User signin drizzle error:", error);
       return c.json({
         result: null,
         error: {
@@ -90,7 +90,7 @@ export const signinUserHandler: AppRouteHandler<AuthRoute> = async (c) => {
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("internal user signin error:", error);
+    c.var.logger.error("User signin internal error:", error);
     return c.json({
       result: null,
       error: {

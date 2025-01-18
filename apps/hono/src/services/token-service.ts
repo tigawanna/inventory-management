@@ -1,6 +1,7 @@
 import type { Context } from "hono";
 
 import { compare, hash } from "bcrypt";
+import { getContext } from "hono/context-storage";
 import { sign, verify } from "hono/jwt";
 
 import type { UserJWTPayload } from "@/api/users/schema";
@@ -10,16 +11,17 @@ import { envVariables } from "@/env";
 
 import { verifyRefreshTokenAndrefreshAccessToken } from "../shared/utils/refresh-if-possible-util";
 import {
+  clearAllTokenCookie,
   getAccessTokenFromCookieOrHeaders,
   setAccessTokenCookie,
   setRefreshTokenCookie,
 } from "./cookie-service";
 
 export async function createAccessToken(
-  c: Context<AppBindings, "/", {}>,
   payload: UserJWTPayload,
   superUser: boolean = false,
 ) {
+  const c = getContext<AppBindings>();
   const { ACCESS_TOKEN_SECRET } = envVariables;
   const fiftenMinutesInSeconds = Math.floor(Date.now() / 1000) + 60 * 15; // 15 minutes
   const fiveDaysInSeconds = Math.floor(Date.now() / 1000) + 5 * 24 * 60 * 60; // 5 days
@@ -44,9 +46,9 @@ export async function createAccessToken(
 }
 
 export async function createRefreshToken(
-  c: Context<AppBindings, "/", {}>,
   payload: UserJWTPayload,
 ) {
+  const c = getContext<AppBindings>();
   const { REFRESH_TOKEN_SECRET } = envVariables;
   // const { refreshTokenVersion } = await bumpUserTokenVersion(payload.id);
   const twelveDaysInSeconds = 12 * 24 * 60 * 60;
@@ -67,7 +69,8 @@ export async function createRefreshToken(
   return refreshToken;
 }
 
-export async function verifiedAccessToken(c: Context<AppBindings, "/", {}>) {
+export async function verifiedAccessToken() {
+  const c = getContext<AppBindings>();
   const accessToken = getAccessTokenFromCookieOrHeaders(c);
   if (!accessToken) {
     c.var.logger.error("verifiedAccessToken : Missing access token");
@@ -78,18 +81,19 @@ export async function verifiedAccessToken(c: Context<AppBindings, "/", {}>) {
   return payload as UserJWTPayload;
 }
 
-export async function refreshAccessToken(c: Context<AppBindings, "/", {}>) {
+export async function refreshAccessToken() {
+  const c = getContext<AppBindings>();
   const refreshTokenPayload = await verifyRefreshTokenAndrefreshAccessToken(c);
   return refreshTokenPayload;
 }
 
 export async function generateUserAuthTokens(
-  c: Context<AppBindings, "/", {}>,
   userPayload: UserJWTPayload,
   superUser: boolean = false,
 ) {
-  const accessToken = await createAccessToken(c, userPayload, superUser);
-  const refreshToken = await createRefreshToken(c, userPayload);
+  const c = getContext<AppBindings>();
+  const accessToken = await createAccessToken(userPayload, superUser);
+  const refreshToken = await createRefreshToken(userPayload);
   c.var.logger.info("generateUserAuthTokens: Tokens generated");
   return { accessToken, refreshToken };
 }
@@ -100,4 +104,9 @@ export async function hashPassword(password: string) {
 
 export async function verifyPassword(password: string, passwordHash: string) {
   return compare(password, passwordHash);
+}
+
+export async function clearTokens() {
+  const c = getContext<AppBindings>();
+  clearAllTokenCookie(c);
 }

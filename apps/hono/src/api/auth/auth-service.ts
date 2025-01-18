@@ -1,11 +1,18 @@
 import { compare, hash } from "bcrypt";
 import { eq } from "drizzle-orm";
-import { randomBytes, verify } from "node:crypto";
+import { randomBytes } from "node:crypto";
 
 import { db } from "@/db/client";
 import { passwordResets, usersTable } from "@/db/schema/users";
-import { auditAction, AuditLogService, entityType } from "@/services/audit-log.service";
+import {
+  auditAction,
+  AuditLogService,
+  entityType,
+} from "@/services/audit-log.service";
 import { EmailService } from "@/services/email-service";
+import * as tokenService from "@/services/token-service";
+
+import type { UserItem } from "../users/schema";
 
 export class AuthService {
   private readonly SALT_ROUNDS = 10;
@@ -20,19 +27,19 @@ export class AuthService {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.id, userId),
     });
-    if (!user)
+    if (!user) {
       throw new Error("User not found");
+    }
 
     // Exclude sensitive data
-    const { password, verificationToken, refreshToken, ...userProfile } = user;
-    return userProfile;
+    return filterUserJWTPayload(user);
   }
 
   async register(
     data: { email: string; password: string; name: string },
   ) {
     const hashedPassword = await hash(data.password, this.SALT_ROUNDS);
-    const verificationToken = randomBytes(4).toString("hex");
+    const verificationToken = randomBytes(3).toString("hex");
     const newUser = await db
       .insert(usersTable)
       .values({
@@ -52,13 +59,13 @@ export class AuthService {
         newData: { email: data.email, name: data.name },
       },
     );
-
     await this.emailService.sendEmail({
       mail_to: data.email,
       token: verificationToken,
       type: "verifyemail",
     });
-
+    const userPayload  = filterUserJWTPayload(newUser[0]);
+    await tokenService.generateUserAuthTokens(userPayload);
     return newUser[0];
   }
 
@@ -67,11 +74,14 @@ export class AuthService {
       where: eq(usersTable.email, data.email),
     });
 
-    if (!user)
+    if (!user) {
       throw new Error("Invalid credentials");
+    }
     const isValid = await compare(data.password, user.password);
-    if (!isValid)
+    if (!isValid) {
       throw new Error("Invalid credentials");
+    }
+    await tokenService.generateUserAuthTokens(filterUserJWTPayload(user));
     await this.auditLogService.logLogin(user.id);
     return user;
   }
@@ -80,21 +90,24 @@ export class AuthService {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.email, email),
     });
-    if (!user)
+    if (!user) {
       throw new Error("User not found");
-    const verificationToken = randomBytes(4).toString("hex");
+    }
+    const verificationToken = randomBytes(3).toString("hex");
     await this.emailService.sendEmail({
       mail_to: email,
       token: verificationToken,
       type: "verifyemail",
     });
-    await db
+    const updatedUser = await db
       .update(usersTable)
       .set({ verificationToken })
-      .where(eq(usersTable.id, user.id));
+      .where(eq(usersTable.id, user.id))
+      .returning();
+   await tokenService.generateUserAuthTokens(filterUserJWTPayload(updatedUser[0]));
   }
 
-  async verifyEmail(token?: string, email?: string) {
+  async verifyEmail({ email, token }: { token?: string; email?: string }) {
     const getUserByEmailOrToken = async (email?: string, token?: string) => {
       if (email) {
         return db.query.usersTable.findFirst({
@@ -109,9 +122,10 @@ export class AuthService {
     };
     if (email && !token) {
       const user = await getUserByEmailOrToken(email);
-      if (!user)
+      if (!user) {
         throw new Error("User not found");
-      const verificationToken = randomBytes(4).toString("hex");
+      }
+      const verificationToken = randomBytes(3).toString("hex");
       this.emailService.sendEmail({
         mail_to: email,
         token: verificationToken,
@@ -125,9 +139,10 @@ export class AuthService {
       // throw new Error("Please check your email to verify your account");
     }
     const user = await getUserByEmailOrToken(undefined, token);
-    if (!user)
+    if (!user) {
       throw new Error("Invalid verification token");
-    return db
+    }
+    const newUser = await db
       .update(usersTable)
       .set({
         verificationToken: null,
@@ -135,41 +150,21 @@ export class AuthService {
       })
       .where(eq(usersTable.id, user.id))
       .returning();
+    return newUser?.[0] ? filterUserJWTPayload(newUser[0]) : undefined;
   }
 
-  async changePassword(
-    userId: string,
-    currentPassword: string,
-    newPassword: string,
-  ) {
-    const user = await db.query.usersTable.findFirst({
-      where: eq(usersTable.id, userId),
-    });
 
-    if (!user)
-      throw new Error("User not found");
 
-    const isValid = await compare(currentPassword, user.password);
-    if (!isValid)
-      throw new Error("Invalid current password");
-
-    const hashedPassword = await hash(newPassword, this.SALT_ROUNDS);
-
-    await db
-      .update(usersTable)
-      .set({ password: hashedPassword })
-      .where(eq(usersTable.id, userId));
-  }
-
-  async requestReset(email: string) {
+  async requestReset({ email }: { email: string }) {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.email, email),
     });
 
-    if (!user)
+    if (!user) {
       throw new Error("User not found");
+    }
 
-    const token = randomBytes(4).toString("hex");
+    const token = randomBytes(3).toString("hex");
     const expiresAt = new Date(Date.now() + 3_600_000); // 1 hour
     await db.insert(passwordResets).values({
       userId: user.id,
@@ -183,15 +178,19 @@ export class AuthService {
     });
   }
 
-  async resetPassword(token: string, newPassword: string) {
+  async resetPassword(
+    { token, newPassword }: { token: string; newPassword: string },
+  ) {
     const reset = await db.query.passwordResets.findFirst({
       where: eq(passwordResets.token, token),
     });
 
-    if (!reset)
+    if (!reset) {
       throw new Error("Invalid token");
-    if (reset.expiresAt < new Date())
+    }
+    if (reset.expiresAt < new Date()) {
       throw new Error("Token expired");
+    }
 
     const hashedPassword = await hash(newPassword, this.SALT_ROUNDS);
     await db.transaction(async (tx) => {
@@ -202,5 +201,11 @@ export class AuthService {
 
       await tx.delete(passwordResets).where(eq(passwordResets.token, token));
     });
+    await tokenService.clearTokens()
   }
+}
+
+export function filterUserJWTPayload(user: UserItem) {
+  const { password, refreshToken, verificationToken, ...userPayload } = user;
+  return userPayload;
 }
