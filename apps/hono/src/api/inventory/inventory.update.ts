@@ -12,7 +12,6 @@ import { baseResponseSchema } from "@/schemas/shared-schema";
 import type { InventoryItem } from "../../schemas/invemtory.schema";
 
 import {
-  inventoryInsertSchema,
   inventorySelectSchema,
   inventoryUpdateSchema,
 } from "../../schemas/invemtory.schema";
