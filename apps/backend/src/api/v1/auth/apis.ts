@@ -28,7 +28,7 @@ resetPasswordRoute(router, authService);
 // refresh token
 refreshTokenRoute(router, authService);
 // logout
-logoutRoute(router, authService);
+ logoutRoute(router, authService);
 // verify-email
 verifyEmailRoute(router, authService);
 //  requets email verification

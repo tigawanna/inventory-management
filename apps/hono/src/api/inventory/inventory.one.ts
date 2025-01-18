@@ -6,59 +6,73 @@ import type { AppRouteHandler } from "@/lib/types";
 
 import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
-import { baseListResponseSchema, baseResponseSchema } from "@/schemas/shared-schema";
+import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import {
   inventorySelectSchema,
-  listInventoryQueryParamsSchema,
 } from "../../schemas/invemtory.schema";
 import { InventoryService } from "./inventory.service";
 
 const tags = ["Inventory"];
 
-export const inventoryListRoute = createRoute({
-  path: "/",
+export const inventoryGetOneRoute = createRoute({
+  path: "/:id",
   method: "get",
   tags,
   request: {
-    query: listInventoryQueryParamsSchema,
+    params: z.object({
+      id: z.string(),
+    }),
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      baseResponseSchema.extend({ 
-        result: baseListResponseSchema.extend({ items: z.array(inventorySelectSchema) }),
-        error:z.null().optional(),
+      baseResponseSchema.extend({
+        result: inventorySelectSchema,
+        error: z.null().optional(),
       })
       ,
-      "Inventpry listing success",
+      "Inventpry by id success",
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      baseResponseSchema
+      ,
+      "Inventpry by id not found error",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema
       ,
-      "Inventpry listing validation error",
+      "Inventpry by id validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema
       ,
-      "Inventpry listing internal server error",
+      "Inventpry by id internal server error",
     ),
   },
 });
 
-export type ListRoute = typeof inventoryListRoute;
+export type GetOneRoute = typeof inventoryGetOneRoute;
 
 const inventoryService = new InventoryService();
-export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
+export const inventoryGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
   try {
-    const inventory = await inventoryService.findAll(c.req.valid("query"));
+    const oneItem = await inventoryService.findById(c.req.valid("param").id);
+    if (!oneItem) {
+      return c.json({
+        result: null,
+        error: {
+          message: "Item not found",
+        },
+      }, HttpStatusCodes.NOT_FOUND);
+    }
     return c.json({
-      result: inventory,
+      result: oneItem,
       error: null,
     }, HttpStatusCodes.OK);
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("Inventpry listing error:", error.message);
+      c.var.logger.error("Inventpry by id error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -69,7 +83,7 @@ export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("Inventpry listing internal error:", error.name);
+      c.var.logger.error("Inventpry by id internal error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -78,7 +92,7 @@ export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("Inventpry listing internal  error:", error);
+    c.var.logger.error("Inventpry by id internal  error:", error);
     return c.json({
       result: null,
       error: {

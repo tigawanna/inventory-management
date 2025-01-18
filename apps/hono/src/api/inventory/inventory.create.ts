@@ -45,23 +45,23 @@ export const inventoryCreateRoute = createRoute({
         result: inventorySelectSchema,
         error: z.null().optional(),
       }),
-      "The inventory creation",
+      "Inventory creation successful",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "The inventory creation validation error",
+      "Inventory creation validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "The inventory creation internal server error",
+      "Inventory creation internal server error",
     ),
   },
 });
 
-export type ListRoute = typeof inventoryCreateRoute;
+export type CreateInventoryRoute = typeof inventoryCreateRoute;
 
 const inventoryService = new InventoryService();
-export const inventoryCreateHandler: AppRouteHandler<ListRoute> = async (c) => {
+export const inventoryCreateHandler: AppRouteHandler<CreateInventoryRoute> = async (c) => {
   try {
     const inventory = await inventoryService.create(c.req.valid("json")) as InventoryItem;
     return c.json({
@@ -71,7 +71,7 @@ export const inventoryCreateHandler: AppRouteHandler<ListRoute> = async (c) => {
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("list inventory error:", error.message);
+      c.var.logger.error("Inventory creation  error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -82,7 +82,7 @@ export const inventoryCreateHandler: AppRouteHandler<ListRoute> = async (c) => {
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("list internal inventory error:", error.name);
+      c.var.logger.error("Inventory creation  error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -92,7 +92,7 @@ export const inventoryCreateHandler: AppRouteHandler<ListRoute> = async (c) => {
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
     if (error instanceof DrizzleError) {
-      c.var.logger.error("drizzle create inventory error:", error);
+      c.var.logger.error("Inventory creation drizzle error:", error);
       return c.json({
         result: null,
         error: {
@@ -101,7 +101,7 @@ export const inventoryCreateHandler: AppRouteHandler<ListRoute> = async (c) => {
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("internal create inventory error:", error);
+    c.var.logger.error("Inventory creation  internal  error:", error);
     return c.json({
       result: null,
       error: {
