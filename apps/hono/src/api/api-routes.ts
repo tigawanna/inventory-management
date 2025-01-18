@@ -1,9 +1,9 @@
-import index from "@/api/v1/index.route";
-import v1Routes from "@/api/v1/v1.index.route";
+import index from "@/api/index.route";
+import mainroutes from "@/api/main.route";
 
 export const allroutes = [
   //  start of routes
   index,
- v1Routes
+ mainroutes
   // end of routes
 ] as const;

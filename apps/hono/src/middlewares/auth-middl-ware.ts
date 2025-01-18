@@ -2,7 +2,7 @@ import type { Context, Next } from "hono";
 
 import { sign } from "hono/jwt";
 
-import type { UserJWTPayload } from "@/api/v1/users/schema";
+import type { UserJWTPayload } from "@/api/users/schema";
 import type { AppBindings } from "@/lib/types";
 
 import { envVariables } from "@/env";
