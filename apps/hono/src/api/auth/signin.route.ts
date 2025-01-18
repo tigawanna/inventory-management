@@ -10,7 +10,7 @@ import { returnValidationData } from "@/lib/zod";
 import { userSigninSchema } from "@/schemas/auth.schema";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
-import { userSelectSchema } from "../users/schema";
+import { userJWTSchema, userSelectSchema } from "../users/schema";
 import { AuthService } from "./auth-service";
 
 const tags = ["Auth"];
@@ -31,7 +31,7 @@ export const signinUserRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: userSelectSchema,
+        result: userJWTSchema,
         error: z.null().optional(),
       }),
       "User signin successfully",

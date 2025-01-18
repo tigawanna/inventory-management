@@ -35,6 +35,10 @@ export class AuthService {
     return filterUserJWTPayload(user);
   }
 
+  async currebtUser(){
+    
+  }
+
   async register(
     data: { email: string; password: string; name: string },
   ) {

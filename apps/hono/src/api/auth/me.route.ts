@@ -7,26 +7,28 @@ import type { AppRouteHandler } from "@/lib/types";
 
 import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
-import { userSignupSchema } from "@/schemas/auth.schema";
+import { userSigninSchema } from "@/schemas/auth.schema";
 import { baseResponseSchema } from "@/schemas/shared-schema";
+import {
+  accessTokebCookieKey,
+  refreshTokebCookieKey,
+} from "@/services/cookie-service";
+import { verifiedAccessToken } from "@/services/token-service";
 
-import { userJWTSchema, userSelectSchema } from "../users/schema";
-import { AuthService } from "./auth-service";
+import { userJWTSchema } from "../users/schema";
+
 
 const tags = ["Auth"];
 
-export const signupUserRoute = createRoute({
-  path: "/signup",
-  method: "post",
+export const currentUserRoute = createRoute({
+  path: "/me",
+  method: "get",
   tags,
   request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: userSignupSchema,
-        },
-      },
-    },
+    cookies: z.object({
+      [accessTokebCookieKey]: z.string(),
+      [refreshTokebCookieKey]: z.string(),
+    }),
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
@@ -34,25 +36,37 @@ export const signupUserRoute = createRoute({
         result: userJWTSchema,
         error: z.null().optional(),
       }),
-      "User signup successfully",
+      "Current user successfully",
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      baseResponseSchema,
+      "Current user not found error",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "User signup validation error",
+      "Current user validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "User signup internal error",
+      "Current user internal error",
     ),
   },
 });
 
-export type SignupRoute = typeof signupUserRoute;
+export type CurrentUserRoute = typeof currentUserRoute;
 
-const authService = new AuthService();
-export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
+export const currentUserHandler: AppRouteHandler<CurrentUserRoute> = async (c,
+) => {
   try {
-    const newUser = await authService.register(c.req.valid("json"));
+    const newUser = await verifiedAccessToken();
+    if (!newUser) {
+      return c.json({
+        result: null,
+        error: {
+          message: "Login required",
+        },
+      }, HttpStatusCodes.NOT_FOUND);
+    }
     return c.json({
       result: newUser,
       error: null,
@@ -60,7 +74,7 @@ export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("User signup error:", error.message);
+      c.var.logger.error("Current user validation error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -71,7 +85,7 @@ export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("User signup internal inventory error:", error.name);
+      c.var.logger.error("Current user internal error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -81,7 +95,7 @@ export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
     if (error instanceof DrizzleError) {
-      c.var.logger.error("User signup drizzle error:", error);
+      c.var.logger.error("Current user drizzle error:", error);
       return c.json({
         result: null,
         error: {
@@ -90,7 +104,7 @@ export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("User signup internal error:", error);
+    c.var.logger.error("Current user internal error:", error);
     return c.json({
       result: null,
       error: {

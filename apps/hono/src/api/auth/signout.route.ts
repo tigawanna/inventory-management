@@ -7,60 +7,51 @@ import type { AppRouteHandler } from "@/lib/types";
 
 import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
-import { userSignupSchema } from "@/schemas/auth.schema";
 import { baseResponseSchema } from "@/schemas/shared-schema";
-
-import { userJWTSchema, userSelectSchema } from "../users/schema";
-import { AuthService } from "./auth-service";
+import * as tokenService from "@/services/token-service";
 
 const tags = ["Auth"];
 
-export const signupUserRoute = createRoute({
-  path: "/signup",
+export const signoutUserRoute = createRoute({
+  path: "/signout",
   method: "post",
   tags,
-  request: {
-    body: {
-      content: {
-        "application/json": {
-          schema: userSignupSchema,
-        },
-      },
-    },
-  },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: userJWTSchema,
+        result: z.object({
+          message: z.string(),
+        }),
         error: z.null().optional(),
       }),
-      "User signup successfully",
+      "User signed out successfully",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "User signup validation error",
+      "User signed out validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "User signup internal error",
+      "User signed out internal error",
     ),
   },
 });
 
-export type SignupRoute = typeof signupUserRoute;
+export type SignoutRoute = typeof signoutUserRoute;
 
-const authService = new AuthService();
-export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
+export const signoutUserHandler: AppRouteHandler<SignoutRoute> = async (c) => {
   try {
-    const newUser = await authService.register(c.req.valid("json"));
+    await tokenService.clearTokens();
     return c.json({
-      result: newUser,
+      result: {
+        message: "User signed out",
+      },
       error: null,
     }, HttpStatusCodes.OK);
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("User signup error:", error.message);
+      c.var.logger.error("User signed out validation error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -71,7 +62,7 @@ export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("User signup internal inventory error:", error.name);
+      c.var.logger.error("User signed out internal error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -81,7 +72,7 @@ export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
     if (error instanceof DrizzleError) {
-      c.var.logger.error("User signup drizzle error:", error);
+      c.var.logger.error("User signed out drizzle error:", error);
       return c.json({
         result: null,
         error: {
@@ -90,7 +81,7 @@ export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("User signup internal error:", error);
+    c.var.logger.error("User signed out internal error:", error);
     return c.json({
       result: null,
       error: {
