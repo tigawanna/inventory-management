@@ -61,7 +61,7 @@ export async function createDB() {
     return pgDrizzle({
       client: pool,
       schema: { ...inventorySchema, ...usersSchema },
-      logger: new MyLogger(),
+      logger: envVariables.LOG_LEVEL==="debug"&&new MyLogger(),
     });
   }
 
