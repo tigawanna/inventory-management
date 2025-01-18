@@ -12,7 +12,8 @@
     "drizzle:gen": "drizzle-kit generate",
     "drizzle:push": "drizzle-kit push ",
     "drizzle:migrate": "drizzle-kit migrate ",
-    "build": "tsc && tsc-alias"
+    "build": "tsc && tsc-alias",
+    "route":"tsx src/cmd/bootstrap/cli.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
