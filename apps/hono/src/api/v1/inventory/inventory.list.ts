@@ -6,12 +6,12 @@ import type { AppRouteHandler } from "@/lib/types";
 
 import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
-import { baseListResponseSchema, baseResponseSchema } from "@/shared/schema";
+import { baseListResponseSchema, baseResponseSchema } from "@/schemas/shared-schema";
 
 import {
   inventorySelectSchema,
   listInventoryQueryParamsSchema,
-} from "./invemtory.schema";
+} from "../../../schemas/invemtory.schema";
 import { InventoryService } from "./inventory.service";
 
 const tags = ["Inventory"];

@@ -2,7 +2,7 @@ import { createInsertSchema, createSelectSchema, createUpdateSchema } from "driz
 import { z } from "zod";
 
 import { categoryTable, inventoryTable } from "@/db/schema/inventory";
-import { genericQueryParamsSchema } from "@/shared/schema";
+import { genericQueryParamsSchema } from "@/schemas/shared-schema";
 
 export const inventorySelectSchema = createSelectSchema(inventoryTable);
 export const inventoryInsertSchema = createInsertSchema(inventoryTable);

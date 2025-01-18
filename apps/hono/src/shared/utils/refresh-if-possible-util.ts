@@ -6,7 +6,7 @@ import type { AppBindings } from "@/lib/types";
 import type { UserJWTPayload } from "@/api/v1/users/schema";
 
 import { envVariables } from "@/env";
-import { errorCodes } from "@/shared/schema";
+import { errorCodes } from "@/schemas/shared-schema";
 
 import {
   getRefreshTokenFromCookie,

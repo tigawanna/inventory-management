@@ -7,16 +7,16 @@ import type { AppRouteHandler } from "@/lib/types";
 
 import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
-import { baseResponseSchema } from "@/shared/schema";
+import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import type {
   InventoryItem,
-} from "./invemtory.schema";
+} from "../../../schemas/invemtory.schema";
 
 import {
   inventoryInsertSchema,
   inventorySelectSchema,
-} from "./invemtory.schema";
+} from "../../../schemas/invemtory.schema";
 import { InventoryService } from "./inventory.service";
 
 const tags = ["Inventory"];
