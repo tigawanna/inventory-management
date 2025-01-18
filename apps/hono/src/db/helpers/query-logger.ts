@@ -1,3 +1,5 @@
+import { ANSIColors } from "@/shared/utils/text";
+
 export function formatSqlQuery(query: string): string {
   const keywords = [
     "SELECT",
@@ -21,24 +23,35 @@ export function formatSqlQuery(query: string): string {
     "JSON_BUILD_ARRAY",
   ];
 
+  // Remove extra spaces and trim the query
   let formattedQuery = query.replace(/\s+/g, " ").trim();
 
+  // Replace spaces inside double quotes with a placeholder
   formattedQuery = formattedQuery.replace(/"([^"]+)"/g, (match) => {
     return match.replace(/\s+/g, "_SPACE_");
   });
 
-  formattedQuery = formattedQuery.replace(/\bSELECT\b/i, "SELECT\n");
+  // Highlight the SELECT keyword and add a newline after it
+  formattedQuery = formattedQuery.replace(
+    /\bSELECT\b/i,
+    `${ANSIColors.FgPurple}SELECT\n ${ANSIColors.Reset}`,
+  );
 
+  // Highlight other SQL keywords and add a newline before them
   keywords.forEach((keyword) => {
     if (keyword !== "SELECT") {
       const regex = new RegExp(`\\b${keyword}\\b`, "gi");
-      formattedQuery = formattedQuery.replace(regex, `\n${keyword}`);
+      formattedQuery = formattedQuery.replace(
+        regex,
+        `\n${ANSIColors.FgYellow}${keyword}${ANSIColors.Reset}`,
+      );
     }
   });
 
-  // Add newline after every comma
-  formattedQuery = formattedQuery.replace(/,/g, ",\n");
+  // Add a newline after every comma
+  // formattedQuery = formattedQuery.replace(/,/g, ",\n");
 
+  // Replace the placeholder with spaces again
   formattedQuery = formattedQuery.replace(/_SPACE_/g, " ");
 
   const lines = formattedQuery.split("\n");
@@ -47,16 +60,18 @@ export function formatSqlQuery(query: string): string {
     .map((line) => {
       line = line.trim();
 
+      // Decrease indent level if the line starts with a closing parenthesis
       if (line.startsWith(")")) {
         indentLevel = Math.max(0, indentLevel - 1);
       }
 
+      // Add indentation based on the current indent level
       const indentedLine = "  ".repeat(indentLevel) + line;
 
+      // Increase indent level if the line contains an opening parenthesis without a closing parenthesis
       if (line.includes("(") && !line.includes(")")) {
         indentLevel++;
       }
-
       return indentedLine;
     })
     .join("\n");
