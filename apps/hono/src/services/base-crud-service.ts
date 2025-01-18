@@ -82,7 +82,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
 
   async create(data: CreateDTO) {
     const ctx = getContext<AppBindings>();
-    const userId = ctx.var.viewer.id;
+    const userId = ctx.var.viewer?.id;
     const item = await db
       .insert(this.table)
       .values(data as any)

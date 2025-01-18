@@ -10,7 +10,7 @@ import type {
   inventoryInsertSchema,
   inventoryUpdateSchema,
   listInventoryQueryParamsSchema,
-} from "./schema";
+} from "./invemtory.schema";
 
 export class InventoryService extends BaseCrudService<
   typeof inventoryTable,

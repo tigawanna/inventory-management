@@ -11,8 +11,8 @@ import { baseListResponseSchema, baseResponseSchema } from "@/shared/schema";
 import {
   inventorySelectSchema,
   listInventoryQueryParamsSchema,
-} from "./schema";
-import { InventoryService } from "./service";
+} from "./invemtory.schema";
+import { InventoryService } from "./inventory.service";
 
 const tags = ["Inventory"];
 
@@ -25,7 +25,10 @@ export const inventoryListRoute = createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      baseResponseSchema.extend({ result: baseListResponseSchema.extend({ items: z.array(inventorySelectSchema) }) })
+      baseResponseSchema.extend({ 
+        result: baseListResponseSchema.extend({ items: z.array(inventorySelectSchema) }),
+        error:z.null().optional(),
+      })
       ,
       "The inventory list",
     ),
@@ -44,10 +47,10 @@ export const inventoryListRoute = createRoute({
 
 export type ListRoute = typeof inventoryListRoute;
 
-const userService = new InventoryService();
+const inventoryService = new InventoryService();
 export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
   try {
-    const inventory = await userService.findAll(c.req.valid("query"));
+    const inventory = await inventoryService.findAll(c.req.valid("query"));
     return c.json({
       result: inventory,
       error: null,
@@ -62,7 +65,7 @@ export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
           code: "parameters-required",
           message: error.message,
           data: returnValidationData(error),
-        },
+        } as const,
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
@@ -72,7 +75,7 @@ export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
         error: {
           code: "internal-server-error",
           message: error.message,
-        },
+        } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
     c.var.logger.error("list internal inventory error:", error);
@@ -81,7 +84,7 @@ export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
       error: {
         code: "internal-server-error",
         message: "Internal Server Error",
-      },
+      } as const,
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };

@@ -3,8 +3,8 @@ import type { Context } from "hono";
 import { compare, hash } from "bcrypt";
 import { sign, verify } from "hono/jwt";
 
-import type { AppBindings } from "@/lib/types";
 import type { UserJWTPayload } from "@/api/v1/users/schema";
+import type { AppBindings } from "@/lib/types";
 
 import { envVariables } from "@/env";
 

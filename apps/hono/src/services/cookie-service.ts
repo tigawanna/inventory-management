@@ -23,8 +23,8 @@ const accessTokencookieOptions: CookieOptions = {
   // maxAge: 12 * 60 * 1000, // expires in 12 minutes
 } as const;
 
-const accessTokebCookieKey = "jwt";
-const refreshTokebCookieKey = "kjz-rft";
+const accessTokebCookieKey = "access";
+const refreshTokebCookieKey = "refresh";
 
 export function setAccessTokenCookie(jc: Context<AppBindings, "/", {}>, token: string) {
   deleteCookie(jc, accessTokebCookieKey);
