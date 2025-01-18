@@ -1,11 +1,19 @@
 import { ANSIColors } from "@/shared/utils/text";
 
+
 export function formatSqlQuery(query: string): string {
   const keywords = [
     "SELECT",
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "CREATE",
     "FROM",
     "WHERE",
+    "VALUES",
+    "INTO",
     "LEFT JOIN",
+    "RETURNING",
     "RIGHT JOIN",
     "INNER JOIN",
     "OUTER JOIN",
@@ -22,8 +30,10 @@ export function formatSqlQuery(query: string): string {
     "JSON_AGG",
     "JSON_BUILD_ARRAY",
   ];
+  const firstKeywords = keywords.slice(0, 4);
 
-  // Remove extra spaces and trim the query
+  
+    // Remove extra spaces and trim the query
   let formattedQuery = query.replace(/\s+/g, " ").trim();
 
   // Replace spaces inside double quotes with a placeholder
@@ -31,20 +41,23 @@ export function formatSqlQuery(query: string): string {
     return match.replace(/\s+/g, "_SPACE_");
   });
 
-  // Highlight the SELECT keyword and add a newline after it
-  formattedQuery = formattedQuery.replace(
-    /\bSELECT\b/i,
-    `${ANSIColors.FgPurple}SELECT\n ${ANSIColors.Reset}`,
-  );
+  // Highlight the first set of keywords and add a newline after them
+  firstKeywords.forEach((keyword) => {
+    const regex = new RegExp(`\\b${keyword}\\b`, "gi");
+    formattedQuery = formattedQuery.replace(
+      regex,
+      `${ANSIColors.FgGreen}${keyword}${ANSIColors.Reset}`,
+    );
+  });
 
   // Highlight other SQL keywords and add a newline before them
   keywords.forEach((keyword) => {
-    if (keyword !== "SELECT") {
-      const regex = new RegExp(`\\b${keyword}\\b`, "gi");
-      formattedQuery = formattedQuery.replace(
-        regex,
-        `\n${ANSIColors.FgYellow}${keyword}${ANSIColors.Reset}`,
-      );
+    const regex = new RegExp(`\\b${keyword}\\b`, "gi");
+    if (!firstKeywords.includes(keyword)) {
+    formattedQuery = formattedQuery.replace(
+      regex,
+      `\n${ANSIColors.FgYellow}${keyword}${ANSIColors.Reset}\n`,
+    );
     }
   });
 
@@ -59,6 +72,7 @@ export function formatSqlQuery(query: string): string {
   formattedQuery = lines
     .map((line) => {
       line = line.trim();
+   
 
       // Decrease indent level if the line starts with a closing parenthesis
       if (line.startsWith(")")) {
@@ -72,6 +86,7 @@ export function formatSqlQuery(query: string): string {
       if (line.includes("(") && !line.includes(")")) {
         indentLevel++;
       }
+
       return indentedLine;
     })
     .join("\n");

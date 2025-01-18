@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type { Logger } from "drizzle-orm/logger";
 
 import { neon } from "@neondatabase/serverless";
@@ -6,6 +7,7 @@ import { drizzle as pgDrizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
 
 import { envVariables } from "@/env";
+import { ANSIColors } from "@/shared/utils/text";
 
 import { formatSqlQuery } from "./helpers/query-logger";
 import * as inventorySchema from "./schema/inventory";
@@ -13,11 +15,11 @@ import * as usersSchema from "./schema/users";
 
 class MyLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {
-    console.log("=== DRIZZLE QUERY ===");
-    console.log(`%c${formatSqlQuery(query)}`, "color:cyan");
+    console.log(ANSIColors.Bright, "\n=== DRIZZLE QUERY ===");
+    console.log("",formatSqlQuery(query),"\n");
     if (params && params.length > 0) {
-      console.log("=== DRIZZLE PARAMS ===");
-      console.log(`%c${JSON.stringify(params)}`, "color:blue");
+      console.log(ANSIColors.Bright,"=== DRIZZLE PARAMS === ",ANSIColors.Reset,params,"\n");
+      // console.log(params)
     }
   }
 }
@@ -38,6 +40,7 @@ async function createLocalPool() {
   for (let i = 0; i < RETRY_ATTEMPTS; i++) {
     try {
       const client = await pool.connect();
+
       console.log("Successfully connected to local database");
       client.release();
       return pool;
