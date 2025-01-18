@@ -7,7 +7,7 @@ import type { AppBindings } from "@/lib/types";
 
 import { envVariables } from "@/env";
 import HttpStatusCodes from "@/lib/status-codes";
-import { parseZodError } from "@/lib/zod";
+import { parseZodError, returnValidationData } from "@/lib/zod";
 
 export async function onHonoError(
   err: Error | HTTPResponseError,
@@ -22,7 +22,7 @@ export async function onHonoError(
   if (err instanceof ZodError) {
     return c.json({
       message: "invalid fields",
-      data: parseZodError(err),
+      data: returnValidationData(err),
       error: err?.flatten(),
     });
   }

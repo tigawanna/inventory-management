@@ -11,6 +11,7 @@ import { pinoLogger } from "@/middlewares/loggermiddleware";
 
 import type { AppBindings, AppOpenAPI } from "./types";
 
+
 export function createRouter() {
   return new OpenAPIHono<AppBindings>({
     strict: false,
@@ -22,6 +23,33 @@ export function createApp() {
   const app = createRouter();
   app.use(requestId());
   app.use(pinoLogger());
+//   app.use(async (c,next) => {
+//   c.set(
+//     'custom-logger',
+//     pino({
+//       browser: {
+//         formatters: {
+//           level(label, _number) {
+//             return { level: label.toUpperCase() };
+//           },
+//         },
+//         write: (o) => {
+//           console.log("write logger",o);
+//           // @ts-expect-error : the type is too genrric but shape matches
+//           const { time, level, msg } = o;
+//           const paddedLevel = level.padEnd(5, ' ');
+//           const requestId = c.var.requestId;
+//           console.log(`[${time}] ${paddedLevel} (${requestId}): ${msg}`);
+//         },
+//       },
+//       enabled: true,
+//       level: 'debug',
+//       timestamp: pino.stdTimeFunctions.isoTime,
+//     }),
+//   )
+//   // next()
+// }
+//   )
   app.use((c,next)=>corsHeaders(c,next))
   app.use(contextStorage());
   // app.use(async (c, next) => {
