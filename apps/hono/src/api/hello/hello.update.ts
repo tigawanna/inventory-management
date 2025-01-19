@@ -1,12 +1,4 @@
-import { capitalizeFirstLetter } from "@/cmd/utils/string";
 
-interface ApiDeleteTemplateProps {
-  routename: string;
-}
-export function apiDeleteTemplate({ routename }: ApiDeleteTemplateProps) {
-  const capitalizedRoutename = capitalizeFirstLetter(routename);
-  const filename = `${routename}.delete.ts`;
-  const template = `
 import { createRoute } from "@hono/zod-openapi";
 import { DrizzleError } from "drizzle-orm";
 import { jsonContent } from "stoker/openapi/helpers";
@@ -18,15 +10,19 @@ import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
-import type { ${capitalizedRoutename}Item } from "./${routename}.schema";
+import type { HelloItem } from "./hello.schema";
 
-import { ${capitalizedRoutename}Service } from "./${routename}.service";
+import {
+  helloSelectSchema,
+  helloUpdateSchema,
+} from "./hello.schema";
+import { HelloService } from "./hello.service";
 
-const tags = ["${capitalizedRoutename}"];
+const tags = ["Hello"];
 
-export const ${routename}DeleteRoute = createRoute({
+export const helloUpdateRoute = createRoute({
   path: "/",
-  method: "delete",
+  method: "patch",
   tags,
   request: {
     headers: z.object({
@@ -37,9 +33,7 @@ export const ${routename}DeleteRoute = createRoute({
     body: {
       content: {
         "application/json": {
-          schema: z.object({
-            id: z.string(),
-          }),
+          schema: helloUpdateSchema.extend({id:z.string()}),
         },
       },
     },
@@ -47,56 +41,40 @@ export const ${routename}DeleteRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: z.object({
-          message: z.string(),
-        }),
+        result: helloSelectSchema,
         error: z.null().optional(),
       }),
-      "${capitalizedRoutename} deletion successful",
-    ),
-    [HttpStatusCodes.NOT_FOUND]: jsonContent(
-      baseResponseSchema,
-      "${capitalizedRoutename} deletion not found error",
+      "Hello update successful",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "${capitalizedRoutename} deletion validation error",
+      "Hello update validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "${capitalizedRoutename} deletion internal server error",
+      "Hello update internal server error",
     ),
   },
 });
 
-export type Delete${capitalizedRoutename}Route = typeof ${routename}DeleteRoute;
+export type UpdateHelloRoute = typeof helloUpdateRoute;
 
-const ${routename}Service = new ${capitalizedRoutename}Service();
-export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoutename}Route>
-  = async (c) => {
+const helloService = new HelloService();
+export const helloUpdateHandler: AppRouteHandler<UpdateHelloRoute> =
+  async (c) => {
     try {
       const newItem = c.req.valid("json");
-      const deletedItem = await ${routename}Service.delete(
+      const hello = await helloService.update(
         newItem.id,
-      ) as ${capitalizedRoutename}Item;
-      if (!deletedItem) {
-        return c.json({
-          result: null,
-          error: {
-            message: "Entry not found",
-          },
-        }, HttpStatusCodes.NOT_FOUND);
-      }
+        newItem
+      ) as HelloItem;
       return c.json({
-        result: {
-          message: "successfully deleted",
-        },
+        result: hello,
         error: null,
       }, HttpStatusCodes.OK);
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof ZodError) {
-        c.var.logger.error("${capitalizedRoutename} deletion  error:", error.message);
+        c.var.logger.error("Hello update  error:", error.message);
         return c.json({
           result: null,
           error: {
@@ -107,7 +85,7 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
         }, HttpStatusCodes.BAD_REQUEST);
       }
       if (error instanceof Error) {
-        c.var.logger.error("${capitalizedRoutename} deletion  error:", error.name);
+        c.var.logger.error("Hello update  error:", error.name);
         return c.json({
           result: null,
           error: {
@@ -117,7 +95,7 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
         }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
       }
       if (error instanceof DrizzleError) {
-        c.var.logger.error("${capitalizedRoutename} deletion drizzle error:", error);
+        c.var.logger.error("Hello update drizzle error:", error);
         return c.json({
           result: null,
           error: {
@@ -126,7 +104,7 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
           } as const,
         }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
       }
-      c.var.logger.error("${capitalizedRoutename} deletion  internal  error:", error);
+      c.var.logger.error("Hello update  internal  error:", error);
       return c.json({
         result: null,
         error: {
@@ -138,9 +116,4 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
   };
 
 
-  `;
-  return {
-    filename,
-    template,
-  };
-}
+    

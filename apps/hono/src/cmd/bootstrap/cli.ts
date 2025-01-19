@@ -11,7 +11,7 @@ import { apiServiceTemplate } from "./templates/api-service-template";
 import { apiUpdateTemplate } from "./templates/api-update-template";
 import { apiSchemaTemplate } from "./templates/api.schema.tempalte";
 
-// const API_DIRECTORY = "./src/api";
+const API_DIRECTORY = "./src/api";
 // const DB = "./src/db";
 async function generateAPIboilerpalte() {
   const routename = process.argv[2];
@@ -32,11 +32,15 @@ async function generateAPIboilerpalte() {
     apiIndexTemplate({ routename }),
   ];
   // registerRoutesInMainRouter(routename, "./src/api")
-  tasks.map(async (task) => {
+  const apiRouteCreationpromises = tasks.map(async (task) => {
     const { template, filename } = task;
     const filepath = `${routename}/${filename}`;
-    await ensurePathExistsOrCreate("./src/api", filepath, template);
+    return ensurePathExistsOrCreate(API_DIRECTORY, filepath, template);
   });
+  await Promise.all(apiRouteCreationpromises);
+  const { filename, template } = await registerRoutesInMainRouter(API_DIRECTORY, routename);
+  // console.log(filename, template);
+  await ensurePathExistsOrCreate(API_DIRECTORY, filename, template);
 }
 generateAPIboilerpalte()
   .catch((e) => {

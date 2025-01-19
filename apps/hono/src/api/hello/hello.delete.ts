@@ -1,12 +1,4 @@
-import { capitalizeFirstLetter } from "@/cmd/utils/string";
 
-interface ApiDeleteTemplateProps {
-  routename: string;
-}
-export function apiDeleteTemplate({ routename }: ApiDeleteTemplateProps) {
-  const capitalizedRoutename = capitalizeFirstLetter(routename);
-  const filename = `${routename}.delete.ts`;
-  const template = `
 import { createRoute } from "@hono/zod-openapi";
 import { DrizzleError } from "drizzle-orm";
 import { jsonContent } from "stoker/openapi/helpers";
@@ -18,13 +10,13 @@ import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
-import type { ${capitalizedRoutename}Item } from "./${routename}.schema";
+import type { HelloItem } from "./hello.schema";
 
-import { ${capitalizedRoutename}Service } from "./${routename}.service";
+import { HelloService } from "./hello.service";
 
-const tags = ["${capitalizedRoutename}"];
+const tags = ["Hello"];
 
-export const ${routename}DeleteRoute = createRoute({
+export const helloDeleteRoute = createRoute({
   path: "/",
   method: "delete",
   tags,
@@ -52,33 +44,33 @@ export const ${routename}DeleteRoute = createRoute({
         }),
         error: z.null().optional(),
       }),
-      "${capitalizedRoutename} deletion successful",
+      "Hello deletion successful",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       baseResponseSchema,
-      "${capitalizedRoutename} deletion not found error",
+      "Hello deletion not found error",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "${capitalizedRoutename} deletion validation error",
+      "Hello deletion validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "${capitalizedRoutename} deletion internal server error",
+      "Hello deletion internal server error",
     ),
   },
 });
 
-export type Delete${capitalizedRoutename}Route = typeof ${routename}DeleteRoute;
+export type DeleteHelloRoute = typeof helloDeleteRoute;
 
-const ${routename}Service = new ${capitalizedRoutename}Service();
-export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoutename}Route>
+const helloService = new HelloService();
+export const helloDeleteHandler: AppRouteHandler<DeleteHelloRoute>
   = async (c) => {
     try {
       const newItem = c.req.valid("json");
-      const deletedItem = await ${routename}Service.delete(
+      const deletedItem = await helloService.delete(
         newItem.id,
-      ) as ${capitalizedRoutename}Item;
+      ) as HelloItem;
       if (!deletedItem) {
         return c.json({
           result: null,
@@ -96,7 +88,7 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
     }
     catch (error) {
       if (error instanceof ZodError) {
-        c.var.logger.error("${capitalizedRoutename} deletion  error:", error.message);
+        c.var.logger.error("Hello deletion  error:", error.message);
         return c.json({
           result: null,
           error: {
@@ -107,7 +99,7 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
         }, HttpStatusCodes.BAD_REQUEST);
       }
       if (error instanceof Error) {
-        c.var.logger.error("${capitalizedRoutename} deletion  error:", error.name);
+        c.var.logger.error("Hello deletion  error:", error.name);
         return c.json({
           result: null,
           error: {
@@ -117,7 +109,7 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
         }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
       }
       if (error instanceof DrizzleError) {
-        c.var.logger.error("${capitalizedRoutename} deletion drizzle error:", error);
+        c.var.logger.error("Hello deletion drizzle error:", error);
         return c.json({
           result: null,
           error: {
@@ -126,7 +118,7 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
           } as const,
         }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
       }
-      c.var.logger.error("${capitalizedRoutename} deletion  internal  error:", error);
+      c.var.logger.error("Hello deletion  internal  error:", error);
       return c.json({
         result: null,
         error: {
@@ -138,9 +130,4 @@ export const ${routename}DeleteHandler: AppRouteHandler<Delete${capitalizedRoute
   };
 
 
-  `;
-  return {
-    filename,
-    template,
-  };
-}
+  
