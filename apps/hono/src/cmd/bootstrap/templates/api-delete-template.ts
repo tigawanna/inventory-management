@@ -3,7 +3,7 @@ import { capitalizeFirstLetter } from "@/cmd/utils/string";
 interface ApiDeleteTemplateProps {
   routename: string;
 }
-export function apiCreateTemplate({ routename }: ApiDeleteTemplateProps) {
+export function apiDeleteTemplate({ routename }: ApiDeleteTemplateProps) {
   const capitalizedRoutename = capitalizeFirstLetter(routename);
   const filename = `${routename}.delete.ts`;
   const template = `
