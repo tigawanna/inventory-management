@@ -1,3 +1,11 @@
+import { capitalizeFirstLetter } from "@/cmd/utils/string";
+
+interface ApiCreateTemplateProps {
+  routename: string;
+}
+export function apiCreateTemplate({ routename }: ApiCreateTemplateProps) {
+  const capitalizedRoutename = capitalizeFirstLetter(routename);
+  return `
 import { createRoute } from "@hono/zod-openapi";
 import { DrizzleError } from "drizzle-orm";
 import { jsonContent } from "stoker/openapi/helpers";
@@ -10,18 +18,18 @@ import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import type {
-  InventoryItem,
-} from "./inventory.schema";
+  ${capitalizedRoutename}Item,
+} from "./${routename}.schema";
 
 import {
-  inventoryInsertSchema,
-  inventorySelectSchema,
-} from "./inventory.schema";
-import { InventoryService } from "./inventory.service";
+  ${routename}InsertSchema,
+  ${routename}SelectSchema,
+} from "./${routename}.schema";
+import { ${capitalizedRoutename}Service } from "./${routename}.service";
 
-const tags = ["Inventory"];
+const tags = ["${capitalizedRoutename}"];
 
-export const inventoryCreateRoute = createRoute({
+export const ${routename}CreateRoute = createRoute({
   path: "/",
   method: "post",
   tags,
@@ -34,7 +42,7 @@ export const inventoryCreateRoute = createRoute({
     body: {
       content: {
         "application/json": {
-          schema: inventoryInsertSchema,
+          schema: ${routename}InsertSchema,
         },
       },
     },
@@ -42,36 +50,36 @@ export const inventoryCreateRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: inventorySelectSchema,
+        result: ${routename}SelectSchema,
         error: z.null().optional(),
       }),
-      "Inventory creation successful",
+      "${capitalizedRoutename} creation successful",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "Inventory creation validation error",
+      "${capitalizedRoutename} creation validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "Inventory creation internal server error",
+      "${capitalizedRoutename} creation internal server error",
     ),
   },
 });
 
-export type CreateInventoryRoute = typeof inventoryCreateRoute;
+export type Create${capitalizedRoutename}Route = typeof ${routename}CreateRoute;
 
-const inventoryService = new InventoryService();
-export const inventoryCreateHandler: AppRouteHandler<CreateInventoryRoute> = async (c) => {
+const ${routename}Service = new ${capitalizedRoutename}Service();
+export const ${routename}CreateHandler: AppRouteHandler<Create${capitalizedRoutename}Route> = async (c) => {
   try {
-    const inventory = await inventoryService.create(c.req.valid("json")) as InventoryItem;
+    const ${routename} = await ${routename}Service.create(c.req.valid("json")) as ${capitalizedRoutename}Item;
     return c.json({
-      result: inventory,
+      result: ${routename},
       error: null,
     }, HttpStatusCodes.OK);
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("Inventory creation  error:", error.message);
+      c.var.logger.error("${capitalizedRoutename} creation  error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -82,7 +90,7 @@ export const inventoryCreateHandler: AppRouteHandler<CreateInventoryRoute> = asy
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("Inventory creation  error:", error.name);
+      c.var.logger.error("${capitalizedRoutename} creation  error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -92,7 +100,7 @@ export const inventoryCreateHandler: AppRouteHandler<CreateInventoryRoute> = asy
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
     if (error instanceof DrizzleError) {
-      c.var.logger.error("Inventory creation drizzle error:", error);
+      c.var.logger.error("${capitalizedRoutename} creation drizzle error:", error);
       return c.json({
         result: null,
         error: {
@@ -101,7 +109,7 @@ export const inventoryCreateHandler: AppRouteHandler<CreateInventoryRoute> = asy
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("Inventory creation  internal  error:", error);
+    c.var.logger.error("${capitalizedRoutename} creation  internal  error:", error);
     return c.json({
       result: null,
       error: {
@@ -111,3 +119,6 @@ export const inventoryCreateHandler: AppRouteHandler<CreateInventoryRoute> = asy
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
+
+    `;
+}

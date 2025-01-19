@@ -1,3 +1,11 @@
+import { capitalizeFirstLetter } from "@/cmd/utils/string";
+
+interface ApiUpdateTemplateProps {
+  routename: string;
+}
+export function apiUpdateTemplate({ routename }: ApiUpdateTemplateProps) {
+  const capitalizedRoutename = capitalizeFirstLetter(routename);
+return `
 import { createRoute } from "@hono/zod-openapi";
 import { DrizzleError } from "drizzle-orm";
 import { jsonContent } from "stoker/openapi/helpers";
@@ -9,17 +17,17 @@ import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
-import type { InventoryItem } from "./inventory.schema";
+import type { ${capitalizedRoutename}Item } from "./${routename}.schema";
 
 import {
-  inventorySelectSchema,
-  inventoryUpdateSchema,
-} from "./inventory.schema";
-import { InventoryService } from "./inventory.service";
+  ${routename}SelectSchema,
+  ${routename}UpdateSchema,
+} from "./${routename}.schema";
+import { ${capitalizedRoutename}Service } from "./${routename}.service";
 
-const tags = ["Inventory"];
+const tags = ["${capitalizedRoutename}"];
 
-export const inventoryUpdateRoute = createRoute({
+export const ${routename}UpdateRoute = createRoute({
   path: "/",
   method: "patch",
   tags,
@@ -32,7 +40,7 @@ export const inventoryUpdateRoute = createRoute({
     body: {
       content: {
         "application/json": {
-          schema: inventoryUpdateSchema.extend({id:z.string()}),
+          schema: ${routename}UpdateSchema.extend({id:z.string()}),
         },
       },
     },
@@ -40,40 +48,40 @@ export const inventoryUpdateRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: inventorySelectSchema,
+        result: ${routename}SelectSchema,
         error: z.null().optional(),
       }),
-      "Inventory update successful",
+      "${capitalizedRoutename} update successful",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "Inventory update validation error",
+      "${capitalizedRoutename} update validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "Inventory update internal server error",
+      "${capitalizedRoutename} update internal server error",
     ),
   },
 });
 
-export type UpdateInventoryRoute = typeof inventoryUpdateRoute;
+export type Update${capitalizedRoutename}Route = typeof ${routename}UpdateRoute;
 
-const inventoryService = new InventoryService();
-export const inventoryUpdateHandler: AppRouteHandler<UpdateInventoryRoute> =
+const ${routename}Service = new ${capitalizedRoutename}Service();
+export const ${routename}UpdateHandler: AppRouteHandler<Update${capitalizedRoutename}Route> =
   async (c) => {
     try {
       const newItem = c.req.valid("json");
-      const inventory = await inventoryService.update(
+      const ${routename} = await ${routename}Service.update(
         newItem.id,
         newItem
-      ) as InventoryItem;
+      ) as ${capitalizedRoutename}Item;
       return c.json({
-        result: inventory,
+        result: ${routename},
         error: null,
       }, HttpStatusCodes.OK);
     } catch (error) {
       if (error instanceof ZodError) {
-        c.var.logger.error("Inventory update  error:", error.message);
+        c.var.logger.error("${capitalizedRoutename} update  error:", error.message);
         return c.json({
           result: null,
           error: {
@@ -84,7 +92,7 @@ export const inventoryUpdateHandler: AppRouteHandler<UpdateInventoryRoute> =
         }, HttpStatusCodes.BAD_REQUEST);
       }
       if (error instanceof Error) {
-        c.var.logger.error("Inventory update  error:", error.name);
+        c.var.logger.error("${capitalizedRoutename} update  error:", error.name);
         return c.json({
           result: null,
           error: {
@@ -94,7 +102,7 @@ export const inventoryUpdateHandler: AppRouteHandler<UpdateInventoryRoute> =
         }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
       }
       if (error instanceof DrizzleError) {
-        c.var.logger.error("Inventory update drizzle error:", error);
+        c.var.logger.error("${capitalizedRoutename} update drizzle error:", error);
         return c.json({
           result: null,
           error: {
@@ -103,7 +111,7 @@ export const inventoryUpdateHandler: AppRouteHandler<UpdateInventoryRoute> =
           } as const,
         }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
       }
-      c.var.logger.error("Inventory update  internal  error:", error);
+      c.var.logger.error("${capitalizedRoutename} update  internal  error:", error);
       return c.json({
         result: null,
         error: {
@@ -113,3 +121,7 @@ export const inventoryUpdateHandler: AppRouteHandler<UpdateInventoryRoute> =
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
   };
+
+
+    `;
+}

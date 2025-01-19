@@ -1,3 +1,11 @@
+import { capitalizeFirstLetter } from "@/cmd/utils/string";
+
+interface ApiListTemplateProps {
+  routename: string;
+}
+export function apiListTemplate({ routename }: ApiListTemplateProps) {
+  const capitalizedRoutename = capitalizeFirstLetter(routename);
+return `
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -9,25 +17,25 @@ import { returnValidationData } from "@/lib/zod";
 import { baseListResponseSchema, baseResponseSchema } from "@/schemas/shared-schema";
 
 import {
-  inventorySelectSchema,
-  listInventoryQueryParamsSchema,
-} from "./inventory.schema";
-import { InventoryService } from "./inventory.service";
+  ${routename}SelectSchema,
+  list${capitalizedRoutename}QueryParamsSchema,
+} from "./${routename}.schema";
+import { ${capitalizedRoutename}Service } from "./${routename}.service";
 
-const tags = ["Inventory"];
+const tags = ["${capitalizedRoutename}"];
 
-export const inventoryListRoute = createRoute({
+export const ${routename}ListRoute = createRoute({
   path: "/",
   method: "get",
   tags,
   request: {
-    query: listInventoryQueryParamsSchema,
+    query: list${capitalizedRoutename}QueryParamsSchema,
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      baseResponseSchema.extend({
-        result: baseListResponseSchema.extend({ items: z.array(inventorySelectSchema) }),
-        error: z.null().optional(),
+      baseResponseSchema.extend({ 
+        result: baseListResponseSchema.extend({ items: z.array(${routename}SelectSchema) }),
+        error:z.null().optional(),
       })
       ,
       "Inventpry listing success",
@@ -45,14 +53,14 @@ export const inventoryListRoute = createRoute({
   },
 });
 
-export type ListRoute = typeof inventoryListRoute;
+export type ListRoute = typeof ${routename}ListRoute;
 
-const inventoryService = new InventoryService();
-export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
+const ${routename}Service = new ${capitalizedRoutename}Service();
+export const ${routename}ListHandler: AppRouteHandler<ListRoute> = async (c) => {
   try {
-    const inventory = await inventoryService.findAll(c.req.valid("query"));
+    const ${routename} = await ${routename}Service.findAll(c.req.valid("query"));
     return c.json({
-      result: inventory,
+      result: ${routename},
       error: null,
     }, HttpStatusCodes.OK);
   }
@@ -88,3 +96,7 @@ export const inventoryListHandler: AppRouteHandler<ListRoute> = async (c) => {
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
+
+
+    `;
+}

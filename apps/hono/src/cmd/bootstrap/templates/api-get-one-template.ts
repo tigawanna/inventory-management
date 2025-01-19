@@ -1,3 +1,11 @@
+import { capitalizeFirstLetter } from "@/cmd/utils/string";
+
+interface ApiGetOneTemplateProps {
+  routename: string;
+}
+export function apiGetOneTemplate({ routename }: ApiGetOneTemplateProps) {
+  const capitalizedRoutename = capitalizeFirstLetter(routename);
+return `
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -9,13 +17,13 @@ import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import {
-  inventorySelectSchema,
-} from "./inventory.schema";
-import { InventoryService } from "./inventory.service";
+  ${routename}SelectSchema,
+} from "./${routename}.schema";
+import { ${capitalizedRoutename}Service } from "./${routename}.service";
 
-const tags = ["Inventory"];
+const tags = ["${capitalizedRoutename}"];
 
-export const inventoryGetOneRoute = createRoute({
+export const ${routename}GetOneRoute = createRoute({
   path: "/:id",
   method: "get",
   tags,
@@ -27,7 +35,7 @@ export const inventoryGetOneRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: inventorySelectSchema,
+        result: ${routename}SelectSchema,
         error: z.null().optional(),
       })
       ,
@@ -51,12 +59,12 @@ export const inventoryGetOneRoute = createRoute({
   },
 });
 
-export type GetOneRoute = typeof inventoryGetOneRoute;
+export type GetOneRoute = typeof ${routename}GetOneRoute;
 
-const inventoryService = new InventoryService();
-export const inventoryGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
+const ${routename}Service = new ${capitalizedRoutename}Service();
+export const ${routename}GetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
   try {
-    const oneItem = await inventoryService.findById(c.req.valid("param").id);
+    const oneItem = await ${routename}Service.findById(c.req.valid("param").id);
     if (!oneItem) {
       return c.json({
         result: null,
@@ -102,3 +110,6 @@ export const inventoryGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) =
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
+
+    `;
+}
