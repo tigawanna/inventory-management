@@ -11,12 +11,12 @@ import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import type {
   InventoryItem,
-} from "../../schemas/invemtory.schema";
+} from "./invemtory.schema";
 
 import {
   inventoryInsertSchema,
   inventorySelectSchema,
-} from "../../schemas/invemtory.schema";
+} from "./invemtory.schema";
 import { InventoryService } from "./inventory.service";
 
 const tags = ["Inventory"];

@@ -11,7 +11,7 @@ import { baseListResponseSchema, baseResponseSchema } from "@/schemas/shared-sch
 import {
   inventorySelectSchema,
   listInventoryQueryParamsSchema,
-} from "../../schemas/invemtory.schema";
+} from "./invemtory.schema";
 import { InventoryService } from "./inventory.service";
 
 const tags = ["Inventory"];

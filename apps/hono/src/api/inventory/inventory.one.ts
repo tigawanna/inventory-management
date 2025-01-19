@@ -10,7 +10,7 @@ import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import {
   inventorySelectSchema,
-} from "../../schemas/invemtory.schema";
+} from "./invemtory.schema";
 import { InventoryService } from "./inventory.service";
 
 const tags = ["Inventory"];

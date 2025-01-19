@@ -9,7 +9,7 @@ import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
-import type { InventoryItem } from "../../schemas/invemtory.schema";
+import type { InventoryItem } from "./invemtory.schema";
 
 import { InventoryService } from "./inventory.service";
 
