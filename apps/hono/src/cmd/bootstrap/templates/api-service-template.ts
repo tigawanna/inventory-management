@@ -19,7 +19,7 @@ export function apiServiceTemplate({ routename }: ApiServiceTemplateProps) {
       ${routename}InsertSchema,
       ${routename}UpdateSchema,
       list${capitalizedRoutename}QueryParamsSchema,
-    } from "../../schemas/invemtory.schema";
+    } from "./${routename}.schema";
     
     export class ${capitalizedRoutename}Service extends BaseCrudService<
       typeof ${routename}Table,
@@ -32,7 +32,7 @@ export function apiServiceTemplate({ routename }: ApiServiceTemplateProps) {
     
       // Override or add custom methods
       async findAll(query: z.infer<typeof list${capitalizedRoutename}QueryParamsSchema>) {
-        const { search, categoryId, ...paginationQuery } = query;
+        const { search, ...paginationQuery } = query;
         const conditions = and(
       search ? ilike(${routename}Table.name, \`%\${search}%\`) : undefined,
         );
