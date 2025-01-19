@@ -5,7 +5,8 @@ interface ApiCreateTemplateProps {
 }
 export function apiCreateTemplate({ routename }: ApiCreateTemplateProps) {
   const capitalizedRoutename = capitalizeFirstLetter(routename);
-  return `
+  const filename = `${routename}.create.ts`;
+  const template = `
 import { createRoute } from "@hono/zod-openapi";
 import { DrizzleError } from "drizzle-orm";
 import { jsonContent } from "stoker/openapi/helpers";
@@ -121,4 +122,6 @@ export const ${routename}CreateHandler: AppRouteHandler<Create${capitalizedRoute
 };
 
     `;
+
+  return { filename, template };
 }

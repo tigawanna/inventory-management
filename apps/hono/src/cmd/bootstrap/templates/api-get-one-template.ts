@@ -5,7 +5,8 @@ interface ApiGetOneTemplateProps {
 }
 export function apiGetOneTemplate({ routename }: ApiGetOneTemplateProps) {
   const capitalizedRoutename = capitalizeFirstLetter(routename);
-return `
+  const filename = `${routename}.one.ts`;
+  const template = `
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -112,4 +113,5 @@ export const ${routename}GetOneHandler: AppRouteHandler <GetOneRoute> = async (c
 };
 
     `;
+  return { filename, template };
 }

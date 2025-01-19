@@ -3,9 +3,10 @@ import { capitalizeFirstLetter } from "@/cmd/utils/string";
 interface ApiSchemaTemplateProps {
   routename: string;
 }
-export function apiSchemaTemplate({routename}: ApiSchemaTemplateProps) {
-const capitalizedRoutename = capitalizeFirstLetter(routename); 
-  return `
+export function apiSchemaTemplate({ routename }: ApiSchemaTemplateProps) {
+  const capitalizedRoutename = capitalizeFirstLetter(routename);
+  const filename = `${routename}.schema.ts`;
+  const template = `
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -34,4 +35,6 @@ export type list${capitalizedRoutename}QueryParams = z.infer<typeof list${capita
 export type view${capitalizedRoutename}Params = z.infer<typeof view${capitalizedRoutename}ParamsSchema>;
 
 `;
+
+  return { filename, template };
 }

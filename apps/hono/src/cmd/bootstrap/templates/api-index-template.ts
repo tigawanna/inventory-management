@@ -4,8 +4,8 @@ interface ApiIndexTemplateProps {
   routename: string;
 }
 export function apiIndexTemplate({ routename }: ApiIndexTemplateProps) {
-  const pathname = `${routename}.index.ts`
-  const template= `
+  const filename = `${routename}.index.ts`;
+  const template = `
   import { createRouter } from "@/lib/create-app";
   
   import { ${routename}CreateHandler, ${routename}CreateRoute } from "./${routename}.create";
@@ -22,6 +22,6 @@ export function apiIndexTemplate({ routename }: ApiIndexTemplateProps) {
     .openapi(${routename}DeleteRoute, ${routename}DeleteHandler);
   
   export default router;
-  `
-  return { template, pathname }
+  `;
+  return { template, filename };
 }

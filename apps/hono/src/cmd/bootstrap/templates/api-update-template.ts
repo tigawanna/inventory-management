@@ -5,7 +5,8 @@ interface ApiUpdateTemplateProps {
 }
 export function apiUpdateTemplate({ routename }: ApiUpdateTemplateProps) {
   const capitalizedRoutename = capitalizeFirstLetter(routename);
-return `
+  const filename = `${routename}.update.ts`;
+  const template = `
 import { createRoute } from "@hono/zod-openapi";
 import { DrizzleError } from "drizzle-orm";
 import { jsonContent } from "stoker/openapi/helpers";
@@ -124,4 +125,8 @@ export const ${routename}UpdateHandler: AppRouteHandler<Update${capitalizedRoute
 
 
     `;
+  return {
+    filename,
+    template,
+  };
 }

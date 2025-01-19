@@ -5,7 +5,8 @@ interface ApiDeleteTemplateProps {
 }
 export function apiCreateTemplate({ routename }: ApiDeleteTemplateProps) {
   const capitalizedRoutename = capitalizeFirstLetter(routename);
-  return `
+  const filename = `${routename}.delete.ts`;
+  const template = `
 import { createRoute } from "@hono/zod-openapi";
 import { DrizzleError } from "drizzle-orm";
 import { jsonContent } from "stoker/openapi/helpers";
@@ -120,5 +121,9 @@ export const ${routename}CreateHandler: AppRouteHandler<Create${capitalizedRoute
   }
 };
 
-  `
+  `;
+  return {
+    filename,
+    template,
+  };
 }

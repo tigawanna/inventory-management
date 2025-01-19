@@ -1,10 +1,12 @@
-
+import { capitalizeFirstLetter } from "@/cmd/utils/string";
 
 interface ApiServiceTemplateProps {
   routename: string;
 }
 export function apiServiceTemplate({ routename }: ApiServiceTemplateProps) {
-  const service = `
+  const capitalizedRoutename = capitalizeFirstLetter(routename);
+  const filename = `${routename}.service.ts`;
+  const template = `
     import type { z } from "zod";
     
     import { and, ilike } from "drizzle-orm";
@@ -16,10 +18,10 @@ export function apiServiceTemplate({ routename }: ApiServiceTemplateProps) {
     import type {
       ${routename}InsertSchema,
       ${routename}UpdateSchema,
-      listInventoryQueryParamsSchema,
+      list${capitalizedRoutename}QueryParamsSchema,
     } from "../../schemas/invemtory.schema";
     
-    export class InventoryService extends BaseCrudService<
+    export class ${capitalizedRoutename}Service extends BaseCrudService<
       typeof ${routename}Table,
       z.infer<typeof ${routename}InsertSchema>,
       z.infer<typeof ${routename}UpdateSchema>
@@ -29,7 +31,7 @@ export function apiServiceTemplate({ routename }: ApiServiceTemplateProps) {
       }
     
       // Override or add custom methods
-      async findAll(query: z.infer<typeof listInventoryQueryParamsSchema>) {
+      async findAll(query: z.infer<typeof list${capitalizedRoutename}QueryParamsSchema>) {
         const { search, categoryId, ...paginationQuery } = query;
         const conditions = and(
       search ? ilike(${routename}Table.name, \`%\${search}%\`) : undefined,
@@ -40,7 +42,8 @@ export function apiServiceTemplate({ routename }: ApiServiceTemplateProps) {
     }
     
     `;
-  return service;
+  return {
+    filename,
+    template,
+  };
 }
-
-

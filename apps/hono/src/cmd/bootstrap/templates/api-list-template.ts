@@ -5,7 +5,8 @@ interface ApiListTemplateProps {
 }
 export function apiListTemplate({ routename }: ApiListTemplateProps) {
   const capitalizedRoutename = capitalizeFirstLetter(routename);
-return `
+  const filename = `${routename}.list.ts`;
+  const template = `
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -97,6 +98,7 @@ export const ${routename}ListHandler: AppRouteHandler<ListRoute> = async (c) => 
   }
 };
 
-
     `;
+
+  return { filename, template };
 }
