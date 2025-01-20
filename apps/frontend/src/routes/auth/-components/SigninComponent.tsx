@@ -36,6 +36,7 @@ export function SigninComponent({}: SigninComponentProps) {
       return signInUser(body);
     },
     onSuccess(data) {
+      console.log(" ===  signin data === ",data)
       if (data.error) {
         makeHotToast({
           title: "Something went wrong",

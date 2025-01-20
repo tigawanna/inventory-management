@@ -36,11 +36,12 @@ export function configureOpenAPI(app: AppOpenAPI) {
 export const defaultHonoOpenApiHook: Hook<any, any, any, any> = (result, c) => {
   if (!result.success) {
     return c.json(
-      {
+      { result: null, error: {
         success: result.success,
-        data:returnValidationData(result.error),
+        data: returnValidationData(result.error),
         error: result.error,
-      },
+
+      } },
       HttpStatusCodes.UNPROCESSABLE_ENTITY,
     );
   }

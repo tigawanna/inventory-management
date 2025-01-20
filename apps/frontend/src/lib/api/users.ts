@@ -26,15 +26,15 @@ export interface LoginInventoryUser {
 }
 
 const authEndponts = {
-  me: "/api/v1/auth/me",
-  signin: "/api/v1/auth/signin",
-  signup: "/api/v1/auth/signup",
-  logout: "/api/v1/auth/logout",
-  "verify-email": "/api/v1/auth/verify-email",
-  "refresh-token": "/api/v1/auth/refresh-token",
-  "forgot-password": "/api/v1/auth/forgot-password",
-  "reset-password": "/api/v1/auth/reset-password",
-  "request-reset": "/api/v1/auth/request-email-verification",
+  me: "/api/auth/me",
+  signin: "/api/auth/signin",
+  signup: "/api/auth/signup",
+  logout: "/api/auth/signout",
+  "verify-email": "/api/auth/verify-email",
+  "refresh-token": "/api/auth/refresh-token",
+  "forgot-password": "/api/auth/forgot-password",
+  "reset-password": "/api/auth/reset-password",
+  "request-reset": "/api/auth/request-email-verification",
 } as const;
 
 export interface AuthEnpointsEroor{
@@ -116,13 +116,15 @@ export async function signInUser(user: LoginInventoryUser) {
         record: null,
         error: await res
           .json()
-          .then((res) => res)
+          .then((res) => res?.error)
           .catch(() => {
             return { message: res.statusText };
           }),
       };
     }
-    return { record: (await res.json()) as UserSigninResponse, error: null };
+    const record = (await res.json()) as UserSigninResponse
+    console.log({record})
+    return { record,  error: null };
   } catch (error) {
     return {
       record: null,

@@ -1,5 +1,6 @@
 import { makeHotToast } from "@/components/toasters";
 import { getCurrentUser, InventoryUser, logoutUser } from "@/lib/api/users";
+import { CookieManager } from "@/utils/browser";
 import {
   QueryClient,
   useMutation,
@@ -31,22 +32,8 @@ export function viewerqueryOptions() {
   return {
     queryKey: ["viewer"],
     queryFn: async () => {
-      // return new Promise<ViewerType>((res, rej) => {
-      //   setTimeout(() => {
-      //     res({
-      //       record: {
-      //           id: "id_1",
-      //           name: "name_1",
-      //           email: "email1@email.com",
-      //           username: "username_1",
-      //           role: "user",
-      //        },
-      //       token: "token_1",
-      //     });
-      //   }, 1000);
-      // });
-      const currentUserResponse = await getCurrentUser()
-      console.log(currentUserResponse)
+      const currentUserResponse = await getCurrentUser();
+      console.log(currentUserResponse);
       return currentUserResponse;
     },
     staleTime: 12 * 60 * 1000,
@@ -59,19 +46,22 @@ export function useViewer() {
   const logoutMutation = useMutation({
     mutationFn: async () => {
       qc.invalidateQueries(viewerqueryOptions());
-      return await logoutUser();
+      return new Promise<{ result: { message: string }; error: null }>((res) =>
+        setTimeout(() => {
+          CookieManager.clearAccessAndRefreshTokens();
+          res({
+            result: {
+              message: "success",
+            },
+            error: null,
+          });
+        }, 3000),
+      );
+      // document.cookie = "";
+      // return await logoutUser();
       // navigate({ to: "/auth", search: { returnTo: "/" } });
     },
     onSuccess: (data) => {
-      if (data.error) {
-        makeHotToast({
-          title: "Something went wrong",
-          description: data.error.message,
-          variant: "error",
-          duration: 10000,
-        });
-        return;
-      }
       makeHotToast({
         title: "signed out",
         description: "",
@@ -85,7 +75,7 @@ export function useViewer() {
       const errorMessage = error as { message: string };
       makeHotToast({
         title: "Something went wrong",
-        description: `${errorMessage.message}`,
+        description: `${errorMessage?.message}`,
         variant: "error",
         duration: 10000,
       });
@@ -111,8 +101,6 @@ export type PocketbaseViewerType =
       record: InventoryUser;
       error: null;
     };
-
-
 
 type AuthBeforeloadContext = BeforeLoadContextOptions<
   RootRoute<

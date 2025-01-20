@@ -1,9 +1,10 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { contextStorage } from "hono/context-storage";
+import { cors } from "hono/cors";
 import { requestId } from "hono/request-id";
 import { notFound, serveEmojiFavicon } from "stoker/middlewares";
 
-import { corsHeaders } from "@/middlewares/cors-middlewares";
+import { allowedOrigins, corsHeaders, corsMiddleware } from "@/middlewares/cors-middlewares";
 import { onHonoError } from "@/middlewares/error-middleware";
 import { pinoLogger } from "@/middlewares/loggermiddleware";
 
@@ -20,38 +21,20 @@ export function createRouter() {
 
 export function createApp() {
   const app = createRouter();
+    app.use("*", cors({
+      origin:[...allowedOrigins],
+      allowHeaders: ["Content-Type", "Authorization"],
+      allowMethods: ["POST", "GET", "OPTIONS","PUT","DELETE","PATCH"],
+      exposeHeaders: ["Content-Length"],
+      maxAge: 600,
+      credentials: true,
+    }));
   app.use(requestId());
   // @ts-expect-error its fine
   app.use(pinoLogger());
+  app.use("/api/*", (c, next) => corsHeaders(c, next));
+  // app.use("/api/*",(c, next) => corsMiddleware(next));
 
-  //   app.use(async (c,next) => {
-  //   c.set(
-  //     'custom-logger',
-  //     pino({
-  //       browser: {
-  //         formatters: {
-  //           level(label, _number) {
-  //             return { level: label.toUpperCase() };
-  //           },
-  //         },
-  //         write: (o) => {
-  //           console.log("write logger",o);
-  //           // @ts-expect-error : the type is too genrric but shape matches
-  //           const { time, level, msg } = o;
-  //           const paddedLevel = level.padEnd(5, ' ');
-  //           const requestId = c.var.requestId;
-  //           console.log(`[${time}] ${paddedLevel} (${requestId}): ${msg}`);
-  //         },
-  //       },
-  //       enabled: true,
-  //       level: 'debug',
-  //       timestamp: pino.stdTimeFunctions.isoTime,
-  //     }),
-  //   )
-  //   // next()
-  // }
-  //   )
-  app.use("*",(c, next) => corsHeaders(c, next));
   app.use(contextStorage());
   // app.use(async (c, next) => {
   //   await authenticateUserMiddleware(c, next);

@@ -34,11 +34,11 @@ export interface ListInventoryParams {
 }
 
 const inventoryEndpoints = {
-  list: "/api/v1/items",
-  create: "/api/v1/items",
-  view: (id: string) => `/api/v1/items/${id}`,
-  update: (id: string) => `/api/v1/items/${id}`,
-  delete: (id: string) => `/api/v1/items/${id}`,
+  list: "/api/inventory",
+  create: "/api/inventory",
+  view: (id: string) => `/api/inventory/${id}`,
+  update: (id: string) => `/api/inventory/${id}`,
+  delete: (id: string) => `/api/inventory/${id}`,
 } as const;
 
 const baseUrl = import.meta.env.VITE_API_URL;
