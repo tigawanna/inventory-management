@@ -1,7 +1,7 @@
 import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import { categoryTable, inventoryTable } from "@/db/schema/inventory";
+import { categoriesTable, inventoryTable } from "@/db/schema/inventory";
 import { genericQueryParamsSchema } from "@/schemas/shared-schema";
 
 export const inventorySelectSchema = createSelectSchema(inventoryTable);
@@ -26,6 +26,6 @@ export const viewInventoryParamsSchema = z.object({
 export type listInventoryQueryParams = z.infer<typeof listInventoryQueryParamsSchema>;
 export type viewInventoryParams = z.infer<typeof viewInventoryParamsSchema>;
 
-export const categorySelectSchema = createSelectSchema(categoryTable);
-export const categoryInsertSchema = createInsertSchema(categoryTable);
-export const categoryUpdateSchema = createUpdateSchema(categoryTable);
+export const categorySelectSchema = createSelectSchema(categoriesTable);
+export const categoryInsertSchema = createInsertSchema(categoriesTable);
+export const categoryUpdateSchema = createUpdateSchema(categoriesTable);

@@ -4,7 +4,7 @@ import { uuidv7 } from "uuidv7";
 
 import { commonColumns } from "../helpers/columns";
 
-export const categoryTable = pgTable("categories", {
+export const categoriesTable = pgTable("categories", {
   ...commonColumns,
   name: text("name").notNull().unique(),
   description: text("description"),
@@ -16,7 +16,7 @@ export const inventoryTable = pgTable("inventory", {
   description: text("description"),
   quantity: integer("quantity").notNull().default(0),
   price: decimal("price", { precision: 10, scale: 2 }).notNull(),
-  categoryId: text("category_id").references(() => categoryTable.id),
+  categoryId: text("category_id").references(() => categoriesTable.id),
   sku: text("sku")
     .unique()
     .$defaultFn(() => uuidv7()),
@@ -28,6 +28,6 @@ export const inventoryTable = pgTable("inventory", {
   tags: text("tags").array(),
 });
 
-export const categoryRelation = relations(categoryTable, ({ many }) => ({
+export const categoryRelation = relations(categoriesTable, ({ many }) => ({
   inventory: many(inventoryTable),
 }));

@@ -17,7 +17,7 @@ export function CategoriesPage({}: CategoriesPageProps) {
   const { debouncedValue, isDebouncing, keyword, setKeyword } =
     usePageSearchQuery("/dashboard/categories");
   return (
-    <div className="flex h-full min-h-screen w-full flex-col items-center gap-5">
+    <div className="flex h-full min-h-screen w-full flex-col gap-5">
       <Helmet
         title="Collabs | categories"
         description="The list of Collabs | categories"
@@ -38,7 +38,7 @@ export function CategoriesPage({}: CategoriesPageProps) {
         }
       />
 
-      <div className="m-3 flex h-full w-full items-center justify-center p-5">
+      <div className="m-3 flex h-full w-full  p-5">
         <Suspense fallback={<ResponsiveSuspenseFallbacks />}>
           <CategoriesContainer keyword={keyword} />
         </Suspense>

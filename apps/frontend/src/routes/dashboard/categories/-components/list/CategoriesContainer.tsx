@@ -43,7 +43,7 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
   }
   const items = data.items;
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center">
+    <div className="flex h-full w-full flex-col items-center ">
       <div className="hidden w-full max-w-[99vw] lg:flex">
         <CategoryTable items={items} />
       </div>
