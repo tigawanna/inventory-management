@@ -2,7 +2,7 @@ import { InventoryUser } from "@/lib/api/users";
 import { QueryClient } from "@tanstack/react-query";
 import { AnyContext, BeforeLoadContextOptions, redirect, RootRoute } from "@tanstack/react-router";
 
-export type PocketbaseViewerType =
+export type ViewerType =
   | {
       record: null;
       error: any;
@@ -18,7 +18,7 @@ type AuthBeforeloadContext = BeforeLoadContextOptions<
     undefined,
     {
       queryClient: QueryClient;
-      viewer?: PocketbaseViewerType;
+      viewer?: ViewerType;
     },
     AnyContext,
     AnyContext,
