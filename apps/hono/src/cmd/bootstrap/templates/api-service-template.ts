@@ -31,7 +31,7 @@ export function apiServiceTemplate({ routename }: ApiServiceTemplateProps) {
       }
     
       // Override or add custom methods
-      async findAll(query: z.infer<typeof list${capitalizedRoutename}QueryParamsSchema>) {
+     override async findAll(query: z.infer<typeof list${capitalizedRoutename}QueryParamsSchema>) {
         const { search, ...paginationQuery } = query;
         const conditions = and(
       search ? ilike(${routename}Table.name, \`%\${search}%\`) : undefined,

@@ -1,4 +1,3 @@
-
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -7,73 +6,62 @@ import type { AppRouteHandler } from "@/lib/types";
 
 import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
-import { baseResponseSchema } from "@/schemas/shared-schema";
-
 import {
-  helloSelectSchema,
-} from "./hello.schema";
-import { HelloService } from "./hello.service";
+  baseListResponseSchema,
+  baseResponseSchema,
+} from "@/schemas/shared-schema";
 
-const tags = ["Hello"];
+import { listUsersQueryParamsSchema, usersSelectSchema } from "./users.schema";
+import { UsersService } from "./users.service";
 
-export const helloGetOneRoute = createRoute({
-  path: "/:id",
+const tags = ["Users"];
+
+export const usersListRoute = createRoute({
+  path: "/",
   method: "get",
   tags,
   request: {
-    params: z.object({
-      id: z.string(),
-    }),
+    query: listUsersQueryParamsSchema,
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: helloSelectSchema,
+        result: baseListResponseSchema.extend({
+          items: z.array(usersSelectSchema.omit({
+            password: true,
+            verificationToken: true,
+            refreshTokenVersion: true,
+            refreshToken: true,
+          })),
+        }),
         error: z.null().optional(),
-      })
-      ,
-      "Inventpry by id success",
-    ),
-    [HttpStatusCodes.NOT_FOUND]: jsonContent(
-      baseResponseSchema
-      ,
-      "Inventpry by id not found error",
+      }),
+      "Inventpry listing success",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
-      baseResponseSchema
-      ,
-      "Inventpry by id validation error",
+      baseResponseSchema,
+      "Inventpry listing validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
-      baseResponseSchema
-      ,
-      "Inventpry by id internal server error",
+      baseResponseSchema,
+      "Inventpry listing internal server error",
     ),
   },
 });
 
-export type GetOneRoute = typeof helloGetOneRoute;
+export type ListRoute = typeof usersListRoute;
 
-const helloService = new HelloService();
-export const helloGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
+const usersService = new UsersService();
+export const usersListHandler: AppRouteHandler<ListRoute> = async (c) => {
   try {
-    const oneItem = await helloService.findById(c.req.valid("param").id);
-    if (!oneItem) {
-      return c.json({
-        result: null,
-        error: {
-          message: "Item not found",
-        },
-      }, HttpStatusCodes.NOT_FOUND);
-    }
+    const users = await usersService.findAll(c.req.valid("query"));
     return c.json({
-      result: oneItem,
+      result: users,
       error: null,
     }, HttpStatusCodes.OK);
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("Inventpry by id error:", error.message);
+      c.var.logger.error("Inventpry listing error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -84,7 +72,7 @@ export const helloGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("Inventpry by id internal error:", error.name);
+      c.var.logger.error("Inventpry listing internal error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -93,7 +81,7 @@ export const helloGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("Inventpry by id internal  error:", error);
+    c.var.logger.error("Inventpry listing internal  error:", error);
     return c.json({
       result: null,
       error: {
@@ -103,5 +91,3 @@ export const helloGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
-
-    

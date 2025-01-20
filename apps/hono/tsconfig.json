@@ -12,6 +12,7 @@
     "typeRoots": ["./node_modules/@types"],
     "types": ["node"],
     "strict": true,
+    "noImplicitOverride": true,
     "outDir": "./dist",
     "sourceMap": true,
     "skipLibCheck": true

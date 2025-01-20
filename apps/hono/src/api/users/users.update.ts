@@ -10,15 +10,19 @@ import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
-import type { HelloItem } from "./hello.schema";
+import type { UsersItem } from "./users.schema";
 
-import { HelloService } from "./hello.service";
+import {
+  usersSelectSchema,
+  usersUpdateSchema,
+} from "./users.schema";
+import { UsersService } from "./users.service";
 
-const tags = ["Hello"];
+const tags = ["Users"];
 
-export const helloDeleteRoute = createRoute({
+export const usersUpdateRoute = createRoute({
   path: "/",
-  method: "delete",
+  method: "patch",
   tags,
   request: {
     headers: z.object({
@@ -29,9 +33,7 @@ export const helloDeleteRoute = createRoute({
     body: {
       content: {
         "application/json": {
-          schema: z.object({
-            id: z.string(),
-          }),
+          schema: usersUpdateSchema.extend({id:z.string()}),
         },
       },
     },
@@ -39,56 +41,40 @@ export const helloDeleteRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: z.object({
-          message: z.string(),
-        }),
+        result: usersSelectSchema,
         error: z.null().optional(),
       }),
-      "Hello deletion successful",
-    ),
-    [HttpStatusCodes.NOT_FOUND]: jsonContent(
-      baseResponseSchema,
-      "Hello deletion not found error",
+      "Users update successful",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "Hello deletion validation error",
+      "Users update validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "Hello deletion internal server error",
+      "Users update internal server error",
     ),
   },
 });
 
-export type DeleteHelloRoute = typeof helloDeleteRoute;
+export type UpdateUsersRoute = typeof usersUpdateRoute;
 
-const helloService = new HelloService();
-export const helloDeleteHandler: AppRouteHandler<DeleteHelloRoute>
-  = async (c) => {
+const usersService = new UsersService();
+export const usersUpdateHandler: AppRouteHandler<UpdateUsersRoute> =
+  async (c) => {
     try {
       const newItem = c.req.valid("json");
-      const deletedItem = await helloService.delete(
+      const users = await usersService.update(
         newItem.id,
-      ) as HelloItem;
-      if (!deletedItem) {
-        return c.json({
-          result: null,
-          error: {
-            message: "Entry not found",
-          },
-        }, HttpStatusCodes.NOT_FOUND);
-      }
+        newItem
+      ) as UsersItem;
       return c.json({
-        result: {
-          message: "successfully deleted",
-        },
+        result: users,
         error: null,
       }, HttpStatusCodes.OK);
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof ZodError) {
-        c.var.logger.error("Hello deletion  error:", error.message);
+        c.var.logger.error("Users update  error:", error.message);
         return c.json({
           result: null,
           error: {
@@ -99,7 +85,7 @@ export const helloDeleteHandler: AppRouteHandler<DeleteHelloRoute>
         }, HttpStatusCodes.BAD_REQUEST);
       }
       if (error instanceof Error) {
-        c.var.logger.error("Hello deletion  error:", error.name);
+        c.var.logger.error("Users update  error:", error.name);
         return c.json({
           result: null,
           error: {
@@ -109,7 +95,7 @@ export const helloDeleteHandler: AppRouteHandler<DeleteHelloRoute>
         }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
       }
       if (error instanceof DrizzleError) {
-        c.var.logger.error("Hello deletion drizzle error:", error);
+        c.var.logger.error("Users update drizzle error:", error);
         return c.json({
           result: null,
           error: {
@@ -118,7 +104,7 @@ export const helloDeleteHandler: AppRouteHandler<DeleteHelloRoute>
           } as const,
         }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
       }
-      c.var.logger.error("Hello deletion  internal  error:", error);
+      c.var.logger.error("Users update  internal  error:", error);
       return c.json({
         result: null,
         error: {
@@ -130,4 +116,4 @@ export const helloDeleteHandler: AppRouteHandler<DeleteHelloRoute>
   };
 
 
-  
+    

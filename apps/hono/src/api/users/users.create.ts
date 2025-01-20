@@ -11,18 +11,18 @@ import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import type {
-  HelloItem,
-} from "./hello.schema";
+  UsersItem,
+} from "./users.schema";
 
 import {
-  helloInsertSchema,
-  helloSelectSchema,
-} from "./hello.schema";
-import { HelloService } from "./hello.service";
+  usersInsertSchema,
+  usersSelectSchema,
+} from "./users.schema";
+import { UsersService } from "./users.service";
 
-const tags = ["Hello"];
+const tags = ["Users"];
 
-export const helloCreateRoute = createRoute({
+export const usersCreateRoute = createRoute({
   path: "/",
   method: "post",
   tags,
@@ -35,7 +35,7 @@ export const helloCreateRoute = createRoute({
     body: {
       content: {
         "application/json": {
-          schema: helloInsertSchema,
+          schema: usersInsertSchema,
         },
       },
     },
@@ -43,36 +43,36 @@ export const helloCreateRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: helloSelectSchema,
+        result: usersSelectSchema,
         error: z.null().optional(),
       }),
-      "Hello creation successful",
+      "Users creation successful",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "Hello creation validation error",
+      "Users creation validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "Hello creation internal server error",
+      "Users creation internal server error",
     ),
   },
 });
 
-export type CreateHelloRoute = typeof helloCreateRoute;
+export type CreateUsersRoute = typeof usersCreateRoute;
 
-const helloService = new HelloService();
-export const helloCreateHandler: AppRouteHandler<CreateHelloRoute> = async (c) => {
+const usersService = new UsersService();
+export const usersCreateHandler: AppRouteHandler<CreateUsersRoute> = async (c) => {
   try {
-    const hello = await helloService.create(c.req.valid("json")) as HelloItem;
+    const users = await usersService.create(c.req.valid("json")) as UsersItem;
     return c.json({
-      result: hello,
+      result: users,
       error: null,
     }, HttpStatusCodes.OK);
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("Hello creation  error:", error.message);
+      c.var.logger.error("Users creation  error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -83,7 +83,7 @@ export const helloCreateHandler: AppRouteHandler<CreateHelloRoute> = async (c) =
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("Hello creation  error:", error.name);
+      c.var.logger.error("Users creation  error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -93,7 +93,7 @@ export const helloCreateHandler: AppRouteHandler<CreateHelloRoute> = async (c) =
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
     if (error instanceof DrizzleError) {
-      c.var.logger.error("Hello creation drizzle error:", error);
+      c.var.logger.error("Users creation drizzle error:", error);
       return c.json({
         result: null,
         error: {
@@ -102,7 +102,7 @@ export const helloCreateHandler: AppRouteHandler<CreateHelloRoute> = async (c) =
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("Hello creation  internal  error:", error);
+    c.var.logger.error("Users creation  internal  error:", error);
     return c.json({
       result: null,
       error: {
