@@ -72,7 +72,7 @@ export class AuthService {
     });
     const userPayload = filterUserJWTPayload(newUser[0]);
     await tokenService.generateUserAuthTokens(userPayload);
-    return newUser[0];
+    return newUser?.[0] ? filterUserJWTPayload(newUser[0]) : undefined;
   }
 
   async login(data: { email: string; password: string }) {
@@ -89,7 +89,7 @@ export class AuthService {
     }
     await tokenService.generateUserAuthTokens(filterUserJWTPayload(user));
     await this.auditLogService.logLogin(user.id);
-    return user;
+    return filterUserJWTPayload(user);
   }
 
   async requestVerifyEmail(email: string) {
