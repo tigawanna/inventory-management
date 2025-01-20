@@ -23,6 +23,7 @@ export function createApp() {
   app.use(requestId());
   // @ts-expect-error its fine
   app.use(pinoLogger());
+
   //   app.use(async (c,next) => {
   //   c.set(
   //     'custom-logger',
@@ -50,7 +51,7 @@ export function createApp() {
   //   // next()
   // }
   //   )
-  app.use((c, next) => corsHeaders(c, next));
+  app.use("*",(c, next) => corsHeaders(c, next));
   app.use(contextStorage());
   // app.use(async (c, next) => {
   //   await authenticateUserMiddleware(c, next);

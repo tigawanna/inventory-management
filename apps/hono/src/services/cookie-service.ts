@@ -27,7 +27,7 @@ export const accessTokebCookieKey = "access";
 export const refreshTokebCookieKey = "refresh";
 
 export function setAccessTokenCookie(jc: Context<AppBindings, "/", {}>, token: string) {
-  deleteCookie(jc, accessTokebCookieKey);
+  // deleteCookie(jc, accessTokebCookieKey);
   setCookie(jc, accessTokebCookieKey, token, accessTokencookieOptions);
 }
 export function clearAccessTokenCookie(jc: Context<AppBindings, "/", {}>) {
@@ -44,7 +44,7 @@ export function getAccessTokenFromCookieOrHeaders(c: Context<AppBindings, "/", {
 }
 
 export function setRefreshTokenCookie(jc: Context<AppBindings, "/", {}>, token: string) {
-  deleteCookie(jc, refreshTokebCookieKey);
+  // deleteCookie(jc, refreshTokebCookieKey);
   setCookie(jc, refreshTokebCookieKey, token, refreshCookieOptions);
 }
 export function clearRefreshTokenCookie(jc: Context<AppBindings, "/", {}>) {

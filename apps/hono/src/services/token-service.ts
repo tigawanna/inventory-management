@@ -25,16 +25,10 @@ export async function createAccessToken(
   const { ACCESS_TOKEN_SECRET } = envVariables;
   const fiftenMinutesInSeconds = Math.floor(Date.now() / 1000) + 60 * 15; // 15 minutes
   const fiveDaysInSeconds = Math.floor(Date.now() / 1000) + 5 * 24 * 60 * 60; // 5 days
-  const sanitizedPayload = {
-    id: payload.id,
-    email: payload.email,
-    role: payload.role,
-    name: payload.name,
-    refreshTokenVersion: payload.refreshTokenVersion,
-  };
+
   const accessToken = await sign(
     {
-      ...sanitizedPayload,
+      ...payload,
       exp: superUser ? fiveDaysInSeconds : fiftenMinutesInSeconds,
     },
     ACCESS_TOKEN_SECRET,
@@ -53,15 +47,9 @@ export async function createRefreshToken(
   // const { refreshTokenVersion } = await bumpUserTokenVersion(payload.id);
   const twelveDaysInSeconds = 12 * 24 * 60 * 60;
   const expriesin = Math.floor(Date.now() / 1000) + twelveDaysInSeconds;
-  const sanitizedPayload = {
-    id: payload.id,
-    email: payload.email,
-    role: payload.role,
-    name: payload.name,
-    refreshTokenVersion: payload.refreshTokenVersion,
-  };
+
   const refreshToken = await sign(
-    { ...sanitizedPayload, exp: expriesin },
+    { ...payload, exp: expriesin },
     REFRESH_TOKEN_SECRET,
   );
   setRefreshTokenCookie(c, refreshToken);

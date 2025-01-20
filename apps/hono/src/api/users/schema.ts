@@ -12,6 +12,7 @@ export const userJWTSchema = userSelectSchema.omit({
   password: true,
   verificationToken: true,
   refreshToken: true,
+    refreshTokenVersion:true,
 });
 
 export const createNewUserSchema = userInsertSchema.pick({

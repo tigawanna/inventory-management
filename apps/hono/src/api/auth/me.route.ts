@@ -26,8 +26,8 @@ export const currentUserRoute = createRoute({
   tags,
   request: {
     cookies: z.object({
-      [accessTokebCookieKey]: z.string(),
-      [refreshTokebCookieKey]: z.string(),
+      [accessTokebCookieKey]: z.string().optional(),
+      [refreshTokebCookieKey]: z.string().optional(),
     }),
   },
   responses: {

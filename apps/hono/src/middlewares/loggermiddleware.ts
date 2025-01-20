@@ -27,5 +27,3 @@ export function pinoLogger() {
   });
 }
 
-export function customPinoLogger() {
-}
