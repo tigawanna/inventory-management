@@ -71,9 +71,9 @@ export function SigninComponent({}: SigninComponentProps) {
       qc.invalidateQueries(viewerqueryOptions());
       navigate({ to:returnTo??"/" });
       // qc.setQueryData(["viewer"], () => data.record);
-      // if (typeof window !== "undefined") {
-      //   location.reload();
-      // }
+      if (typeof window !== "undefined") {
+        location.reload();
+      }
     },
     onError(error) {
       const errorMessage = error as { message: string };
