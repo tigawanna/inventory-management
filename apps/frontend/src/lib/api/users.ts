@@ -44,11 +44,7 @@ export interface AuthEnpointsEroor{
 }
 
 export interface UserSigninResponse {
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    user: InventoryUser;
-  }
+  result: InventoryUser
 }
 const baseUrl = import.meta.env.VITE_API_URL;
 export async function getCurrentUser() {
@@ -61,13 +57,14 @@ export async function getCurrentUser() {
         record: null,
         error: await res
           .json()
-          .then((res) => res)
+          .then((res) => res.error)
           .catch(() => {
             return { message: res.statusText };
           }),
       };
     }
-    return { record: (await res.json()) as InventoryUser, error: null };
+    const response = (await res.json()) as {result:InventoryUser}
+    return { record: response.result, error: null };
   } catch (error) {
     return {
       record: null,
@@ -122,9 +119,9 @@ export async function signInUser(user: LoginInventoryUser) {
           }),
       };
     }
-    const record = (await res.json()) as UserSigninResponse
-    console.log({record})
-    return { record,  error: null };
+    const response = (await res.json()) as {result:InventoryUser}
+    console.log("signupUser response  ====",response.result);
+    return { record: response.result,  error: null };
   } catch (error) {
     return {
       record: null,

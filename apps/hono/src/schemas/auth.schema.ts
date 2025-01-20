@@ -20,6 +20,8 @@ export const userSignupSchema = userInsertSchema.pick({
 export const userSigninSchema = userInsertSchema.pick({
   email: true,
   password: true
+}).extend({
+  email: z.string().email()
 })
 export const userJWTSchema = userSelectSchema.omit({
   password: true,
