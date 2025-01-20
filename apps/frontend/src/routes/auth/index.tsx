@@ -12,9 +12,9 @@ export const Route = createFileRoute("/auth/")({
   async beforeLoad(ctx) {
     const viewer = ctx.context?.viewer;
     const returnTo = ctx.search?.returnTo ?? "/";
-    // if (viewer?.record) {
-    //   throw redirect({ to: returnTo });
-    // }
+    if (viewer?.record) {
+      throw redirect({ to: returnTo, replace: true });
+    }
   },
 });
 
