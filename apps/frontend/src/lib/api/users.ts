@@ -37,14 +37,14 @@ const authEndponts = {
   "request-reset": "/api/auth/request-email-verification",
 } as const;
 
-export interface AuthEnpointsEroor{
+export interface AuthEnpointsEroor {
   error: string;
-  message: string
-  code?:string
+  message: string;
+  code?: string;
 }
 
 export interface UserSigninResponse {
-  result: InventoryUser
+  result: InventoryUser;
 }
 const baseUrl = import.meta.env.VITE_API_URL;
 export async function getCurrentUser() {
@@ -63,7 +63,7 @@ export async function getCurrentUser() {
           }),
       };
     }
-    const response = (await res.json()) as {result:InventoryUser}
+    const response = (await res.json()) as { result: InventoryUser };
     return { record: response.result, error: null };
   } catch (error) {
     return {
@@ -119,9 +119,9 @@ export async function signInUser(user: LoginInventoryUser) {
           }),
       };
     }
-    const response = (await res.json()) as {result:InventoryUser}
-    console.log("signupUser response  ====",response.result);
-    return { record: response.result,  error: null };
+    const response = (await res.json()) as { result: InventoryUser };
+    console.log("signupUser response  ====", response.result);
+    return { record: response.result, error: null };
   } catch (error) {
     return {
       record: null,
@@ -137,7 +137,7 @@ export async function verifyEmail(token: string) {
       {
         method: "POST",
         credentials: "include",
-      }
+      },
     );
     if (!res.ok) {
       return {
@@ -184,7 +184,6 @@ export async function requestEmailVerification(email: string) {
       error: error as AuthEnpointsEroor,
     };
   }
-  
 }
 
 export async function logoutUser() {

@@ -11,7 +11,7 @@ export function inventoryListQueryOptions({
   limit = 10,
   order = "desc",
   sort = "name",
-  categoryId="",
+  categoryId = "",
 }: inventoryQueryOptionPropss) {
   return queryOptions({
     queryKey: ["inventory_list", keyword, page, categoryId, limit, order, sort],
@@ -28,7 +28,7 @@ export function inventoryListQueryOptions({
         return {
           page,
           perPage: 10,
-          totaleItems:0,
+          totaleItems: 0,
           totalPages: 0,
           items: [],
         };
@@ -39,7 +39,6 @@ export function inventoryListQueryOptions({
       return items.record;
     },
     staleTime: 1000,
-    
   });
 }
 interface oneInventoryQueryOptionPropss {

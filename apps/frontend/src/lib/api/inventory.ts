@@ -58,13 +58,15 @@ export async function listInventory(params: ListInventoryParams) {
         record: null,
         error: await res
           .json()
-          .then((res) => res)
+          .then((res) => res.error)
           .catch(() => {
             return { message: res.statusText };
           }),
       };
     }
-    return { record: (await res.json()) as ListInventoryResponse, error: null };
+    const response = (await res.json()) as {result:ListInventoryResponse}
+    console.log("listInventory response  ====",response);
+    return { record: response.result , error: null };
   } catch (error:any) {
     return {
       record: null,
@@ -89,7 +91,8 @@ export async function getInventoryItem(id: string) {
           }),
       };
     }
-    return { record: (await res.json()) as InventoryItem, error: null };
+    const response = (await res.json()) as {result:InventoryItem}
+    return { record: response.result, error: null };
   } catch (error:any) {
     return {
       record: null,
@@ -117,7 +120,9 @@ export async function createInventoryItem(item: CreateInventoryItem) {
           }),
       };
     }
-    return { record: (await res.json()) as InventoryItem, error: null };
+    const response = (await res.json()) as {result:InventoryItem}
+    return { record: response.result, error: null };
+
   } catch (error:any) {
     return {
       record: null,
@@ -148,7 +153,8 @@ export async function updateInventoryItem(
           }),
       };
     }
-    return { record: (await res.json()) as InventoryItem, error: null };
+    const response = (await res.json()) as {result:InventoryItem}
+    return { record: response.result, error: null };
   } catch (error:any) {
     return {
       record: null,
