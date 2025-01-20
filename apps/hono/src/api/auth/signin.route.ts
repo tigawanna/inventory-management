@@ -11,6 +11,7 @@ import { userSigninSchema } from "@/schemas/auth.schema";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import { userJWTSchema, userSelectSchema } from "../users/schema";
+import { MyAuthError } from "./auth-errors";
 import { AuthService } from "./auth-service";
 
 const tags = ["Auth"];
@@ -70,8 +71,18 @@ export const signinUserHandler: AppRouteHandler<SigninRoute> = async (c) => {
         } as const,
       }, HttpStatusCodes.BAD_REQUEST);
     }
-    if (error instanceof Error) {
+    if (error instanceof MyAuthError) {
       c.var.logger.error("User signin internal error:", error.name);
+      return c.json({
+        result: null,
+        error: {
+          code: "parameters-required",
+          message: error.message,
+        } as const,
+      }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+    }
+    if (error instanceof Error) {
+      c.var.logger.error("User signin error:", error.name);
       return c.json({
         result: null,
         error: {

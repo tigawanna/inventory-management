@@ -14,6 +14,8 @@ import * as tokenService from "@/services/token-service";
 
 import type { UserItem } from "../users/schema";
 
+import { MyAuthError } from "./auth-errors";
+
 export class AuthService {
   private readonly SALT_ROUNDS = 10;
   private emailService: EmailService;
@@ -35,8 +37,8 @@ export class AuthService {
     return filterUserJWTPayload(user);
   }
 
-  async currebtUser(){
-    
+  async currebtUser() {
+
   }
 
   async register(
@@ -68,7 +70,7 @@ export class AuthService {
       token: verificationToken,
       type: "verifyemail",
     });
-    const userPayload  = filterUserJWTPayload(newUser[0]);
+    const userPayload = filterUserJWTPayload(newUser[0]);
     await tokenService.generateUserAuthTokens(userPayload);
     return newUser[0];
   }
@@ -79,11 +81,11 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error("Invalid credentials");
+      throw new MyAuthError("Invalid credentials");
     }
     const isValid = await compare(data.password, user.password);
     if (!isValid) {
-      throw new Error("Invalid credentials");
+      throw new MyAuthError("Invalid credentials");
     }
     await tokenService.generateUserAuthTokens(filterUserJWTPayload(user));
     await this.auditLogService.logLogin(user.id);
@@ -108,7 +110,7 @@ export class AuthService {
       .set({ verificationToken })
       .where(eq(usersTable.id, user.id))
       .returning();
-   await tokenService.generateUserAuthTokens(filterUserJWTPayload(updatedUser[0]));
+    await tokenService.generateUserAuthTokens(filterUserJWTPayload(updatedUser[0]));
   }
 
   async verifyEmail({ email, token }: { token?: string; email?: string }) {
@@ -157,8 +159,6 @@ export class AuthService {
     return newUser?.[0] ? filterUserJWTPayload(newUser[0]) : undefined;
   }
 
-
-
   async requestReset({ email }: { email: string }) {
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.email, email),
@@ -205,7 +205,7 @@ export class AuthService {
 
       await tx.delete(passwordResets).where(eq(passwordResets.token, token));
     });
-    await tokenService.clearTokens()
+    await tokenService.clearTokens();
   }
 }
 
