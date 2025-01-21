@@ -24,7 +24,14 @@ export function AuditlogsList({ keyword = "" }: AuditlogsListProps) {
       </div>
     );
   }
-  if (!data || data.items.length === 0) {
+  if (data.error) {
+    return (
+      <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
+        <ErrorWrapper err={data.error} />
+      </div>
+    );
+  }
+  if (!data || data?.result?.items?.length === 0) {
     return (
       <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
         <ItemNotFound label="Auditlogs" />
@@ -34,7 +41,7 @@ export function AuditlogsList({ keyword = "" }: AuditlogsListProps) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-between ">
       <ul className="w-[95%] min-h-[80vh] flex flex-wrap justify-center p-2 gap-2">
-        {data.items.map((item) => {
+        {data?.result?.items.map((item) => {
           return (
             <li
               key={item.id}
@@ -43,7 +50,7 @@ export function AuditlogsList({ keyword = "" }: AuditlogsListProps) {
               <div className="flex flex-col gap-2 w-full h-full justify-between">
               <div className="flex  gap-2 w-full h-full justify-between">
               <h1 className="text-2xl font-bold">
-              {item.id}
+              {item.action}
               </h1>
               <UpdateAuditlogsform item={item} />
               </div>
@@ -55,7 +62,7 @@ export function AuditlogsList({ keyword = "" }: AuditlogsListProps) {
             <div className="flex w-full items-center justify-center">
         <ResponsivePagination
           current={page ?? 1}
-          total={data.totalPages}
+          total={data.result?.totalPages??0}
           onPageChange={(e) => {
             updatePage(e);
           }}
