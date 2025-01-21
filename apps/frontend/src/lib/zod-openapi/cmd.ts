@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { exec } from "node:child_process";
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 
 async function getOpenAPiDoc() {
     try {
@@ -34,7 +34,7 @@ async function generateZodOpenAPIClient() {
         "--export-schemas",
         "--export-schemas",
         "--export-types",
-        "--strict-objects"
+        "--strict-objects",
     ];
     console.log("running command: " + commands.join(" "));
     exec("pnpm " + commands.join(" "), (error, stdout, stderr) => {
@@ -45,7 +45,6 @@ async function generateZodOpenAPIClient() {
         console.log(`stdout: ${stdout}`);
         console.error(`stderr: ${stderr}`);
     });
-    //  --error-expr
 }
 
 generateZodOpenAPIClient().catch((error) => {
