@@ -19,7 +19,7 @@ export class UsersService extends BaseCrudService<
   z.infer<typeof usersUpdateSchema>
 > {
   constructor() {
-    super(usersTable, entityType.INVENTORY);
+    super(usersTable, entityType.USER);
   }
 
   // Override or add custom methods

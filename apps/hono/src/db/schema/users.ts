@@ -18,16 +18,7 @@ export const usersTable = pgTable("users", {
   isEmailVerified: boolean().default(false),
 });
 
-export const auditLogsTable = pgTable("audit_logs", {
-  ...commonColumns,
-  userId: text("user_id").references(() => usersTable.id),
-  action: text("action").notNull(),
-  entityType: text("entity_type").notNull(),
-  entityId: text("entity_id").notNull(),
-  oldData: jsonb("old_data"),
-  newData: jsonb("new_data"),
-  ipAddress: text("ip_address"),
-});
+
 
 export const passwordResets = pgTable("password_resets", {
   ...commonColumns,

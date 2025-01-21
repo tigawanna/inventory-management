@@ -11,8 +11,7 @@ export const userUpdateSchema = createUpdateSchema(usersTable);
 export const userJWTSchema = userSelectSchema.omit({
   password: true,
   verificationToken: true,
-  refreshToken: true,
-    refreshTokenVersion:true,
+  refreshToken: true
 });
 
 export const createNewUserSchema = userInsertSchema.pick({

@@ -210,6 +210,6 @@ export class AuthService {
 }
 
 export function filterUserJWTPayload(user: UserItem) {
-  const { password, refreshToken, verificationToken,refreshTokenVersion,...userPayload } = user;
+  const { password, refreshToken, verificationToken,...userPayload } = user;
   return userPayload;
 }

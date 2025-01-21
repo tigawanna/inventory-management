@@ -17,7 +17,7 @@ export async function authenticateUserMiddleware(
   next: Next,
   role?: UserJWTPayload["role"],
 ) {
-  const user = await verifiedAccessToken(c);
+  const user = await verifiedAccessToken();
   // invalid or no accessoken
   if (!user) {
     const refreshTokenPresent = await verifyRefreshTokenAndrefreshAccessToken(

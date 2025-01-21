@@ -15,7 +15,8 @@
     "noImplicitOverride": true,
     "outDir": "./dist",
     "sourceMap": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noErrorTruncation": true
   },
   "tsc-alias": {
     "resolveFullPaths": true

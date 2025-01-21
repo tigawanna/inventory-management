@@ -18,7 +18,7 @@ export class CategoriesService extends BaseCrudService<
   z.infer<typeof categoriesUpdateSchema>
 > {
   constructor() {
-    super(categoriesTable, entityType.INVENTORY);
+    super(categoriesTable, entityType.CATEGORY);
   }
 
   // Override or add custom methods

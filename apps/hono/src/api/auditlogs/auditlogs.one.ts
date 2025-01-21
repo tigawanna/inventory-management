@@ -1,12 +1,4 @@
-import { capitalizeFirstLetter } from "@/cmd/utils/string";
 
-interface ApiGetOneTemplateProps {
-  routename: string;
-}
-export function apiGetOneTemplate({ routename }: ApiGetOneTemplateProps) {
-  const capitalizedRoutename = capitalizeFirstLetter(routename);
-  const filename = `${routename}.one.ts`;
-  const template = `
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -18,13 +10,13 @@ import { returnValidationData } from "@/lib/zod";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import {
-  ${routename}SelectSchema,
-} from "./${routename}.schema";
-import { ${capitalizedRoutename}Service } from "./${routename}.service";
+  auditlogsSelectSchema,
+} from "./auditlogs.schema";
+import { AuditlogsService } from "./auditlogs.service";
 
-const tags = ["${capitalizedRoutename}"];
+const tags = ["Auditlogs"];
 
-export const ${routename}GetOneRoute = createRoute({
+export const auditlogsGetOneRoute = createRoute({
   path: "/:id",
   method: "get",
   tags,
@@ -36,36 +28,37 @@ export const ${routename}GetOneRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: ${routename}SelectSchema,
+        result: auditlogsSelectSchema,
         error: z.null().optional(),
       })
       ,
-      "${capitalizedRoutename} by id success",
+      "Inventpry by id success",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       baseResponseSchema
       ,
-      "${capitalizedRoutename} by id not found error",
+      "Inventpry by id not found error",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema
       ,
-      "${capitalizedRoutename} by id validation error",
+      "Inventpry by id validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema
       ,
-      "${capitalizedRoutename} by id internal server error",
+      "Inventpry by id internal server error",
     ),
   },
 });
 
-export type GetOneRoute = typeof ${routename}GetOneRoute;
+export type GetOneRoute = typeof auditlogsGetOneRoute;
 
-const ${routename}Service = new ${capitalizedRoutename}Service();
-export const ${routename}GetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
+const auditlogsService = new AuditlogsService();
+// @ts-expect-error excessively deep warming
+export const auditlogsGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
   try {
-    const oneItem = await ${routename}Service.findById(c.req.valid("param").id);
+    const oneItem = await auditlogsService.findById(c.req.valid("param").id);
     if (!oneItem) {
       return c.json({
         result: null,
@@ -81,7 +74,7 @@ export const ${routename}GetOneHandler: AppRouteHandler <GetOneRoute> = async (c
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("${capitalizedRoutename} by id error:", error.message);
+      c.var.logger.error("Inventpry by id error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -92,7 +85,7 @@ export const ${routename}GetOneHandler: AppRouteHandler <GetOneRoute> = async (c
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("${capitalizedRoutename} by id internal error:", error.name);
+      c.var.logger.error("Inventpry by id internal error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -101,7 +94,7 @@ export const ${routename}GetOneHandler: AppRouteHandler <GetOneRoute> = async (c
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("${capitalizedRoutename} by id internal  error:", error);
+    c.var.logger.error("Inventpry by id internal  error:", error);
     return c.json({
       result: null,
       error: {
@@ -112,6 +105,4 @@ export const ${routename}GetOneHandler: AppRouteHandler <GetOneRoute> = async (c
   }
 };
 
-    `;
-  return { filename, template };
-}
+    

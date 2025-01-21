@@ -6,7 +6,7 @@ import { getContext } from "hono/context-storage";
 import type { AppBindings } from "@/lib/types";
 
 import { db } from "@/db/client";
-import { auditLogsTable } from "@/db/schema/users";
+import { auditLogsTable } from "@/db/schema/auditlogs";
 
 export const auditAction = {
   CREATE: "CREATE",

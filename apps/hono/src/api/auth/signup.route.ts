@@ -36,6 +36,10 @@ export const signupUserRoute = createRoute({
       }),
       "User signup successfully",
     ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      baseResponseSchema,
+      "User signup not found error",
+    ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
       "User signup validation error",
@@ -53,6 +57,15 @@ const authService = new AuthService();
 export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
   try {
     const newUser = await authService.register(c.req.valid("json"));
+    if(!newUser) {
+      return c.json({
+        result: null,
+        error: {
+          code: "not-found",
+          message: "User not found",
+        } as const,
+      }, HttpStatusCodes.NOT_FOUND);
+    }
     return c.json({
       result: newUser,
       error: null,

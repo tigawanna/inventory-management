@@ -1,3 +1,4 @@
+import { notFound } from "stoker/middlewares";
 import { z } from "zod";
 
 export const genericQueryParamsSchema = z.object({
@@ -15,6 +16,7 @@ export const errorCodes = {
   queryParametersRequired: "query-parametersRequired-required",
   payloadRequired: "payload-required",
   internalServererror: "internal-server-error",
+  notFound: "not-found",
 } as const;
 
 const errorCodesArray = [
@@ -24,6 +26,7 @@ const errorCodesArray = [
   errorCodes.queryParametersRequired,
   errorCodes.payloadRequired,
   errorCodes.internalServererror,
+  errorCodes.notFound,
 ] as const;
 
 export const errorSchema = z.object({

@@ -2,8 +2,8 @@ import type { Context } from "hono";
 
 import { verify } from "hono/jwt";
 
-import type { AppBindings } from "@/lib/types";
 import type { UserJWTPayload } from "@/api/users/schema";
+import type { AppBindings } from "@/lib/types";
 
 import { envVariables } from "@/env";
 import { errorCodes } from "@/schemas/shared-schema";
