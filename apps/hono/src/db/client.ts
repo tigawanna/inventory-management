@@ -10,15 +10,16 @@ import { envVariables } from "@/env";
 import { ANSIColors } from "@/shared/utils/text";
 
 import { formatSqlQuery } from "./helpers/query-logger";
+import * as auditLogSchema from "./schema/auditlogs";
 import * as inventorySchema from "./schema/inventory";
 import * as usersSchema from "./schema/users";
 
 class MyLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {
     console.log(ANSIColors.Bright, "\n=== DRIZZLE QUERY ===");
-    console.log("",formatSqlQuery(query),"\n");
+    console.log("", formatSqlQuery(query), "\n");
     if (params && params.length > 0) {
-      console.log(ANSIColors.Bright,"=== DRIZZLE PARAMS === ",ANSIColors.Reset,params,"\n");
+      console.log(ANSIColors.Bright, "=== DRIZZLE PARAMS === ", ANSIColors.Reset, params, "\n");
       // console.log(params)
     }
   }
@@ -60,14 +61,14 @@ export async function createDB() {
     const pool = await createLocalPool();
     return pgDrizzle({
       client: pool,
-      schema: { ...inventorySchema, ...usersSchema },
-      logger: envVariables.LOG_LEVEL==="debug"&&new MyLogger(),
+      schema: { ...auditLogSchema ,...inventorySchema, ...usersSchema},
+      logger: envVariables.LOG_LEVEL === "debug" && new MyLogger(),
     });
   }
 
   return drizzle({
     client: neon(envVariables.DATABASE_URL),
-    schema: { ...inventorySchema, ...usersSchema },
+      schema: { ...auditLogSchema ,...inventorySchema, ...usersSchema},
   });
 }
 

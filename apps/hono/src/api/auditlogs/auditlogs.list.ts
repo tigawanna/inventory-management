@@ -48,8 +48,8 @@ export const auditlogsListRoute = createRoute({
 
 export type ListRoute = typeof auditlogsListRoute;
 
+
 const auditlogsService = new AuditlogsService();
-// @ts-expect-error excessively deep warming
 export const auditlogsListHandler: AppRouteHandler<ListRoute> = async (c) => {
   try {
     const auditlogs = await auditlogsService.findAll(c.req.valid("query"));

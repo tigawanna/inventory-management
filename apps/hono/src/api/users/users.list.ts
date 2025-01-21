@@ -36,15 +36,15 @@ export const usersListRoute = createRoute({
         }),
         error: z.null().optional(),
       }),
-      "Inventpry listing success",
+      "Users listing success",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema,
-      "Inventpry listing validation error",
+      "Users listing validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema,
-      "Inventpry listing internal server error",
+      "Users listing internal server error",
     ),
   },
 });
@@ -61,7 +61,7 @@ export const usersListHandler: AppRouteHandler<ListRoute> = async (c) => {
     }, HttpStatusCodes.OK);
   } catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("Inventpry listing error:", error.message);
+      c.var.logger.error("Users listing error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -72,7 +72,7 @@ export const usersListHandler: AppRouteHandler<ListRoute> = async (c) => {
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("Inventpry listing internal error:", error.name);
+      c.var.logger.error("Users listing internal error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -81,7 +81,7 @@ export const usersListHandler: AppRouteHandler<ListRoute> = async (c) => {
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("Inventpry listing internal  error:", error);
+    c.var.logger.error("Users listing internal  error:", error);
     return c.json({
       result: null,
       error: {

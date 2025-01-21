@@ -1,9 +1,9 @@
 import type { z } from "zod";
 
-import { auditLogsTable } from "@/db/schema/auditlogs";
 import { and, asc, desc, eq, ilike, sql } from "drizzle-orm";
 
 import { db } from "@/db/client";
+import { auditLogsTable } from "@/db/schema/auditlogs";
 
 import type {
   listAuditlogsQueryParamsSchema,
@@ -58,6 +58,6 @@ export class AuditlogsService {
       .from(auditLogsTable)
       .where(eq(auditLogsTable.id, id))
       .limit(1);
-    return auditLog;
+    return auditLog?.[0];
   }
 }

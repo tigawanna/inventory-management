@@ -1,4 +1,3 @@
-
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -55,8 +54,7 @@ export const auditlogsGetOneRoute = createRoute({
 export type GetOneRoute = typeof auditlogsGetOneRoute;
 
 const auditlogsService = new AuditlogsService();
-// @ts-expect-error excessively deep warming
-export const auditlogsGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
+export const auditlogsGetOneHandler: AppRouteHandler<GetOneRoute> = async (c) => {
   try {
     const oneItem = await auditlogsService.findById(c.req.valid("param").id);
     if (!oneItem) {
@@ -104,5 +102,3 @@ export const auditlogsGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) =
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
-
-    

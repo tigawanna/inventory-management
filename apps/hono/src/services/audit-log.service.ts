@@ -1,5 +1,3 @@
-import type { Context } from "hono";
-
 import { and, desc, eq } from "drizzle-orm";
 import { getContext } from "hono/context-storage";
 

@@ -13,3 +13,4 @@ export const auditLogsTable = pgTable("audit_logs", {
   newData: jsonb("new_data"),
   ipAddress: text("ip_address"),
 });
+

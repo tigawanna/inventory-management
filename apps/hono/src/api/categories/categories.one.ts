@@ -32,22 +32,22 @@ export const categoriesGetOneRoute = createRoute({
         error: z.null().optional(),
       })
       ,
-      "Inventpry by id success",
+      "Category by id success",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       baseResponseSchema
       ,
-      "Inventpry by id not found error",
+      "Category by id not found error",
     ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       baseResponseSchema
       ,
-      "Inventpry by id validation error",
+      "Category by id validation error",
     ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       baseResponseSchema
       ,
-      "Inventpry by id internal server error",
+      "Category by id internal server error",
     ),
   },
 });
@@ -73,7 +73,7 @@ export const categoriesGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) 
   }
   catch (error) {
     if (error instanceof ZodError) {
-      c.var.logger.error("Inventpry by id error:", error.message);
+      c.var.logger.error("Category by id error:", error.message);
       return c.json({
         result: null,
         error: {
@@ -84,7 +84,7 @@ export const categoriesGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) 
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("Inventpry by id internal error:", error.name);
+      c.var.logger.error("Category by id internal error:", error.name);
       return c.json({
         result: null,
         error: {
@@ -93,7 +93,7 @@ export const categoriesGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) 
         } as const,
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
-    c.var.logger.error("Inventpry by id internal  error:", error);
+    c.var.logger.error("Category by id internal  error:", error);
     return c.json({
       result: null,
       error: {
