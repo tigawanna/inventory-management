@@ -15,6 +15,7 @@
     "vitest:ui": "vitest --ui",
     "playwright": "playwright test --ui",
     "test": "vitest run && playwright test",
+    "apidoc": "tsx src/lib/zod-openapi/cmd.ts",
     "start": "vite"
   },
   "devDependencies": {
@@ -32,6 +33,7 @@
     "daisyui-devtools": "^0.0.4",
     "dotenv": "^16.4.5",
     "openapi-typescript": "^7.5.2",
+    "openapi-zod-client": "^1.18.2",
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
@@ -79,6 +81,7 @@
     "@tanstack/react-router": "^1.58.3",
     "@tanstack/router-devtools": "^1.58.3",
     "@tanstack/zod-form-adapter": "^0.33.0",
+    "@zodios/core": "^10.9.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",

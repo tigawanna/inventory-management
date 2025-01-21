@@ -4,7 +4,7 @@ import { cors } from "hono/cors";
 import { requestId } from "hono/request-id";
 import { notFound, serveEmojiFavicon } from "stoker/middlewares";
 
-import { allowedOrigins, corsHeaders, corsMiddleware } from "@/middlewares/cors-middlewares";
+import { allowedOrigins, corsHeaders } from "@/middlewares/cors-middlewares";
 import { onHonoError } from "@/middlewares/error-middleware";
 import { pinoLogger } from "@/middlewares/loggermiddleware";
 
@@ -16,6 +16,7 @@ export function createRouter() {
   return new OpenAPIHono<AppBindings>({
     strict: false,
     defaultHook: defaultHonoOpenApiHook,
+
   });
 }
 
@@ -33,12 +34,7 @@ export function createApp() {
   // @ts-expect-error its fine
   app.use(pinoLogger());
   app.use("/api/*", (c, next) => corsHeaders(c, next));
-  // app.use("/api/*",(c, next) => corsMiddleware(next));
-
   app.use(contextStorage());
-  // app.use(async (c, next) => {
-  //   await authenticateUserMiddleware(c, next);
-  // });
   app.use(serveEmojiFavicon("📝"));
   app.notFound(notFound);
   app.onError(onHonoError);
