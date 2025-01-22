@@ -43,7 +43,7 @@ export function InventoryPage({}: InventoryPageProps) {
               keyword={keyword}
             />
             </div>
-            <InventoryCategoriesSelect />
+              <InventoryCategoriesSelect />
               <InventorySortSelect />
               <InventoryOrderSelect />
           </div>

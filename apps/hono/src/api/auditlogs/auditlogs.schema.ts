@@ -5,7 +5,7 @@ import {
 } from "drizzle-zod";
 import { z } from "zod";
 
-import { auditLogsTable } from "@/db/schema/auditlogs";
+import { auditAction, auditLogsTable, entityType } from "@/db/schema/auditlogs";
 import { genericQueryParamsSchema } from "@/schemas/shared-schema";
 
 export const brokenauditlogsSelectSchema = createSelectSchema(auditLogsTable);
@@ -41,6 +41,10 @@ const sortBy = ["created_at"] as const satisfies Array<keyof AuditlogsItem>;
 
 export const listAuditlogsQueryParamsSchema = genericQueryParamsSchema.extend({
   sort: z.enum(sortBy).optional(),
+  entity: z.string().optional(),
+  action: z.string().optional(),
+  // entity: z.enum(entityType).optional(),
+  // action: z.enum(auditAction).optional(),
 });
 
 export const viewAuditlogsParamsSchema = z.object({

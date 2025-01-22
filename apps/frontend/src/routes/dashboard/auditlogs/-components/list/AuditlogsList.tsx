@@ -7,6 +7,7 @@ import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { UpdateAuditlogsform } from "@/routes/dashboard/auditlogs/-components/form/update";
 import { auditlogsListQueryOptions } from "@/routes/dashboard/auditlogs/-query-options/auditlogs-query-option";
 import { Auditlogscard } from "./Auditlogscard";
+import { useSearch } from "@tanstack/react-router";
 
 interface AuditlogsListProps {
   keyword?: string;
@@ -14,7 +15,10 @@ interface AuditlogsListProps {
 
 export function AuditlogsList({ keyword = "" }: AuditlogsListProps) {
   const { page,updatePage } = usePageSearchQuery("/dashboard/auditlogs");
-  const query = useSuspenseQuery(auditlogsListQueryOptions({ keyword,page }));
+  const {action,entity} = useSearch({
+    from:"/dashboard/auditlogs/"
+  })
+  const query = useSuspenseQuery(auditlogsListQueryOptions({ keyword,page,action,entity }));
   const data = query.data;
   const error = query.error;
 

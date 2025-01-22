@@ -1,10 +1,9 @@
 import type { z } from "zod";
 
-import { and, asc, desc, eq, ilike, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, like, sql } from "drizzle-orm";
 
 import { db } from "@/db/client";
 import { auditLogsTable } from "@/db/schema/auditlogs";
-import { usersTable } from "@/db/schema/users";
 
 import type {
   listAuditlogsQueryParamsSchema,
@@ -14,9 +13,13 @@ export class AuditlogsService {
   constructor() {}
 
   async findAll(query: z.infer<typeof listAuditlogsQueryParamsSchema>) {
-    const { search, ...paginationQuery } = query;
+    const { search, action, entity, ...paginationQuery } = query;
     const conditions = and(
       search ? ilike(auditLogsTable.entityType, `%${search}%`) : undefined,
+      // @ts-expect-error : this works just fine
+      entity ? eq(auditLogsTable.entityType, entity) : undefined,
+      // @ts-expect-error : this works just fine
+      action ? eq(auditLogsTable.action, action) : undefined,
     );
 
     const { page, limit, sort, order } = paginationQuery;
@@ -31,19 +34,19 @@ export class AuditlogsService {
       where: conditions,
       limit: Number(limit),
       offset: (Number(page) - 1) * Number(limit),
-      orderBy: sort &&( order === "desc" ? desc(auditLogsTable[sort]) : asc(auditLogsTable[sort])),
-      with:{
-        "user":{
+      orderBy: sort && (order === "desc" ? desc(auditLogsTable[sort]) : asc(auditLogsTable[sort])),
+      with: {
+        user: {
           columns: {
             id: true,
             name: true,
             email: true,
             avatarUrl: true,
-            role: true
-          }
-        }
-      }
-    })    
+            role: true,
+          },
+        },
+      },
+    });
     // Build query
     // const dbSelect = db
     //   .select()
@@ -81,17 +84,17 @@ export class AuditlogsService {
     const auditLogSelect = await db.query.auditLogsTable.findFirst({
       where: eq(auditLogsTable.id, id),
       with: {
-        "user": {
+        user: {
           columns: {
             id: true,
             name: true,
             email: true,
             avatarUrl: true,
-            role: true
-          }
-        }
-      }
-    })
+            role: true,
+          },
+        },
+      },
+    });
     return auditLogSelect;
   }
 }

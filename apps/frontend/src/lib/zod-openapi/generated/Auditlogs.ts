@@ -38,8 +38,18 @@ const endpoints = makeApi([
 				type: "Query",
 				schema: z.literal("created_at").optional()
 			},
+			{
+				name: "entity",
+				type: "Query",
+				schema: z.string().optional()
+			},
+			{
+				name: "action",
+				type: "Query",
+				schema: z.string().optional()
+			},
 		],
-		response: z.object({ result: z.object({ page: z.number().nullable(), perPage: z.number().nullable(), totalItems: z.number().nullable(), totalPages: z.number().nullable(), items: z.array(z.object({ id: z.string(), updated_at: z.string().nullable(), created_at: z.string().nullable(), userId: z.string().nullable(), action: z.string(), entityType: z.string(), entityId: z.string(), ipAddress: z.string().nullable(), oldData: z.unknown().nullish(), newData: z.unknown().nullish(), user: z.object({ name: z.string(), email: z.string(), avatarUrl: z.string().nullable(), role: z.enum(["admin", "user"]).nullable(), id: z.string() }).strict().passthrough().nullable() }).strict().passthrough()) }).strict().passthrough(), error: z.unknown().nullish() }).strict().passthrough(),
+		response: z.object({ result: z.object({ page: z.number().nullable(), perPage: z.number().nullable(), totalItems: z.number().nullable(), totalPages: z.number().nullable(), items: z.array(z.object({ id: z.string(), updated_at: z.string().nullable(), created_at: z.string().nullable(), userId: z.string().nullable(), action: z.enum(["CREATE", "UPDATE", "DELETE", "LOGIN", "LOGOUT", "PASSWORD_RESET", "EMAIL_VERIFY"]), entityType: z.enum(["USER", "INVENTORY", "CATEGORY"]), entityId: z.string(), ipAddress: z.string().nullable(), oldData: z.unknown().nullish(), newData: z.unknown().nullish(), user: z.object({ name: z.string(), email: z.string(), avatarUrl: z.string().nullable(), role: z.enum(["admin", "user"]).nullable(), id: z.string() }).strict().passthrough().nullable() }).strict().passthrough()) }).strict().passthrough(), error: z.unknown().nullish() }).strict().passthrough(),
 		errors: [
 			{
 				status: 400,
@@ -65,7 +75,7 @@ const endpoints = makeApi([
 				schema: z.string()
 			},
 		],
-		response: z.object({ result: z.object({ id: z.string(), updated_at: z.string().nullable(), created_at: z.string().nullable(), userId: z.string().nullable(), action: z.string(), entityType: z.string(), entityId: z.string(), ipAddress: z.string().nullable(), oldData: z.unknown().nullish(), newData: z.unknown().nullish(), user: z.object({ name: z.string(), email: z.string(), avatarUrl: z.string().nullable(), role: z.enum(["admin", "user"]).nullable(), id: z.string() }).strict().passthrough().nullable() }).strict().passthrough(), error: z.unknown().nullish() }).strict().passthrough(),
+		response: z.object({ result: z.object({ id: z.string(), updated_at: z.string().nullable(), created_at: z.string().nullable(), userId: z.string().nullable(), action: z.enum(["CREATE", "UPDATE", "DELETE", "LOGIN", "LOGOUT", "PASSWORD_RESET", "EMAIL_VERIFY"]), entityType: z.enum(["USER", "INVENTORY", "CATEGORY"]), entityId: z.string(), ipAddress: z.string().nullable(), oldData: z.unknown().nullish(), newData: z.unknown().nullish(), user: z.object({ name: z.string(), email: z.string(), avatarUrl: z.string().nullable(), role: z.enum(["admin", "user"]).nullable(), id: z.string() }).strict().passthrough().nullable() }).strict().passthrough(), error: z.unknown().nullish() }).strict().passthrough(),
 		errors: [
 			{
 				status: 400,

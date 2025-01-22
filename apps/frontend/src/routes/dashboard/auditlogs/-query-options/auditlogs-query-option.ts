@@ -7,10 +7,12 @@ import { queryOptions } from "@tanstack/react-query";
 interface auditlogsQueryOptionPropss {
   keyword: string;
     page?: number;
+    entity?: string;
+    action?: string;
 }
-export function auditlogsListQueryOptions({ keyword, page=1 }: auditlogsQueryOptionPropss) {
+export function auditlogsListQueryOptions({ keyword,action,entity, page=1 }: auditlogsQueryOptionPropss) {
   return queryOptions({
-    queryKey: ["auditlogs_list", keyword,page],
+    queryKey: ["auditlogs_list", keyword,page,action,entity],
     queryFn: async() => {
       // return new Promise<{
       //     page: number;
@@ -42,6 +44,8 @@ export function auditlogsListQueryOptions({ keyword, page=1 }: auditlogsQueryOpt
         order: "desc",
         search: keyword,
         sort: "created_at",
+        action,
+        entity
       }
     })
     return auditlogs
