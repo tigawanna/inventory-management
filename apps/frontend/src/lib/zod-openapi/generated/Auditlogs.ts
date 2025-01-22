@@ -39,7 +39,7 @@ const endpoints = makeApi([
 				schema: z.literal("created_at").optional()
 			},
 		],
-		response: z.object({ result: z.object({ page: z.number().nullable(), perPage: z.number().nullable(), totalItems: z.number().nullable(), totalPages: z.number().nullable(), items: z.array(z.object({ id: z.string(), userId: z.string().nullable(), action: z.string(), entityType: z.string(), entityId: z.string(), oldData: z.record(z.unknown().nullable()).nullable(), newData: z.record(z.unknown().nullable()).nullable(), ipAddress: z.string().nullable(), updated_at: z.string().nullable(), created_at: z.string().nullable() }).strict().passthrough()) }).strict().passthrough(), error: z.unknown().nullish() }).strict().passthrough(),
+		response: z.object({ result: z.object({ page: z.number().nullable(), perPage: z.number().nullable(), totalItems: z.number().nullable(), totalPages: z.number().nullable(), items: z.array(z.object({ id: z.string(), userId: z.string().nullable(), action: z.string(), entityType: z.string(), entityId: z.string(), oldData: z.unknown().nullish(), newData: z.unknown().nullish(), ipAddress: z.string().nullable(), updated_at: z.string().nullable(), created_at: z.string().nullable() }).strict().passthrough()) }).strict().passthrough(), error: z.unknown().nullish() }).strict().passthrough(),
 		errors: [
 			{
 				status: 400,
@@ -65,7 +65,7 @@ const endpoints = makeApi([
 				schema: z.string()
 			},
 		],
-		response: z.object({ result: z.object({ id: z.string(), userId: z.string().nullable(), action: z.string(), entityType: z.string(), entityId: z.string(), oldData: z.record(z.unknown().nullable()).nullable(), newData: z.record(z.unknown().nullable()).nullable(), ipAddress: z.string().nullable(), updated_at: z.string().nullable(), created_at: z.string().nullable() }).strict().passthrough(), error: z.unknown().nullish() }).strict().passthrough(),
+		response: z.object({ result: z.object({ id: z.string(), userId: z.string().nullable(), action: z.string(), entityType: z.string(), entityId: z.string(), oldData: z.unknown().nullish(), newData: z.unknown().nullish(), ipAddress: z.string().nullable(), updated_at: z.string().nullable(), created_at: z.string().nullable() }).strict().passthrough(), error: z.unknown().nullish() }).strict().passthrough(),
 		errors: [
 			{
 				status: 400,

@@ -6,6 +6,7 @@ import ResponsivePagination from "react-responsive-pagination";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { UpdateAuditlogsform } from "@/routes/dashboard/auditlogs/-components/form/update";
 import { auditlogsListQueryOptions } from "@/routes/dashboard/auditlogs/-query-options/auditlogs-query-option";
+import { Auditlogscard } from "./Auditlogscard";
 
 interface AuditlogsListProps {
   keyword?: string;
@@ -43,19 +44,8 @@ export function AuditlogsList({ keyword = "" }: AuditlogsListProps) {
       <ul className="w-[95%] min-h-[80vh] flex flex-wrap justify-center p-2 gap-2">
         {data?.result?.items.map((item) => {
           return (
-            <li
-              key={item.id}
-              className="h-56 w-[95%] sm:w-[45%] lg:w-[30%] rounded-xl bg-base-300 p-4 flex justify-center items-center gap-2 "
-            >
-              <div className="flex flex-col gap-2 w-full h-full justify-between">
-              <div className="flex  gap-2 w-full h-full justify-between">
-              <h1 className="text-2xl font-bold">
-              {item.action}
-              </h1>
-              <UpdateAuditlogsform item={item} />
-              </div>
-              </div>
-            </li>
+            <Auditlogscard item={item} key={item.id}/>
+
           );
         })}
       </ul>

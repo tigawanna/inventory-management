@@ -1,5 +1,5 @@
  import { envVariables } from "@/lib/env";
-import { AuditlogsApi, createApiClient } from "@/lib/zod-openapi/generated/Auditlogs";
+import { createApiClient } from "@/lib/zod-openapi/generated/Auditlogs";
 import { queryOptions } from "@tanstack/react-query";
 
 
