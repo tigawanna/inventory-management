@@ -9,17 +9,13 @@ import {
   ZodEnum,
   ZodObject,
 } from "zod";
-import { UpdateAuditlogsform } from "../form/update";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/shadcn/ui/popover";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/shadcn/ui/hover-card";
+
 import { Fullscreen } from "lucide-react";
 
 interface AuditlogscardProps {
