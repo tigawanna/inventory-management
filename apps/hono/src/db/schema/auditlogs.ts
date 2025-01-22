@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { jsonb, pgTable, text } from "drizzle-orm/pg-core";
 
 import { commonColumns } from "../helpers/columns";
@@ -14,3 +15,9 @@ export const auditLogsTable = pgTable("audit_logs", {
   ipAddress: text("ip_address"),
 });
 
+export const auditLogRelations = relations(auditLogsTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [auditLogsTable.userId],
+    references: [usersTable.id],
+  }),
+}));

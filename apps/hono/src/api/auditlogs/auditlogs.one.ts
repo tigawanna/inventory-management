@@ -6,6 +6,7 @@ import type { AppRouteHandler } from "@/lib/types";
 
 import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
+import { userSelectSchema } from "@/schemas/auth.schema";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
 import {
@@ -27,7 +28,15 @@ export const auditlogsGetOneRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({
-        result: auditlogsSelectSchema,
+        result: auditlogsSelectSchema.extend({
+          user: userSelectSchema.pick({
+            name: true,
+            email: true,
+            avatarUrl: true,
+            role: true,
+            id: true,
+          }).nullable(),
+        }),
         error: z.null().optional(),
       })
       ,

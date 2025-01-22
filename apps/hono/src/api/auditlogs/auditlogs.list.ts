@@ -1,4 +1,3 @@
-
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -9,6 +8,7 @@ import HttpStatusCodes from "@/lib/status-codes";
 import { returnValidationData } from "@/lib/zod";
 import { baseListResponseSchema, baseResponseSchema } from "@/schemas/shared-schema";
 
+import { userSelectSchema } from "../users/schema";
 import {
   auditlogsSelectSchema,
   listAuditlogsQueryParamsSchema,
@@ -26,9 +26,19 @@ export const auditlogsListRoute = createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      baseResponseSchema.extend({ 
-        result: baseListResponseSchema.extend({ items: z.array(auditlogsSelectSchema) }),
-        error:z.null().optional(),
+      baseResponseSchema.extend({
+        result: baseListResponseSchema.extend({ items: z.array(
+          auditlogsSelectSchema.extend({
+          user: userSelectSchema.pick({
+            name: true,
+            email: true,
+            avatarUrl: true,
+            role: true,
+            id: true,
+          }).nullable(),
+        })
+      ) }),
+        error: z.null().optional(),
       })
       ,
       "Auditlogs listing success",
@@ -47,7 +57,6 @@ export const auditlogsListRoute = createRoute({
 });
 
 export type ListRoute = typeof auditlogsListRoute;
-
 
 const auditlogsService = new AuditlogsService();
 export const auditlogsListHandler: AppRouteHandler<ListRoute> = async (c) => {
@@ -90,5 +99,3 @@ export const auditlogsListHandler: AppRouteHandler<ListRoute> = async (c) => {
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
-
-    

@@ -12,19 +12,26 @@ export const brokenauditlogsSelectSchema = createSelectSchema(auditLogsTable);
 export const auditlogsInsertSchema = createInsertSchema(auditLogsTable);
 export const auditlogsUpdateSchema = createUpdateSchema(auditLogsTable);
 
-// this will be used as the new select schema as the drizzle zod one causes infinte type error
-export const auditlogsSelectSchema = z.object({
-  id: z.string(),
-  userId: z.nullable(z.string()),
-  action: z.string(),
-  entityType: z.string(),
-  entityId: z.string(),
+export const auditlogsSelectSchema = brokenauditlogsSelectSchema.omit({
+  oldData: true,
+  newData: true,
+}).extend({
   oldData: z.any().nullable(),
   newData: z.any().nullable(),
-  ipAddress: z.nullable(z.string()),
-  updated_at: z.nullable(z.date()),
-  created_at: z.nullable(z.date()),
-});
+})
+// this will be used as the new select schema as the drizzle zod one causes infinte type error
+// export const auditlogsSelectSchema = z.object({
+//   id: z.string(),
+//   userId: z.nullable(z.string()),
+//   action: z.string(),
+//   entityType: z.string(),
+//   entityId: z.string(),
+//   oldData: z.any().nullable(),
+//   newData: z.any().nullable(),
+//   ipAddress: z.nullable(z.string()),
+//   updated_at: z.nullable(z.date()),
+//   created_at: z.nullable(z.date()),
+// });
 
 export type AuditlogsItem = z.infer<typeof auditlogsSelectSchema>;
 export type updateAuditlogs = z.infer<typeof auditlogsUpdateSchema>;

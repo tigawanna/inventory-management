@@ -4,6 +4,7 @@ import { and, asc, desc, eq, ilike, sql } from "drizzle-orm";
 
 import { db } from "@/db/client";
 import { auditLogsTable } from "@/db/schema/auditlogs";
+import { usersTable } from "@/db/schema/users";
 
 import type {
   listAuditlogsQueryParamsSchema,
@@ -26,20 +27,38 @@ export class AuditlogsService {
       .from(auditLogsTable)
       .where(conditions);
 
+    const dbQuery = db.query.auditLogsTable.findMany({
+      where: conditions,
+      limit: Number(limit),
+      offset: (Number(page) - 1) * Number(limit),
+      orderBy: sort &&( order === "desc" ? desc(auditLogsTable[sort]) : asc(auditLogsTable[sort])),
+      with:{
+        "user":{
+          columns: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+            role: true
+          }
+        }
+      }
+    })    
     // Build query
-    const dbQuery = db
-      .select()
-      .from(auditLogsTable)
-      .where(conditions)
-      .limit(Number(limit))
-      .offset((Number(page) - 1) * Number(limit));
+    // const dbSelect = db
+    //   .select()
+    //   .from(auditLogsTable)
+    //   .leftJoin(usersTable, eq(auditLogsTable.userId, usersTable.id))
+    //   .where(conditions)
+    //   .limit(Number(limit))
+    //   .offset((Number(page) - 1) * Number(limit));
 
     // Add sorting
-    if (sort) {
-      dbQuery.orderBy(
-        order === "desc" ? desc(auditLogsTable[sort]) : asc(auditLogsTable[sort]),
-      );
-    }
+    // if (sort) {
+    //   dbQuery.orderBy(
+    //     order === "desc" ? desc(auditLogsTable[sort]) : asc(auditLogsTable[sort]),
+    //   );
+    // }
 
     const items = await dbQuery;
 
@@ -53,11 +72,26 @@ export class AuditlogsService {
   }
 
   async findById(id: string) {
-    const auditLog = await db
-      .select()
-      .from(auditLogsTable)
-      .where(eq(auditLogsTable.id, id))
-      .limit(1);
-    return auditLog?.[0];
+    // const auditLogQuery = await db
+    //   .select()
+    //   .from(auditLogsTable)
+    //   .where(eq(auditLogsTable.id, id))
+    //   .limit(1);
+    //   return auditLogQuery?.[0];
+    const auditLogSelect = await db.query.auditLogsTable.findFirst({
+      where: eq(auditLogsTable.id, id),
+      with: {
+        "user": {
+          columns: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+            role: true
+          }
+        }
+      }
+    })
+    return auditLogSelect;
   }
 }
