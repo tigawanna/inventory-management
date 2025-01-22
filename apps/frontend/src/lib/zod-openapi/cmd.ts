@@ -32,8 +32,9 @@ async function generateZodOpenAPIClient() {
         "--group-strategy",
         "tag-file",
         "--export-schemas",
-        "--export-schemas",
+        "true",
         "--export-types",
+        "true",
         "--strict-objects",
     ];
     console.log("running command: " + commands.join(" "));

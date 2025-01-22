@@ -5,6 +5,9 @@ import {
   ZodOptional,
   ZodUnknown,
   ZodTypeAny,
+  objectInputType,
+  ZodEnum,
+  ZodObject,
 } from "zod";
 import { UpdateAuditlogsform } from "../form/update";
 import {
@@ -12,21 +15,61 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/shadcn/ui/popover";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/shadcn/ui/hover-card";
 import { Fullscreen } from "lucide-react";
 
 interface AuditlogscardProps {
   item: objectOutputType<
     {
       id: ZodString;
+      updated_at: ZodNullable<ZodString>;
+      created_at: ZodNullable<ZodString>;
       userId: ZodNullable<ZodString>;
       action: ZodString;
       entityType: ZodString;
       entityId: ZodString;
+      ipAddress: ZodNullable<ZodString>;
       oldData: ZodOptional<ZodNullable<ZodUnknown>>;
       newData: ZodOptional<ZodNullable<ZodUnknown>>;
-      ipAddress: ZodNullable<ZodString>;
-      updated_at: ZodNullable<ZodString>;
-      created_at: ZodNullable<ZodString>;
+      user: ZodNullable<
+        ZodObject<
+          {
+            name: ZodString;
+            email: ZodString;
+            avatarUrl: ZodNullable<ZodString>;
+            role: ZodNullable<ZodEnum<["admin", "user"]>>;
+            id: ZodString;
+          },
+          "passthrough",
+          ZodTypeAny,
+          objectOutputType<
+            {
+              name: ZodString;
+              email: ZodString;
+              avatarUrl: ZodNullable<ZodString>;
+              role: ZodNullable<ZodEnum<["admin", "user"]>>;
+              id: ZodString;
+            },
+            ZodTypeAny,
+            "passthrough"
+          >,
+          objectInputType<
+            {
+              name: ZodString;
+              email: ZodString;
+              avatarUrl: ZodNullable<ZodString>;
+              role: ZodNullable<ZodEnum<["admin", "user"]>>;
+              id: ZodString;
+            },
+            ZodTypeAny,
+            "passthrough"
+          >
+        >
+      >;
     },
     ZodTypeAny,
     "passthrough"
@@ -45,9 +88,27 @@ export function Auditlogscard({ item }: AuditlogscardProps) {
             <h1 className="text-2xl font-bold">{item.action}</h1>
             <div>{item.entityType}</div>
           </div>
-          <UpdateAuditlogsform item={item} />
+          {/* <UpdateAuditlogsform item={item} /> */}
         </div>
-        <div className="h-full">
+
+        <div className="h-full flex flex-wrap gap-2 items-center">
+
+          {item?.user && (
+            <Popover>
+              <PopoverTrigger className="badge badge-secondary badge-outline gap-1">
+                {item.user?.name}
+                <Fullscreen className="size-4" />
+              </PopoverTrigger>
+              <PopoverContent className="w-fit">
+                <div className="flex gap-2 items-center justify-between">
+                    <h1 className="text-2xl font-bold">{item.user?.name}</h1>
+                    <div className="badge badge-accent badge-outline">{item.user.role}</div>
+                </div>
+                    <p>{item.user?.email}</p>
+              </PopoverContent>
+            </Popover>
+          )}
+
           {item.oldData ? (
             <Popover>
               <PopoverTrigger className="badge badge-secondary badge-outline gap-1">
