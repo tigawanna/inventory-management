@@ -40,41 +40,40 @@ export function Auditlogscard({ item }: AuditlogscardProps) {
       className="flex h-36 w-[95%] items-center justify-center gap-2 rounded-xl bg-base-300 p-2 sm:w-[45%] lg:w-[30%]"
     >
       <div className="flex h-full w-full flex-col justify-between gap-2">
-        <div className="flex  w-full justify-between items-center gap-3 p-2">
-        <div className="flex flex-wrap  w-full justify-between items-center">
-          <h1 className="text-2xl font-bold">{item.action}</h1>
-        <div>{item.entityType}</div>
-        </div>
+        <div className="flex w-full items-center justify-between gap-3 p-2">
+          <div className="flex w-full flex-wrap items-center justify-between">
+            <h1 className="text-2xl font-bold">{item.action}</h1>
+            <div>{item.entityType}</div>
+          </div>
           <UpdateAuditlogsform item={item} />
         </div>
         <div className="h-full">
-        {item.oldData ? (
-          <Popover>
-            <PopoverTrigger className="badge badge-secondary badge-outline gap-1">
-              Old Data
-              <Fullscreen className="size-4" />
-            </PopoverTrigger>
-            <PopoverContent className="w-fit">
-              <pre className="min-h-fit">
-                {JSON.stringify(item.oldData, null, 2)}
-              </pre>
-            </PopoverContent>
-          </Popover>
-        ) : null}
-        {item.newData ? (
-          <Popover>
-            <PopoverTrigger className="badge badge-primary badge-outline gap-1">
-              New Data
-              <Fullscreen className="size-4" />
-            </PopoverTrigger>
-            <PopoverContent className="w-fit">
-              <pre className="min-h-fit max-w-[50%]">
-                {JSON.stringify(item.newData, null, 2)}
-              </pre>
-            </PopoverContent>
-          </Popover>
-        ) : null}
-
+          {item.oldData ? (
+            <Popover>
+              <PopoverTrigger className="badge badge-secondary badge-outline gap-1">
+                Old Data
+                <Fullscreen className="size-4" />
+              </PopoverTrigger>
+              <PopoverContent className="w-fit">
+                <pre className="min-h-fit">
+                  {JSON.stringify(item.oldData, null, 2)}
+                </pre>
+              </PopoverContent>
+            </Popover>
+          ) : null}
+          {item.newData ? (
+            <Popover>
+              <PopoverTrigger className="badge badge-primary badge-outline gap-1">
+                New Data
+                <Fullscreen className="size-4" />
+              </PopoverTrigger>
+              <PopoverContent className="w-fit">
+                <pre className="min-h-fit max-w-[50%]">
+                  {JSON.stringify(item.newData, null, 2)}
+                </pre>
+              </PopoverContent>
+            </Popover>
+          ) : null}
         </div>
 
         {item?.created_at && (
