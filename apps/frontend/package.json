@@ -16,11 +16,16 @@
     "playwright": "playwright test --ui",
     "test": "vitest run && playwright test",
     "apidoc": "tsx src/lib/zod-openapi/cmd.ts",
+    "generate": "kubb generate",
     "start": "vite"
   },
   "devDependencies": {
     "@kubb/cli": "^3.5.4",
     "@kubb/core": "^3.5.4",
+    "@kubb/plugin-client": "^3.5.4",
+    "@kubb/plugin-oas": "^3.5.4",
+    "@kubb/plugin-ts": "^3.5.4",
+    "@kubb/plugin-zod": "^3.5.4",
     "@playwright/test": "^1.49.1",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/react-query-devtools": "^5.56.2",

@@ -1,0 +1,6 @@
+export { getDeleteApiInventoryUrlClient, deleteApiInventoryClient } from './deleteApiInventoryClient.ts'
+export { getGetApiInventoryUrlClient, getApiInventoryClient } from './getApiInventoryClient.ts'
+export { getGetApiInventoryIdUrlClient, getApiInventoryIdClient } from './getApiInventoryIdClient.ts'
+export { inventoryService } from './inventoryService.ts'
+export { getPatchApiInventoryUrlClient, patchApiInventoryClient } from './patchApiInventoryClient.ts'
+export { getPostApiInventoryUrlClient, postApiInventoryClient } from './postApiInventoryClient.ts'
