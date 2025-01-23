@@ -9,12 +9,18 @@ import {
   AuditlogsEntityFilterSelect,
   AuditlogsActionFilterSelect,
 } from "./list/AuditLogsSortSelect";
+import { useSearch } from "@tanstack/react-router";
+import { ExternalPagination } from "@/components/pagination/ExternalPagination";
 
 interface AuditlogsPageProps {}
 
 export function AuditlogsPage({}: AuditlogsPageProps) {
   const { debouncedValue, isDebouncing, keyword, setKeyword } =
     usePageSearchQuery("/dashboard/auditlogs");
+      const { page, updatePage } = usePageSearchQuery("/dashboard/auditlogs");
+      const { action, entity } = useSearch({
+        from: "/dashboard/auditlogs/",
+      });
   return (
     <div className="flex h-full min-h-screen w-full flex-col items-center gap-5">
       <Helmet
@@ -44,10 +50,11 @@ export function AuditlogsPage({}: AuditlogsPageProps) {
         }
       />
 
-      <div className="m-3 flex h-full w-full items-center justify-center p-5">
+      <div className="m-3 flex flex-col h-full w-full items-center justify-center p-5">
         <Suspense fallback={<CardsListSuspenseFallback />}>
-          <AuditlogsList keyword={keyword} />
+          <AuditlogsList keyword={keyword}  action={action} entity={entity} page={page} updatePage={updatePage}/>
         </Suspense>
+        <ExternalPagination keyword={keyword}/>
       </div>
     </div>
   );

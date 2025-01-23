@@ -19,6 +19,8 @@
     "start": "vite"
   },
   "devDependencies": {
+    "@kubb/cli": "^3.5.4",
+    "@kubb/core": "^3.5.4",
     "@playwright/test": "^1.49.1",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/react-query-devtools": "^5.56.2",
