@@ -1,4 +1,4 @@
-import { categoriesService, GetApiCategoriesQueryParams } from "@/kubb/gen";
+import { categoriesService, GetApiCategoriesQueryParams } from "@/lib/kubb/gen";
 import { envVariables } from "@/lib/env";
 import { queryOptions } from "@tanstack/react-query";
 
