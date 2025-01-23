@@ -3,6 +3,8 @@ import { pluginZod } from "@kubb/plugin-zod";
 import { pluginOas } from "@kubb/plugin-oas";
 import { pluginTs } from "@kubb/plugin-ts";
 import { pluginClient } from "@kubb/plugin-client";
+
+
 export default defineConfig(() => {
     return {
         root: ".",
@@ -12,6 +14,7 @@ export default defineConfig(() => {
         output: {
             path: "./src/kubb/gen",
         },
+
         plugins: [
             pluginOas({
                 group: { type: "tag", name: ({ group }) => `${group}Oas` },

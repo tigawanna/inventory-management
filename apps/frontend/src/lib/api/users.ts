@@ -255,7 +255,8 @@ export async function resetPassword(token: string, password: string) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ token, password } as ResetPasswordRequest),
+      // @ts-expect-error
+      body: JSON.stringify({ token, newPassword:password } as ResetPasswordRequest),
     });
     if (!res.ok) {
       return {

@@ -15,13 +15,13 @@ interface ForgortPasswordProps {
 
 interface VerifyUserEmailFields {
   token:string;
-  password:string
+  newPassword:string
 }
 
 const formOpts = formOptions<VerifyUserEmailFields>({
   defaultValues: {
     token: "",
-    password: "",
+    newPassword: "",
   },
 });
 
@@ -29,7 +29,7 @@ export function ForgortPassword({}:ForgortPasswordProps){
      const navigate = useNavigate({ from: "/auth/forgort-password" });
      const mutation = useMutation({
        mutationFn: async ({ body }: { body: VerifyUserEmailFields }) => {
-      return resetPassword(body.token, body.password);
+      return resetPassword(body.token, body.newPassword);
        },
        onSuccess(data) {
          if (data.error) {
@@ -111,7 +111,7 @@ return (
         </div>
         <div className="flex w-full flex-col items-center justify-center gap-2">
           <form.Field
-            name="password"
+            name="newPassword"
             validatorAdapter={zodValidator()}
             validators={{
               onChange: z.string(),
@@ -120,7 +120,7 @@ return (
               return (
                 <TextFormField<VerifyUserEmailFields>
                   field={field}
-                  fieldKey="password"
+                  fieldKey="newPassword"
                   fieldlabel="New Password"
                   inputOptions={{
                     onBlur: field.handleBlur,

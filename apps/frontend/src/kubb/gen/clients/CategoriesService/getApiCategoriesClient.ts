@@ -1,4 +1,5 @@
-import client from '@kubb/plugin-client/clients/fetch'
+// import client from '@kubb/plugin-client/clients/fetch'
+import client from '@/kubb/custom-fetch-client.ts'
 import type {
   GetApiCategoriesQueryResponse,
   GetApiCategoriesQueryParams,

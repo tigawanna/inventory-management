@@ -1,8 +1,9 @@
-import { makeHotToast } from "@/components/toasters";
-import { categoryApi, ListCategoryQueryParams } from "@/lib/api/category";
+import { categoriesService, GetApiCategoriesQueryParams } from "@/kubb/gen";
+import { envVariables } from "@/lib/env";
 import { queryOptions } from "@tanstack/react-query";
 
-interface categoriesQueryOptionPropss extends ListCategoryQueryParams {
+
+interface categoriesQueryOptionPropss extends GetApiCategoriesQueryParams {
   keyword: string;
 }
 export function categoriesListQueryOptions({
@@ -15,28 +16,20 @@ export function categoriesListQueryOptions({
   return queryOptions({
     queryKey: ["categories_list", keyword, page, limit, order, sort],
     queryFn: async () => {
-      const { record, error } = await categoryApi.list({
-        limit: "10",
+      const {data,status} = await categoriesService().getApiCategoriesClient({
+        limit: "12",
         page,
-        order: "desc",
+        order,
         search: keyword,
-        sort: "name",
-      });
-      if (error) {
-        makeHotToast({
-          title: "something went wrong fetching categories",
-          description: error.message,
-          variant: "error",
-        })
-        return {
-          page,
-          perPage: 10,
-          totaleItems: 0,
-          totalPages: 0,
-          items: [],
-        };
+        sort,
+      },{baseURL:envVariables.VITE_API_URL,});
+      console.log({status});
+      const { result, error} = data;
+      if(status === 4){
+       error 
       }
-      return record
+      console.log({result,error});
+      return result;
     },
     staleTime: 1000,
   });
