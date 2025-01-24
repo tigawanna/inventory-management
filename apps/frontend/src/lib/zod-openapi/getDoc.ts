@@ -22,33 +22,8 @@ async function getOpenAPiDoc() {
         throw new Error("Error fetching api doc: " + error);
     }
 }
-async function generateZodOpenAPIClient() {
-    await getOpenAPiDoc();
-    const commands = [
-        "openapi-zod-client",
-        "openapi.json",
-        "--output",
-        "src/lib/zod-openapi/generated",
-        "--group-strategy",
-        "tag-file",
-        "--export-schemas",
-        "true",
-        "--export-types",
-        "true",
-        "--strict-objects",
-    ];
-    console.log("running command: " + commands.join(" "));
-    exec("pnpm " + commands.join(" "), (error, stdout, stderr) => {
-        if (error) {
-            console.error(`error running command: ${error}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-        console.error(`stderr: ${stderr}`);
-    });
-}
 
-generateZodOpenAPIClient().catch((error) => {
+getOpenAPiDoc().catch((error) => {
     console.error(
         "=================== something went wrong  =============== ",
         error,

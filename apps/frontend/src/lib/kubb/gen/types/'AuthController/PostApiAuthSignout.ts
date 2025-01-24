@@ -14,7 +14,7 @@ export type PostApiAuthSignout200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum26 = {
+export const errorCodeEnum27 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -24,7 +24,7 @@ export const errorCodeEnum26 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum26 = (typeof errorCodeEnum26)[keyof typeof errorCodeEnum26]
+export type ErrorCodeEnum27 = (typeof errorCodeEnum27)[keyof typeof errorCodeEnum27]
 
 /**
  * @description User signed out validation error
@@ -42,7 +42,7 @@ export type PostApiAuthSignout400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum26 | undefined
+    code?: ErrorCodeEnum27 | undefined
     /**
      * @type object | undefined
      */
@@ -63,7 +63,7 @@ export type PostApiAuthSignout400 = {
   } | null
 }
 
-export const errorCodeEnum27 = {
+export const errorCodeEnum28 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -73,7 +73,7 @@ export const errorCodeEnum27 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum27 = (typeof errorCodeEnum27)[keyof typeof errorCodeEnum27]
+export type ErrorCodeEnum28 = (typeof errorCodeEnum28)[keyof typeof errorCodeEnum28]
 
 /**
  * @description User signed out internal error
@@ -91,7 +91,7 @@ export type PostApiAuthSignout500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum27 | undefined
+    code?: ErrorCodeEnum28 | undefined
     /**
      * @type object | undefined
      */

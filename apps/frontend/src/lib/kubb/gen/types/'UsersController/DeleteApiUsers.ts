@@ -22,55 +22,6 @@ export type DeleteApiUsers200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum37 = {
-  'login-required': 'login-required',
-  'admin-required': 'admin-required',
-  'parameters-required': 'parameters-required',
-  'query-parametersRequired-required': 'query-parametersRequired-required',
-  'payload-required': 'payload-required',
-  'internal-server-error': 'internal-server-error',
-  'not-found': 'not-found',
-} as const
-
-export type ErrorCodeEnum37 = (typeof errorCodeEnum37)[keyof typeof errorCodeEnum37]
-
-/**
- * @description Users deletion validation error
- */
-export type DeleteApiUsers400 = {
-  result?: unknown | undefined
-  /**
-   * @type object
-   */
-  error: {
-    /**
-     * @type string
-     */
-    message: string
-    /**
-     * @type string | undefined
-     */
-    code?: ErrorCodeEnum37 | undefined
-    /**
-     * @type object | undefined
-     */
-    data?:
-      | {
-          [key: string]: {
-            /**
-             * @type string
-             */
-            code: string
-            /**
-             * @type string
-             */
-            message: string
-          }
-        }
-      | undefined
-  } | null
-}
-
 export const errorCodeEnum38 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
@@ -84,9 +35,9 @@ export const errorCodeEnum38 = {
 export type ErrorCodeEnum38 = (typeof errorCodeEnum38)[keyof typeof errorCodeEnum38]
 
 /**
- * @description Users deletion not found error
+ * @description Users deletion validation error
  */
-export type DeleteApiUsers404 = {
+export type DeleteApiUsers400 = {
   result?: unknown | undefined
   /**
    * @type object
@@ -133,6 +84,55 @@ export const errorCodeEnum39 = {
 export type ErrorCodeEnum39 = (typeof errorCodeEnum39)[keyof typeof errorCodeEnum39]
 
 /**
+ * @description Users deletion not found error
+ */
+export type DeleteApiUsers404 = {
+  result?: unknown | undefined
+  /**
+   * @type object
+   */
+  error: {
+    /**
+     * @type string
+     */
+    message: string
+    /**
+     * @type string | undefined
+     */
+    code?: ErrorCodeEnum39 | undefined
+    /**
+     * @type object | undefined
+     */
+    data?:
+      | {
+          [key: string]: {
+            /**
+             * @type string
+             */
+            code: string
+            /**
+             * @type string
+             */
+            message: string
+          }
+        }
+      | undefined
+  } | null
+}
+
+export const errorCodeEnum40 = {
+  'login-required': 'login-required',
+  'admin-required': 'admin-required',
+  'parameters-required': 'parameters-required',
+  'query-parametersRequired-required': 'query-parametersRequired-required',
+  'payload-required': 'payload-required',
+  'internal-server-error': 'internal-server-error',
+  'not-found': 'not-found',
+} as const
+
+export type ErrorCodeEnum40 = (typeof errorCodeEnum40)[keyof typeof errorCodeEnum40]
+
+/**
  * @description Users deletion internal server error
  */
 export type DeleteApiUsers500 = {
@@ -148,7 +148,7 @@ export type DeleteApiUsers500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum39 | undefined
+    code?: ErrorCodeEnum40 | undefined
     /**
      * @type object | undefined
      */

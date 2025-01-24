@@ -1,11 +1,11 @@
 export type {
   DeleteApiCategoriesHeaderParams,
   DeleteApiCategories200,
-  ErrorCodeEnum49,
-  DeleteApiCategories400,
   ErrorCodeEnum50,
-  DeleteApiCategories404,
+  DeleteApiCategories400,
   ErrorCodeEnum51,
+  DeleteApiCategories404,
+  ErrorCodeEnum52,
   DeleteApiCategories500,
   DeleteApiCategoriesMutationRequest,
   DeleteApiCategoriesMutationResponse,
@@ -16,9 +16,9 @@ export type {
   GetApiCategoriesQueryParamsSortEnum,
   GetApiCategoriesQueryParams,
   GetApiCategories200,
-  ErrorCodeEnum43,
-  GetApiCategories400,
   ErrorCodeEnum44,
+  GetApiCategories400,
+  ErrorCodeEnum45,
   GetApiCategories500,
   GetApiCategoriesQueryResponse,
   GetApiCategoriesQuery,
@@ -26,11 +26,11 @@ export type {
 export type {
   GetApiCategoriesIdPathParams,
   GetApiCategoriesId200,
-  ErrorCodeEnum52,
-  GetApiCategoriesId400,
   ErrorCodeEnum53,
-  GetApiCategoriesId404,
+  GetApiCategoriesId400,
   ErrorCodeEnum54,
+  GetApiCategoriesId404,
+  ErrorCodeEnum55,
   GetApiCategoriesId500,
   GetApiCategoriesIdQueryResponse,
   GetApiCategoriesIdQuery,
@@ -38,9 +38,9 @@ export type {
 export type {
   PatchApiCategoriesHeaderParams,
   PatchApiCategories200,
-  ErrorCodeEnum47,
-  PatchApiCategories400,
   ErrorCodeEnum48,
+  PatchApiCategories400,
+  ErrorCodeEnum49,
   PatchApiCategories500,
   PatchApiCategoriesMutationRequest,
   PatchApiCategoriesMutationResponse,
@@ -49,16 +49,16 @@ export type {
 export type {
   PostApiCategoriesHeaderParams,
   PostApiCategories200,
-  ErrorCodeEnum45,
-  PostApiCategories400,
   ErrorCodeEnum46,
+  PostApiCategories400,
+  ErrorCodeEnum47,
   PostApiCategories500,
   PostApiCategoriesMutationRequest,
   PostApiCategoriesMutationResponse,
   PostApiCategoriesMutation,
 } from './PostApiCategories.ts'
-export { errorCodeEnum49, errorCodeEnum50, errorCodeEnum51 } from './DeleteApiCategories.ts'
-export { getApiCategoriesQueryParamsOrderEnum, getApiCategoriesQueryParamsSortEnum, errorCodeEnum43, errorCodeEnum44 } from './GetApiCategories.ts'
-export { errorCodeEnum52, errorCodeEnum53, errorCodeEnum54 } from './GetApiCategoriesId.ts'
-export { errorCodeEnum47, errorCodeEnum48 } from './PatchApiCategories.ts'
-export { errorCodeEnum45, errorCodeEnum46 } from './PostApiCategories.ts'
+export { errorCodeEnum50, errorCodeEnum51, errorCodeEnum52 } from './DeleteApiCategories.ts'
+export { getApiCategoriesQueryParamsOrderEnum, getApiCategoriesQueryParamsSortEnum, errorCodeEnum44, errorCodeEnum45 } from './GetApiCategories.ts'
+export { errorCodeEnum53, errorCodeEnum54, errorCodeEnum55 } from './GetApiCategoriesId.ts'
+export { errorCodeEnum48, errorCodeEnum49 } from './PatchApiCategories.ts'
+export { errorCodeEnum46, errorCodeEnum47 } from './PostApiCategories.ts'

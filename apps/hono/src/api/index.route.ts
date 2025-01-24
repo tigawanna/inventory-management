@@ -4,6 +4,7 @@ import { jsonContent } from "stoker/openapi/helpers";
 import { createMessageObjectSchema } from "stoker/openapi/schemas";
 
 import { createRouter } from "@/lib/create-app";
+import { baseResponseSchema } from "@/schemas/shared-schema";
 
 const router = createRouter().openapi(
   createRoute({
@@ -12,15 +13,18 @@ const router = createRouter().openapi(
     path: "/api/v1",
     responses: {
       [HttpStatusCodes.OK]: jsonContent(
-        createMessageObjectSchema("Welcome"),
-        "Welcome to  the V1 of invemtpry api",
+        baseResponseSchema,
+        "Welcome to the Inventory API",
       ),
     },
   }),
   async (c) => {
     return c.json(
       {
-        message: "Welcome to the Inventory API",
+        error: null,
+        result:{
+          message: "Welcome to the Inventory API",
+        }
       },
       HttpStatusCodes.OK,
     );

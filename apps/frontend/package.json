@@ -16,7 +16,8 @@
     "playwright": "playwright test --ui",
     "test": "vitest run && playwright test",
     "apidoc": "tsx src/lib/zod-openapi/cmd.ts",
-    "generate": "kubb generate",
+    "newdoc":"tsx src/lib/kubb/getDoc.ts",
+    "generate": "npm run newdoc && kubb generate",
     "start": "vite"
   },
   "devDependencies": {

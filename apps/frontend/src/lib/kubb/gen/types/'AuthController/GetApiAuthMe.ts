@@ -55,55 +55,6 @@ export type GetApiAuthMe200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum28 = {
-  'login-required': 'login-required',
-  'admin-required': 'admin-required',
-  'parameters-required': 'parameters-required',
-  'query-parametersRequired-required': 'query-parametersRequired-required',
-  'payload-required': 'payload-required',
-  'internal-server-error': 'internal-server-error',
-  'not-found': 'not-found',
-} as const
-
-export type ErrorCodeEnum28 = (typeof errorCodeEnum28)[keyof typeof errorCodeEnum28]
-
-/**
- * @description Current user validation error
- */
-export type GetApiAuthMe400 = {
-  result?: unknown | undefined
-  /**
-   * @type object
-   */
-  error: {
-    /**
-     * @type string
-     */
-    message: string
-    /**
-     * @type string | undefined
-     */
-    code?: ErrorCodeEnum28 | undefined
-    /**
-     * @type object | undefined
-     */
-    data?:
-      | {
-          [key: string]: {
-            /**
-             * @type string
-             */
-            code: string
-            /**
-             * @type string
-             */
-            message: string
-          }
-        }
-      | undefined
-  } | null
-}
-
 export const errorCodeEnum29 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
@@ -117,9 +68,9 @@ export const errorCodeEnum29 = {
 export type ErrorCodeEnum29 = (typeof errorCodeEnum29)[keyof typeof errorCodeEnum29]
 
 /**
- * @description Current user not found error
+ * @description Current user validation error
  */
-export type GetApiAuthMe404 = {
+export type GetApiAuthMe400 = {
   result?: unknown | undefined
   /**
    * @type object
@@ -166,6 +117,55 @@ export const errorCodeEnum30 = {
 export type ErrorCodeEnum30 = (typeof errorCodeEnum30)[keyof typeof errorCodeEnum30]
 
 /**
+ * @description Current user not found error
+ */
+export type GetApiAuthMe404 = {
+  result?: unknown | undefined
+  /**
+   * @type object
+   */
+  error: {
+    /**
+     * @type string
+     */
+    message: string
+    /**
+     * @type string | undefined
+     */
+    code?: ErrorCodeEnum30 | undefined
+    /**
+     * @type object | undefined
+     */
+    data?:
+      | {
+          [key: string]: {
+            /**
+             * @type string
+             */
+            code: string
+            /**
+             * @type string
+             */
+            message: string
+          }
+        }
+      | undefined
+  } | null
+}
+
+export const errorCodeEnum31 = {
+  'login-required': 'login-required',
+  'admin-required': 'admin-required',
+  'parameters-required': 'parameters-required',
+  'query-parametersRequired-required': 'query-parametersRequired-required',
+  'payload-required': 'payload-required',
+  'internal-server-error': 'internal-server-error',
+  'not-found': 'not-found',
+} as const
+
+export type ErrorCodeEnum31 = (typeof errorCodeEnum31)[keyof typeof errorCodeEnum31]
+
+/**
  * @description Current user internal error
  */
 export type GetApiAuthMe500 = {
@@ -181,7 +181,7 @@ export type GetApiAuthMe500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum30 | undefined
+    code?: ErrorCodeEnum31 | undefined
     /**
      * @type object | undefined
      */

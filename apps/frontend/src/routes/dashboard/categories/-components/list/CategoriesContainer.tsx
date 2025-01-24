@@ -54,7 +54,7 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
       <div className="flex w-full items-center justify-center">
         <ResponsivePagination
           current={page ?? 1}
-          total={data.totalPages}
+          total={data.totalPages??-1}
           onPageChange={(e) => {
             updatePage(e);
           }}

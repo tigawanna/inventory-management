@@ -79,55 +79,6 @@ export type GetApiInventoryId200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum10 = {
-  'login-required': 'login-required',
-  'admin-required': 'admin-required',
-  'parameters-required': 'parameters-required',
-  'query-parametersRequired-required': 'query-parametersRequired-required',
-  'payload-required': 'payload-required',
-  'internal-server-error': 'internal-server-error',
-  'not-found': 'not-found',
-} as const
-
-export type ErrorCodeEnum10 = (typeof errorCodeEnum10)[keyof typeof errorCodeEnum10]
-
-/**
- * @description Inventpry by id validation error
- */
-export type GetApiInventoryId400 = {
-  result?: unknown | undefined
-  /**
-   * @type object
-   */
-  error: {
-    /**
-     * @type string
-     */
-    message: string
-    /**
-     * @type string | undefined
-     */
-    code?: ErrorCodeEnum10 | undefined
-    /**
-     * @type object | undefined
-     */
-    data?:
-      | {
-          [key: string]: {
-            /**
-             * @type string
-             */
-            code: string
-            /**
-             * @type string
-             */
-            message: string
-          }
-        }
-      | undefined
-  } | null
-}
-
 export const errorCodeEnum11 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
@@ -141,9 +92,9 @@ export const errorCodeEnum11 = {
 export type ErrorCodeEnum11 = (typeof errorCodeEnum11)[keyof typeof errorCodeEnum11]
 
 /**
- * @description Inventpry by id not found error
+ * @description Inventpry by id validation error
  */
-export type GetApiInventoryId404 = {
+export type GetApiInventoryId400 = {
   result?: unknown | undefined
   /**
    * @type object
@@ -190,6 +141,55 @@ export const errorCodeEnum12 = {
 export type ErrorCodeEnum12 = (typeof errorCodeEnum12)[keyof typeof errorCodeEnum12]
 
 /**
+ * @description Inventpry by id not found error
+ */
+export type GetApiInventoryId404 = {
+  result?: unknown | undefined
+  /**
+   * @type object
+   */
+  error: {
+    /**
+     * @type string
+     */
+    message: string
+    /**
+     * @type string | undefined
+     */
+    code?: ErrorCodeEnum12 | undefined
+    /**
+     * @type object | undefined
+     */
+    data?:
+      | {
+          [key: string]: {
+            /**
+             * @type string
+             */
+            code: string
+            /**
+             * @type string
+             */
+            message: string
+          }
+        }
+      | undefined
+  } | null
+}
+
+export const errorCodeEnum13 = {
+  'login-required': 'login-required',
+  'admin-required': 'admin-required',
+  'parameters-required': 'parameters-required',
+  'query-parametersRequired-required': 'query-parametersRequired-required',
+  'payload-required': 'payload-required',
+  'internal-server-error': 'internal-server-error',
+  'not-found': 'not-found',
+} as const
+
+export type ErrorCodeEnum13 = (typeof errorCodeEnum13)[keyof typeof errorCodeEnum13]
+
+/**
  * @description Inventpry by id internal server error
  */
 export type GetApiInventoryId500 = {
@@ -205,7 +205,7 @@ export type GetApiInventoryId500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum12 | undefined
+    code?: ErrorCodeEnum13 | undefined
     /**
      * @type object | undefined
      */

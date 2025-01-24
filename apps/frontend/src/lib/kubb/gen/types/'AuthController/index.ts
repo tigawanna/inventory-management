@@ -1,21 +1,21 @@
 export type {
   ResultRoleEnum4,
   GetApiAuthMe200,
-  ErrorCodeEnum28,
-  GetApiAuthMe400,
   ErrorCodeEnum29,
-  GetApiAuthMe404,
+  GetApiAuthMe400,
   ErrorCodeEnum30,
+  GetApiAuthMe404,
+  ErrorCodeEnum31,
   GetApiAuthMe500,
   GetApiAuthMeQueryResponse,
   GetApiAuthMeQuery,
 } from './GetApiAuthMe.ts'
 export type {
   PostApiAuthRequestEmailVerification200,
-  ErrorCodeEnum18,
+  ErrorCodeEnum19,
   PostApiAuthRequestEmailVerification400,
   PostApiAuthRequestEmailVerification404,
-  ErrorCodeEnum19,
+  ErrorCodeEnum20,
   PostApiAuthRequestEmailVerification500,
   PostApiAuthRequestEmailVerificationMutationRequest,
   PostApiAuthRequestEmailVerificationMutationResponse,
@@ -23,10 +23,10 @@ export type {
 } from './PostApiAuthRequestEmailVerification.ts'
 export type {
   PostApiAuthRequestPasswordReset200,
-  ErrorCodeEnum22,
+  ErrorCodeEnum23,
   PostApiAuthRequestPasswordReset400,
   PostApiAuthRequestPasswordReset404,
-  ErrorCodeEnum23,
+  ErrorCodeEnum24,
   PostApiAuthRequestPasswordReset500,
   PostApiAuthRequestPasswordResetMutationRequest,
   PostApiAuthRequestPasswordResetMutationResponse,
@@ -34,10 +34,10 @@ export type {
 } from './PostApiAuthRequestPasswordReset.ts'
 export type {
   PostApiAuthResetPassword200,
-  ErrorCodeEnum24,
+  ErrorCodeEnum25,
   PostApiAuthResetPassword400,
   PostApiAuthResetPassword404,
-  ErrorCodeEnum25,
+  ErrorCodeEnum26,
   PostApiAuthResetPassword500,
   PostApiAuthResetPasswordMutationRequest,
   PostApiAuthResetPasswordMutationResponse,
@@ -46,9 +46,9 @@ export type {
 export type {
   ResultRoleEnum3,
   PostApiAuthSignin200,
-  ErrorCodeEnum20,
-  PostApiAuthSignin400,
   ErrorCodeEnum21,
+  PostApiAuthSignin400,
+  ErrorCodeEnum22,
   PostApiAuthSignin500,
   PostApiAuthSigninMutationRequest,
   PostApiAuthSigninMutationResponse,
@@ -56,9 +56,9 @@ export type {
 } from './PostApiAuthSignin.ts'
 export type {
   PostApiAuthSignout200,
-  ErrorCodeEnum26,
-  PostApiAuthSignout400,
   ErrorCodeEnum27,
+  PostApiAuthSignout400,
+  ErrorCodeEnum28,
   PostApiAuthSignout500,
   PostApiAuthSignoutMutationResponse,
   PostApiAuthSignoutMutation,
@@ -66,11 +66,11 @@ export type {
 export type {
   ResultRoleEnum,
   PostApiAuthSignup200,
-  ErrorCodeEnum13,
-  PostApiAuthSignup400,
   ErrorCodeEnum14,
-  PostApiAuthSignup404,
+  PostApiAuthSignup400,
   ErrorCodeEnum15,
+  PostApiAuthSignup404,
+  ErrorCodeEnum16,
   PostApiAuthSignup500,
   PostApiAuthSignupMutationRequest,
   PostApiAuthSignupMutationResponse,
@@ -79,20 +79,20 @@ export type {
 export type {
   ResultRoleEnum2,
   PostApiAuthVerifyEmail200,
-  ErrorCodeEnum16,
+  ErrorCodeEnum17,
   PostApiAuthVerifyEmail400,
   PostApiAuthVerifyEmail404,
-  ErrorCodeEnum17,
+  ErrorCodeEnum18,
   PostApiAuthVerifyEmail500,
   PostApiAuthVerifyEmailMutationRequest,
   PostApiAuthVerifyEmailMutationResponse,
   PostApiAuthVerifyEmailMutation,
 } from './PostApiAuthVerifyEmail.ts'
-export { resultRoleEnum4, errorCodeEnum28, errorCodeEnum29, errorCodeEnum30 } from './GetApiAuthMe.ts'
-export { errorCodeEnum18, errorCodeEnum19 } from './PostApiAuthRequestEmailVerification.ts'
-export { errorCodeEnum22, errorCodeEnum23 } from './PostApiAuthRequestPasswordReset.ts'
-export { errorCodeEnum24, errorCodeEnum25 } from './PostApiAuthResetPassword.ts'
-export { resultRoleEnum3, errorCodeEnum20, errorCodeEnum21 } from './PostApiAuthSignin.ts'
-export { errorCodeEnum26, errorCodeEnum27 } from './PostApiAuthSignout.ts'
-export { resultRoleEnum, errorCodeEnum13, errorCodeEnum14, errorCodeEnum15 } from './PostApiAuthSignup.ts'
-export { resultRoleEnum2, errorCodeEnum16, errorCodeEnum17 } from './PostApiAuthVerifyEmail.ts'
+export { resultRoleEnum4, errorCodeEnum29, errorCodeEnum30, errorCodeEnum31 } from './GetApiAuthMe.ts'
+export { errorCodeEnum19, errorCodeEnum20 } from './PostApiAuthRequestEmailVerification.ts'
+export { errorCodeEnum23, errorCodeEnum24 } from './PostApiAuthRequestPasswordReset.ts'
+export { errorCodeEnum25, errorCodeEnum26 } from './PostApiAuthResetPassword.ts'
+export { resultRoleEnum3, errorCodeEnum21, errorCodeEnum22 } from './PostApiAuthSignin.ts'
+export { errorCodeEnum27, errorCodeEnum28 } from './PostApiAuthSignout.ts'
+export { resultRoleEnum, errorCodeEnum14, errorCodeEnum15, errorCodeEnum16 } from './PostApiAuthSignup.ts'
+export { resultRoleEnum2, errorCodeEnum17, errorCodeEnum18 } from './PostApiAuthVerifyEmail.ts'

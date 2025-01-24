@@ -109,7 +109,7 @@ export type GetApiUsers200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum31 = {
+export const errorCodeEnum32 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -119,7 +119,7 @@ export const errorCodeEnum31 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum31 = (typeof errorCodeEnum31)[keyof typeof errorCodeEnum31]
+export type ErrorCodeEnum32 = (typeof errorCodeEnum32)[keyof typeof errorCodeEnum32]
 
 /**
  * @description Users listing validation error
@@ -137,7 +137,7 @@ export type GetApiUsers400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum31 | undefined
+    code?: ErrorCodeEnum32 | undefined
     /**
      * @type object | undefined
      */
@@ -158,7 +158,7 @@ export type GetApiUsers400 = {
   } | null
 }
 
-export const errorCodeEnum32 = {
+export const errorCodeEnum33 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -168,7 +168,7 @@ export const errorCodeEnum32 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum32 = (typeof errorCodeEnum32)[keyof typeof errorCodeEnum32]
+export type ErrorCodeEnum33 = (typeof errorCodeEnum33)[keyof typeof errorCodeEnum33]
 
 /**
  * @description Users listing internal server error
@@ -186,7 +186,7 @@ export type GetApiUsers500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum32 | undefined
+    code?: ErrorCodeEnum33 | undefined
     /**
      * @type object | undefined
      */

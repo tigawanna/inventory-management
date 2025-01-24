@@ -22,55 +22,6 @@ export type DeleteApiInventory200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum7 = {
-  'login-required': 'login-required',
-  'admin-required': 'admin-required',
-  'parameters-required': 'parameters-required',
-  'query-parametersRequired-required': 'query-parametersRequired-required',
-  'payload-required': 'payload-required',
-  'internal-server-error': 'internal-server-error',
-  'not-found': 'not-found',
-} as const
-
-export type ErrorCodeEnum7 = (typeof errorCodeEnum7)[keyof typeof errorCodeEnum7]
-
-/**
- * @description Inventory deletion validation error
- */
-export type DeleteApiInventory400 = {
-  result?: unknown | undefined
-  /**
-   * @type object
-   */
-  error: {
-    /**
-     * @type string
-     */
-    message: string
-    /**
-     * @type string | undefined
-     */
-    code?: ErrorCodeEnum7 | undefined
-    /**
-     * @type object | undefined
-     */
-    data?:
-      | {
-          [key: string]: {
-            /**
-             * @type string
-             */
-            code: string
-            /**
-             * @type string
-             */
-            message: string
-          }
-        }
-      | undefined
-  } | null
-}
-
 export const errorCodeEnum8 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
@@ -84,9 +35,9 @@ export const errorCodeEnum8 = {
 export type ErrorCodeEnum8 = (typeof errorCodeEnum8)[keyof typeof errorCodeEnum8]
 
 /**
- * @description Inventory deletion not found error
+ * @description Inventory deletion validation error
  */
-export type DeleteApiInventory404 = {
+export type DeleteApiInventory400 = {
   result?: unknown | undefined
   /**
    * @type object
@@ -133,6 +84,55 @@ export const errorCodeEnum9 = {
 export type ErrorCodeEnum9 = (typeof errorCodeEnum9)[keyof typeof errorCodeEnum9]
 
 /**
+ * @description Inventory deletion not found error
+ */
+export type DeleteApiInventory404 = {
+  result?: unknown | undefined
+  /**
+   * @type object
+   */
+  error: {
+    /**
+     * @type string
+     */
+    message: string
+    /**
+     * @type string | undefined
+     */
+    code?: ErrorCodeEnum9 | undefined
+    /**
+     * @type object | undefined
+     */
+    data?:
+      | {
+          [key: string]: {
+            /**
+             * @type string
+             */
+            code: string
+            /**
+             * @type string
+             */
+            message: string
+          }
+        }
+      | undefined
+  } | null
+}
+
+export const errorCodeEnum10 = {
+  'login-required': 'login-required',
+  'admin-required': 'admin-required',
+  'parameters-required': 'parameters-required',
+  'query-parametersRequired-required': 'query-parametersRequired-required',
+  'payload-required': 'payload-required',
+  'internal-server-error': 'internal-server-error',
+  'not-found': 'not-found',
+} as const
+
+export type ErrorCodeEnum10 = (typeof errorCodeEnum10)[keyof typeof errorCodeEnum10]
+
+/**
  * @description Inventory deletion internal server error
  */
 export type DeleteApiInventory500 = {
@@ -148,7 +148,7 @@ export type DeleteApiInventory500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum9 | undefined
+    code?: ErrorCodeEnum10 | undefined
     /**
      * @type object | undefined
      */
