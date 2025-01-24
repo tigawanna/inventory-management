@@ -7,15 +7,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import {
-  AnyContext,
-  BeforeLoadContextOptions,
-  Navigate,
-  redirect,
-  RootRoute,
-  Route,
-  useNavigate,
-} from "@tanstack/react-router";
+
 
 export type ViewerType = {
   record: {
