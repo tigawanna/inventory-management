@@ -6,3 +6,11 @@ export type ErrorSchema = {
         message: string;
     }> | undefined;
 }
+
+export interface ListResultSchema<T extends Record<string,any> = Record<string,any>>{
+    page: number;
+    perPage: number;
+    totalItems: number;
+    totalPages: number;
+    items: Array<T>;
+}

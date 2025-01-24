@@ -32,7 +32,7 @@ export function categoriesListQueryOptions({
         })
         return {
           page,
-          perPage: 10,
+          perPage: 0,
           totaleItems: 0,
           totalPages: 0,
           items: [],

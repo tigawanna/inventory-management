@@ -1,22 +1,32 @@
 import { ErrorWrapper } from "@/components/wrappers/ErrorWrapper";
 import { ItemNotFound } from "@/components/wrappers/ItemNotFound";
-import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useSearch } from "@tanstack/react-router";
-import { inventoryListQueryOptions } from "../../-query-options/inventory-query-option";
-import ResponsivePagination from "react-responsive-pagination";
+import { inventoryListQueryOptions, InventoryQueryVariables } from "../../-query-options/inventory-query-option";
 import { InventoryList } from "./InventoryList";
 import { InventoryTable } from "./InventoryTable";
-
+import ResponsivePagination from "react-responsive-pagination";
+import { useSearch } from "@tanstack/react-router";
+import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 interface InventoriesContainerProps {
   keyword: string;
 }
 
 export function InventoriesContainer({ keyword }: InventoriesContainerProps) {
-  const { page, updatePage } = usePageSearchQuery("/dashboard/inventory");
-  const sp = useSearch({ from: "/dashboard/inventory/" });
+    const { page, updatePage } = usePageSearchQuery("/dashboard/inventory");
+    const searchParams = useSearch({
+      from: "/dashboard/inventory/",
+    });
+    const inventoryQueryVariables: InventoryQueryVariables = {
+      basekey: "inventory_list",
+      keyword: keyword ?? "",
+      page: searchParams.page ?? 1,
+      categoryId: searchParams.categoryId ?? "",
+      limit: searchParams.limit ?? 12,
+      order: searchParams.order ?? "desc",
+      sort: searchParams.sort ?? "name",
+    };
   const query = useSuspenseQuery(
-    inventoryListQueryOptions({ ...sp, keyword, page }),
+    inventoryListQueryOptions(inventoryQueryVariables),
   );
   const data = query.data;
   const error = query.error;
@@ -36,23 +46,22 @@ export function InventoriesContainer({ keyword }: InventoriesContainerProps) {
     );
   }
   const items = data.items;
+  const totalPages = data.totalPages;
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center">
-      <div className="hidden w-full max-w-[99vw] lg:flex">
+    <div className="flex h-full w-full flex-col gap-4  ">
+      <div className="hidden w-full max-w-[99vw] lg:flex ">
         <InventoryTable items={items} />
       </div>
       <div className="flex w-full lg:hidden">
         <InventoryList items={items} />
       </div>
-      <div className="flex w-full items-center justify-center">
-        <ResponsivePagination
-          current={page ?? 1}
-          total={data.totalPages}
-          onPageChange={(e) => {
-            updatePage(e);
-          }}
-        />
-      </div>
+      <ResponsivePagination
+        current={page ?? 1}
+        total={totalPages??-1}
+        onPageChange={(e) => {
+          updatePage(e);
+        }}
+      />
     </div>
   );
 }

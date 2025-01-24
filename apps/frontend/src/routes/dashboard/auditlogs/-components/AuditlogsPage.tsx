@@ -15,12 +15,22 @@ import { ExternalPagination } from "@/components/pagination/ExternalPagination";
 interface AuditlogsPageProps {}
 
 export function AuditlogsPage({}: AuditlogsPageProps) {
-  const { debouncedValue, isDebouncing, keyword, setKeyword } =
-    usePageSearchQuery("/dashboard/auditlogs");
-      const { page, updatePage } = usePageSearchQuery("/dashboard/auditlogs");
-      const { action, entity } = useSearch({
-        from: "/dashboard/auditlogs/",
-      });
+  const { page, updatePage } = usePageSearchQuery("/dashboard/auditlogs");
+  const { action, entity } = useSearch({
+    from: "/dashboard/auditlogs/",
+  });
+  const queryVariables = {
+    basekey: "auditlogs_list",
+    page,
+    action,
+    entity,
+  } as const;
+  const queryKey = [
+    "auditlogs_list",
+    queryVariables.page,
+    queryVariables.action,
+    queryVariables.entity,
+  ];
   return (
     <div className="flex h-full min-h-screen w-full flex-col items-center gap-5">
       <Helmet
@@ -32,15 +42,6 @@ export function AuditlogsPage({}: AuditlogsPageProps) {
         // formTrigger={<CreateAuditlogsForm />}
         searchBox={
           <div className="flex w-full items-center justify-end gap-2">
-            {/* <SearchBox
-              inputProps={{
-                placeholder: "Search by name",
-                }}
-                debouncedValue={debouncedValue}
-                isDebouncing={isDebouncing}
-                setKeyword={setKeyword}
-                keyword={keyword}
-                /> */}
             <div className="flex items-center justify-end gap-2">
               <AuditlogsEntityFilterSelect />
               <AuditlogsActionFilterSelect />
@@ -50,11 +51,14 @@ export function AuditlogsPage({}: AuditlogsPageProps) {
         }
       />
 
-      <div className="m-3 flex flex-col h-full w-full items-center justify-center p-5">
+      <div className="m-3 flex h-full w-full flex-col items-center justify-center p-5">
         <Suspense fallback={<CardsListSuspenseFallback />}>
-          <AuditlogsList keyword={keyword}  action={action} entity={entity} page={page} updatePage={updatePage}/>
+          <AuditlogsList queryVariables={queryVariables} />
         </Suspense>
-        <ExternalPagination keyword={keyword}/>
+        <ExternalPagination
+          queryKey={queryKey as string[]}
+          route="/dashboard/auditlogs"
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { ErrorSchema } from "@/utils/types/error";
+import { ErrorSchema } from "@/utils/types/data";
 import { envVariables } from "../env";
 
 /**

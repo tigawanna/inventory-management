@@ -1,42 +1,56 @@
+import { makeHotToast } from "@/components/toasters";
 import { listInventory, ListInventoryParams } from "@/lib/api/inventory";
+import { inventoryService } from "@/lib/kubb/gen";
 import { queryOptions } from "@tanstack/react-query";
 
-interface inventoryQueryOptionPropss extends ListInventoryParams {
-  keyword: string;
+export type InventoryQueryVariables= {
+  basekey: "inventory_list";
+  keyword?: string;
   page?: number;
+  limit?: number;
+  order?: "asc" | "desc";
+  sort?: "name" | "quantity" | "price";
+  categoryId?: string;
+}
+
+interface inventoryQueryOptionPropss{
+
 }
 export function inventoryListQueryOptions({
+  basekey,
   keyword,
-  page = 1,
-  limit = 10,
-  order = "desc",
-  sort = "name",
-  categoryId = "",
-}: inventoryQueryOptionPropss) {
+  page,
+  limit,
+  order,
+  sort,
+  categoryId,
+}: InventoryQueryVariables) {
+  // console.log(" query key in query function == ", [basekey, keyword, page, categoryId, limit, order, sort]);
   return queryOptions({
-    queryKey: ["inventory_list", keyword, page, categoryId, limit, order, sort],
+    queryKey: [basekey, keyword, page, categoryId, limit, order, sort],
     queryFn: async () => {
-      const items = await listInventory({
+      const response = await inventoryService().getApiInventoryClient({
         search: keyword,
-        page,
         categoryId,
-        limit,
         order,
         sort,
-      });
-      if (items.error) {
-        return {
-          page,
-          perPage: 10,
-          totaleItems: 0,
-          totalPages: 0,
-          items: [],
-        };
-      }
-      //  if(!items.record){
-      //   throw new Error("Inventory not found")
-      //  }
-      return items.record;
+        
+      })
+       if(response.type === "error"){
+         makeHotToast({
+           title: "Error fetching records",
+           description: response.statusText,
+           variant: "error",
+         })
+         return {
+           page,
+           perPage: 0,
+           totaleItems: 0,
+           totalPages: 0,
+           items: [],
+         }
+       }
+       return response.data.result;
     },
     staleTime: 1000,
   });
