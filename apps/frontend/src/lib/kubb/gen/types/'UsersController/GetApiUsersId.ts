@@ -74,6 +74,55 @@ export type GetApiUsersId200 = {
   error?: unknown | undefined
 }
 
+export const errorCodeEnum40 = {
+  'login-required': 'login-required',
+  'admin-required': 'admin-required',
+  'parameters-required': 'parameters-required',
+  'query-parametersRequired-required': 'query-parametersRequired-required',
+  'payload-required': 'payload-required',
+  'internal-server-error': 'internal-server-error',
+  'not-found': 'not-found',
+} as const
+
+export type ErrorCodeEnum40 = (typeof errorCodeEnum40)[keyof typeof errorCodeEnum40]
+
+/**
+ * @description User by id validation error
+ */
+export type GetApiUsersId400 = {
+  result?: unknown | undefined
+  /**
+   * @type object
+   */
+  error: {
+    /**
+     * @type string
+     */
+    message: string
+    /**
+     * @type string | undefined
+     */
+    code?: ErrorCodeEnum40 | undefined
+    /**
+     * @type object | undefined
+     */
+    data?:
+      | {
+          [key: string]: {
+            /**
+             * @type string
+             */
+            code: string
+            /**
+             * @type string
+             */
+            message: string
+          }
+        }
+      | undefined
+  } | null
+}
+
 export const errorCodeEnum41 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
@@ -87,9 +136,9 @@ export const errorCodeEnum41 = {
 export type ErrorCodeEnum41 = (typeof errorCodeEnum41)[keyof typeof errorCodeEnum41]
 
 /**
- * @description User by id validation error
+ * @description User by id not found error
  */
-export type GetApiUsersId400 = {
+export type GetApiUsersId404 = {
   result?: unknown | undefined
   /**
    * @type object
@@ -136,55 +185,6 @@ export const errorCodeEnum42 = {
 export type ErrorCodeEnum42 = (typeof errorCodeEnum42)[keyof typeof errorCodeEnum42]
 
 /**
- * @description User by id not found error
- */
-export type GetApiUsersId404 = {
-  result?: unknown | undefined
-  /**
-   * @type object
-   */
-  error: {
-    /**
-     * @type string
-     */
-    message: string
-    /**
-     * @type string | undefined
-     */
-    code?: ErrorCodeEnum42 | undefined
-    /**
-     * @type object | undefined
-     */
-    data?:
-      | {
-          [key: string]: {
-            /**
-             * @type string
-             */
-            code: string
-            /**
-             * @type string
-             */
-            message: string
-          }
-        }
-      | undefined
-  } | null
-}
-
-export const errorCodeEnum43 = {
-  'login-required': 'login-required',
-  'admin-required': 'admin-required',
-  'parameters-required': 'parameters-required',
-  'query-parametersRequired-required': 'query-parametersRequired-required',
-  'payload-required': 'payload-required',
-  'internal-server-error': 'internal-server-error',
-  'not-found': 'not-found',
-} as const
-
-export type ErrorCodeEnum43 = (typeof errorCodeEnum43)[keyof typeof errorCodeEnum43]
-
-/**
  * @description User by id internal server error
  */
 export type GetApiUsersId500 = {
@@ -200,7 +200,7 @@ export type GetApiUsersId500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum43 | undefined
+    code?: ErrorCodeEnum42 | undefined
     /**
      * @type object | undefined
      */

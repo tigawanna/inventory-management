@@ -1,5 +1,4 @@
 import "dotenv/config";
-import { exec } from "node:child_process";
 import { writeFile } from "node:fs/promises";
 
 async function getOpenAPiDoc() {

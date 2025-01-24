@@ -55,6 +55,55 @@ export type PostApiAuthSignup200 = {
   error?: unknown | undefined
 }
 
+export const errorCodeEnum13 = {
+  'login-required': 'login-required',
+  'admin-required': 'admin-required',
+  'parameters-required': 'parameters-required',
+  'query-parametersRequired-required': 'query-parametersRequired-required',
+  'payload-required': 'payload-required',
+  'internal-server-error': 'internal-server-error',
+  'not-found': 'not-found',
+} as const
+
+export type ErrorCodeEnum13 = (typeof errorCodeEnum13)[keyof typeof errorCodeEnum13]
+
+/**
+ * @description User signup validation error
+ */
+export type PostApiAuthSignup400 = {
+  result?: unknown | undefined
+  /**
+   * @type object
+   */
+  error: {
+    /**
+     * @type string
+     */
+    message: string
+    /**
+     * @type string | undefined
+     */
+    code?: ErrorCodeEnum13 | undefined
+    /**
+     * @type object | undefined
+     */
+    data?:
+      | {
+          [key: string]: {
+            /**
+             * @type string
+             */
+            code: string
+            /**
+             * @type string
+             */
+            message: string
+          }
+        }
+      | undefined
+  } | null
+}
+
 export const errorCodeEnum14 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
@@ -68,9 +117,9 @@ export const errorCodeEnum14 = {
 export type ErrorCodeEnum14 = (typeof errorCodeEnum14)[keyof typeof errorCodeEnum14]
 
 /**
- * @description User signup validation error
+ * @description User signup not found error
  */
-export type PostApiAuthSignup400 = {
+export type PostApiAuthSignup404 = {
   result?: unknown | undefined
   /**
    * @type object
@@ -117,55 +166,6 @@ export const errorCodeEnum15 = {
 export type ErrorCodeEnum15 = (typeof errorCodeEnum15)[keyof typeof errorCodeEnum15]
 
 /**
- * @description User signup not found error
- */
-export type PostApiAuthSignup404 = {
-  result?: unknown | undefined
-  /**
-   * @type object
-   */
-  error: {
-    /**
-     * @type string
-     */
-    message: string
-    /**
-     * @type string | undefined
-     */
-    code?: ErrorCodeEnum15 | undefined
-    /**
-     * @type object | undefined
-     */
-    data?:
-      | {
-          [key: string]: {
-            /**
-             * @type string
-             */
-            code: string
-            /**
-             * @type string
-             */
-            message: string
-          }
-        }
-      | undefined
-  } | null
-}
-
-export const errorCodeEnum16 = {
-  'login-required': 'login-required',
-  'admin-required': 'admin-required',
-  'parameters-required': 'parameters-required',
-  'query-parametersRequired-required': 'query-parametersRequired-required',
-  'payload-required': 'payload-required',
-  'internal-server-error': 'internal-server-error',
-  'not-found': 'not-found',
-} as const
-
-export type ErrorCodeEnum16 = (typeof errorCodeEnum16)[keyof typeof errorCodeEnum16]
-
-/**
  * @description User signup internal error
  */
 export type PostApiAuthSignup500 = {
@@ -181,7 +181,7 @@ export type PostApiAuthSignup500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum16 | undefined
+    code?: ErrorCodeEnum15 | undefined
     /**
      * @type object | undefined
      */

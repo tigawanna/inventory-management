@@ -14,7 +14,7 @@ async function getOpenAPiDoc() {
         }
         const res = await req.json();
         await writeFile("openapi.json", JSON.stringify(res));
-        console.log("=== successfull updated api doc ===");
+        console.log(" ✅✅  successfull updated api doc  ✅✅  ");
         return res;
     } catch (error) {
         if (error instanceof Error) {

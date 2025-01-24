@@ -75,7 +75,7 @@ export type PostApiUsers200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum34 = {
+export const errorCodeEnum33 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -85,7 +85,7 @@ export const errorCodeEnum34 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum34 = (typeof errorCodeEnum34)[keyof typeof errorCodeEnum34]
+export type ErrorCodeEnum33 = (typeof errorCodeEnum33)[keyof typeof errorCodeEnum33]
 
 /**
  * @description Users creation validation error
@@ -103,7 +103,7 @@ export type PostApiUsers400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum34 | undefined
+    code?: ErrorCodeEnum33 | undefined
     /**
      * @type object | undefined
      */
@@ -124,7 +124,7 @@ export type PostApiUsers400 = {
   } | null
 }
 
-export const errorCodeEnum35 = {
+export const errorCodeEnum34 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -134,7 +134,7 @@ export const errorCodeEnum35 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum35 = (typeof errorCodeEnum35)[keyof typeof errorCodeEnum35]
+export type ErrorCodeEnum34 = (typeof errorCodeEnum34)[keyof typeof errorCodeEnum34]
 
 /**
  * @description Users creation internal server error
@@ -152,7 +152,7 @@ export type PostApiUsers500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum35 | undefined
+    code?: ErrorCodeEnum34 | undefined
     /**
      * @type object | undefined
      */

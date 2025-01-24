@@ -138,7 +138,7 @@ export type GetApiInventory200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum2 = {
+export const errorCodeEnum = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -148,7 +148,7 @@ export const errorCodeEnum2 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum2 = (typeof errorCodeEnum2)[keyof typeof errorCodeEnum2]
+export type ErrorCodeEnum = (typeof errorCodeEnum)[keyof typeof errorCodeEnum]
 
 /**
  * @description Inventpry listing validation error
@@ -166,7 +166,7 @@ export type GetApiInventory400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum2 | undefined
+    code?: ErrorCodeEnum | undefined
     /**
      * @type object | undefined
      */
@@ -187,7 +187,7 @@ export type GetApiInventory400 = {
   } | null
 }
 
-export const errorCodeEnum3 = {
+export const errorCodeEnum2 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -197,7 +197,7 @@ export const errorCodeEnum3 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum3 = (typeof errorCodeEnum3)[keyof typeof errorCodeEnum3]
+export type ErrorCodeEnum2 = (typeof errorCodeEnum2)[keyof typeof errorCodeEnum2]
 
 /**
  * @description Inventpry listing internal server error
@@ -215,7 +215,7 @@ export type GetApiInventory500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum3 | undefined
+    code?: ErrorCodeEnum2 | undefined
     /**
      * @type object | undefined
      */

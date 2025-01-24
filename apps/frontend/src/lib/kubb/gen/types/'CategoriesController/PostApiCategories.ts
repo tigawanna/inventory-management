@@ -38,7 +38,7 @@ export type PostApiCategories200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum46 = {
+export const errorCodeEnum45 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -48,7 +48,7 @@ export const errorCodeEnum46 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum46 = (typeof errorCodeEnum46)[keyof typeof errorCodeEnum46]
+export type ErrorCodeEnum45 = (typeof errorCodeEnum45)[keyof typeof errorCodeEnum45]
 
 /**
  * @description Categories creation validation error
@@ -66,7 +66,7 @@ export type PostApiCategories400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum46 | undefined
+    code?: ErrorCodeEnum45 | undefined
     /**
      * @type object | undefined
      */
@@ -87,7 +87,7 @@ export type PostApiCategories400 = {
   } | null
 }
 
-export const errorCodeEnum47 = {
+export const errorCodeEnum46 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -97,7 +97,7 @@ export const errorCodeEnum47 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum47 = (typeof errorCodeEnum47)[keyof typeof errorCodeEnum47]
+export type ErrorCodeEnum46 = (typeof errorCodeEnum46)[keyof typeof errorCodeEnum46]
 
 /**
  * @description Categories creation internal server error
@@ -115,7 +115,7 @@ export type PostApiCategories500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum47 | undefined
+    code?: ErrorCodeEnum46 | undefined
     /**
      * @type object | undefined
      */

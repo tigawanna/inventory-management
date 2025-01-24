@@ -164,7 +164,7 @@ export type GetApiAuditlogs200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum56 = {
+export const errorCodeEnum55 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -174,7 +174,7 @@ export const errorCodeEnum56 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum56 = (typeof errorCodeEnum56)[keyof typeof errorCodeEnum56]
+export type ErrorCodeEnum55 = (typeof errorCodeEnum55)[keyof typeof errorCodeEnum55]
 
 /**
  * @description Auditlogs listing validation error
@@ -192,7 +192,7 @@ export type GetApiAuditlogs400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum56 | undefined
+    code?: ErrorCodeEnum55 | undefined
     /**
      * @type object | undefined
      */
@@ -213,7 +213,7 @@ export type GetApiAuditlogs400 = {
   } | null
 }
 
-export const errorCodeEnum57 = {
+export const errorCodeEnum56 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -223,7 +223,7 @@ export const errorCodeEnum57 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum57 = (typeof errorCodeEnum57)[keyof typeof errorCodeEnum57]
+export type ErrorCodeEnum56 = (typeof errorCodeEnum56)[keyof typeof errorCodeEnum56]
 
 /**
  * @description Auditlogs listing internal server error
@@ -241,7 +241,7 @@ export type GetApiAuditlogs500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum57 | undefined
+    code?: ErrorCodeEnum56 | undefined
     /**
      * @type object | undefined
      */

@@ -6,9 +6,9 @@ export type {
   ItemsEntityTypeEnum,
   UserRoleEnum,
   GetApiAuditlogs200,
-  ErrorCodeEnum56,
+  ErrorCodeEnum55,
   GetApiAuditlogs400,
-  ErrorCodeEnum57,
+  ErrorCodeEnum56,
   GetApiAuditlogs500,
   GetApiAuditlogsQueryResponse,
   GetApiAuditlogsQuery,
@@ -19,11 +19,11 @@ export type {
   ResultEntityTypeEnum,
   UserRoleEnum2,
   GetApiAuditlogsId200,
-  ErrorCodeEnum58,
+  ErrorCodeEnum57,
   GetApiAuditlogsId400,
-  ErrorCodeEnum59,
+  ErrorCodeEnum58,
   GetApiAuditlogsId404,
-  ErrorCodeEnum60,
+  ErrorCodeEnum59,
   GetApiAuditlogsId500,
   GetApiAuditlogsIdQueryResponse,
   GetApiAuditlogsIdQuery,
@@ -31,21 +31,21 @@ export type {
 export type {
   ResultRoleEnum4,
   GetApiAuthMe200,
-  ErrorCodeEnum29,
+  ErrorCodeEnum28,
   GetApiAuthMe400,
-  ErrorCodeEnum30,
+  ErrorCodeEnum29,
   GetApiAuthMe404,
-  ErrorCodeEnum31,
+  ErrorCodeEnum30,
   GetApiAuthMe500,
   GetApiAuthMeQueryResponse,
   GetApiAuthMeQuery,
 } from "./types/'AuthController/GetApiAuthMe.ts"
 export type {
   PostApiAuthRequestEmailVerification200,
-  ErrorCodeEnum19,
+  ErrorCodeEnum18,
   PostApiAuthRequestEmailVerification400,
   PostApiAuthRequestEmailVerification404,
-  ErrorCodeEnum20,
+  ErrorCodeEnum19,
   PostApiAuthRequestEmailVerification500,
   PostApiAuthRequestEmailVerificationMutationRequest,
   PostApiAuthRequestEmailVerificationMutationResponse,
@@ -53,10 +53,10 @@ export type {
 } from "./types/'AuthController/PostApiAuthRequestEmailVerification.ts"
 export type {
   PostApiAuthRequestPasswordReset200,
-  ErrorCodeEnum23,
+  ErrorCodeEnum22,
   PostApiAuthRequestPasswordReset400,
   PostApiAuthRequestPasswordReset404,
-  ErrorCodeEnum24,
+  ErrorCodeEnum23,
   PostApiAuthRequestPasswordReset500,
   PostApiAuthRequestPasswordResetMutationRequest,
   PostApiAuthRequestPasswordResetMutationResponse,
@@ -64,10 +64,10 @@ export type {
 } from "./types/'AuthController/PostApiAuthRequestPasswordReset.ts"
 export type {
   PostApiAuthResetPassword200,
-  ErrorCodeEnum25,
+  ErrorCodeEnum24,
   PostApiAuthResetPassword400,
   PostApiAuthResetPassword404,
-  ErrorCodeEnum26,
+  ErrorCodeEnum25,
   PostApiAuthResetPassword500,
   PostApiAuthResetPasswordMutationRequest,
   PostApiAuthResetPasswordMutationResponse,
@@ -76,9 +76,9 @@ export type {
 export type {
   ResultRoleEnum3,
   PostApiAuthSignin200,
-  ErrorCodeEnum21,
+  ErrorCodeEnum20,
   PostApiAuthSignin400,
-  ErrorCodeEnum22,
+  ErrorCodeEnum21,
   PostApiAuthSignin500,
   PostApiAuthSigninMutationRequest,
   PostApiAuthSigninMutationResponse,
@@ -86,9 +86,9 @@ export type {
 } from "./types/'AuthController/PostApiAuthSignin.ts"
 export type {
   PostApiAuthSignout200,
-  ErrorCodeEnum27,
+  ErrorCodeEnum26,
   PostApiAuthSignout400,
-  ErrorCodeEnum28,
+  ErrorCodeEnum27,
   PostApiAuthSignout500,
   PostApiAuthSignoutMutationResponse,
   PostApiAuthSignoutMutation,
@@ -96,11 +96,11 @@ export type {
 export type {
   ResultRoleEnum,
   PostApiAuthSignup200,
-  ErrorCodeEnum14,
+  ErrorCodeEnum13,
   PostApiAuthSignup400,
-  ErrorCodeEnum15,
+  ErrorCodeEnum14,
   PostApiAuthSignup404,
-  ErrorCodeEnum16,
+  ErrorCodeEnum15,
   PostApiAuthSignup500,
   PostApiAuthSignupMutationRequest,
   PostApiAuthSignupMutationResponse,
@@ -109,10 +109,10 @@ export type {
 export type {
   ResultRoleEnum2,
   PostApiAuthVerifyEmail200,
-  ErrorCodeEnum17,
+  ErrorCodeEnum16,
   PostApiAuthVerifyEmail400,
   PostApiAuthVerifyEmail404,
-  ErrorCodeEnum18,
+  ErrorCodeEnum17,
   PostApiAuthVerifyEmail500,
   PostApiAuthVerifyEmailMutationRequest,
   PostApiAuthVerifyEmailMutationResponse,
@@ -121,11 +121,11 @@ export type {
 export type {
   DeleteApiCategoriesHeaderParams,
   DeleteApiCategories200,
-  ErrorCodeEnum50,
+  ErrorCodeEnum49,
   DeleteApiCategories400,
-  ErrorCodeEnum51,
+  ErrorCodeEnum50,
   DeleteApiCategories404,
-  ErrorCodeEnum52,
+  ErrorCodeEnum51,
   DeleteApiCategories500,
   DeleteApiCategoriesMutationRequest,
   DeleteApiCategoriesMutationResponse,
@@ -136,9 +136,9 @@ export type {
   GetApiCategoriesQueryParamsSortEnum,
   GetApiCategoriesQueryParams,
   GetApiCategories200,
-  ErrorCodeEnum44,
+  ErrorCodeEnum43,
   GetApiCategories400,
-  ErrorCodeEnum45,
+  ErrorCodeEnum44,
   GetApiCategories500,
   GetApiCategoriesQueryResponse,
   GetApiCategoriesQuery,
@@ -146,11 +146,11 @@ export type {
 export type {
   GetApiCategoriesIdPathParams,
   GetApiCategoriesId200,
-  ErrorCodeEnum53,
+  ErrorCodeEnum52,
   GetApiCategoriesId400,
-  ErrorCodeEnum54,
+  ErrorCodeEnum53,
   GetApiCategoriesId404,
-  ErrorCodeEnum55,
+  ErrorCodeEnum54,
   GetApiCategoriesId500,
   GetApiCategoriesIdQueryResponse,
   GetApiCategoriesIdQuery,
@@ -158,9 +158,9 @@ export type {
 export type {
   PatchApiCategoriesHeaderParams,
   PatchApiCategories200,
-  ErrorCodeEnum48,
+  ErrorCodeEnum47,
   PatchApiCategories400,
-  ErrorCodeEnum49,
+  ErrorCodeEnum48,
   PatchApiCategories500,
   PatchApiCategoriesMutationRequest,
   PatchApiCategoriesMutationResponse,
@@ -169,23 +169,23 @@ export type {
 export type {
   PostApiCategoriesHeaderParams,
   PostApiCategories200,
-  ErrorCodeEnum46,
+  ErrorCodeEnum45,
   PostApiCategories400,
-  ErrorCodeEnum47,
+  ErrorCodeEnum46,
   PostApiCategories500,
   PostApiCategoriesMutationRequest,
   PostApiCategoriesMutationResponse,
   PostApiCategoriesMutation,
 } from "./types/'CategoriesController/PostApiCategories.ts"
-export type { ErrorCodeEnum, GetApiV1200, GetApiV1QueryResponse, GetApiV1Query } from "./types/'HomeController/GetApiV1.ts"
+export type { GetApiV1200, GetApiV1QueryResponse, GetApiV1Query } from "./types/'HomeController/GetApiV1.ts"
 export type {
   DeleteApiInventoryHeaderParams,
   DeleteApiInventory200,
-  ErrorCodeEnum8,
+  ErrorCodeEnum7,
   DeleteApiInventory400,
-  ErrorCodeEnum9,
+  ErrorCodeEnum8,
   DeleteApiInventory404,
-  ErrorCodeEnum10,
+  ErrorCodeEnum9,
   DeleteApiInventory500,
   DeleteApiInventoryMutationRequest,
   DeleteApiInventoryMutationResponse,
@@ -196,9 +196,9 @@ export type {
   GetApiInventoryQueryParamsSortEnum,
   GetApiInventoryQueryParams,
   GetApiInventory200,
-  ErrorCodeEnum2,
+  ErrorCodeEnum,
   GetApiInventory400,
-  ErrorCodeEnum3,
+  ErrorCodeEnum2,
   GetApiInventory500,
   GetApiInventoryQueryResponse,
   GetApiInventoryQuery,
@@ -206,11 +206,11 @@ export type {
 export type {
   GetApiInventoryIdPathParams,
   GetApiInventoryId200,
-  ErrorCodeEnum11,
+  ErrorCodeEnum10,
   GetApiInventoryId400,
-  ErrorCodeEnum12,
+  ErrorCodeEnum11,
   GetApiInventoryId404,
-  ErrorCodeEnum13,
+  ErrorCodeEnum12,
   GetApiInventoryId500,
   GetApiInventoryIdQueryResponse,
   GetApiInventoryIdQuery,
@@ -218,9 +218,9 @@ export type {
 export type {
   PatchApiInventoryHeaderParams,
   PatchApiInventory200,
-  ErrorCodeEnum6,
+  ErrorCodeEnum5,
   PatchApiInventory400,
-  ErrorCodeEnum7,
+  ErrorCodeEnum6,
   PatchApiInventory500,
   PatchApiInventoryMutationRequest,
   PatchApiInventoryMutationResponse,
@@ -229,9 +229,9 @@ export type {
 export type {
   PostApiInventoryHeaderParams,
   PostApiInventory200,
-  ErrorCodeEnum4,
+  ErrorCodeEnum3,
   PostApiInventory400,
-  ErrorCodeEnum5,
+  ErrorCodeEnum4,
   PostApiInventory500,
   PostApiInventoryMutationRequest,
   PostApiInventoryMutationResponse,
@@ -240,11 +240,11 @@ export type {
 export type {
   DeleteApiUsersHeaderParams,
   DeleteApiUsers200,
-  ErrorCodeEnum38,
+  ErrorCodeEnum37,
   DeleteApiUsers400,
-  ErrorCodeEnum39,
+  ErrorCodeEnum38,
   DeleteApiUsers404,
-  ErrorCodeEnum40,
+  ErrorCodeEnum39,
   DeleteApiUsers500,
   DeleteApiUsersMutationRequest,
   DeleteApiUsersMutationResponse,
@@ -256,9 +256,9 @@ export type {
   GetApiUsersQueryParams,
   ItemsRoleEnum,
   GetApiUsers200,
-  ErrorCodeEnum32,
+  ErrorCodeEnum31,
   GetApiUsers400,
-  ErrorCodeEnum33,
+  ErrorCodeEnum32,
   GetApiUsers500,
   GetApiUsersQueryResponse,
   GetApiUsersQuery,
@@ -267,11 +267,11 @@ export type {
   GetApiUsersIdPathParams,
   ResultRoleEnum7,
   GetApiUsersId200,
-  ErrorCodeEnum41,
+  ErrorCodeEnum40,
   GetApiUsersId400,
-  ErrorCodeEnum42,
+  ErrorCodeEnum41,
   GetApiUsersId404,
-  ErrorCodeEnum43,
+  ErrorCodeEnum42,
   GetApiUsersId500,
   GetApiUsersIdQueryResponse,
   GetApiUsersIdQuery,
@@ -280,9 +280,9 @@ export type {
   PatchApiUsersHeaderParams,
   ResultRoleEnum6,
   PatchApiUsers200,
-  ErrorCodeEnum36,
+  ErrorCodeEnum35,
   PatchApiUsers400,
-  ErrorCodeEnum37,
+  ErrorCodeEnum36,
   PatchApiUsers500,
   PatchApiUsersMutationRequestRoleEnum,
   PatchApiUsersMutationRequest,
@@ -293,9 +293,9 @@ export type {
   PostApiUsersHeaderParams,
   ResultRoleEnum5,
   PostApiUsers200,
-  ErrorCodeEnum34,
+  ErrorCodeEnum33,
   PostApiUsers400,
-  ErrorCodeEnum35,
+  ErrorCodeEnum34,
   PostApiUsers500,
   PostApiUsersMutationRequestRoleEnum,
   PostApiUsersMutationRequest,
@@ -347,57 +347,56 @@ export {
   itemsActionEnum,
   itemsEntityTypeEnum,
   userRoleEnum,
+  errorCodeEnum55,
   errorCodeEnum56,
-  errorCodeEnum57,
 } from "./types/'AuditlogsController/GetApiAuditlogs.ts"
 export {
   resultActionEnum,
   resultEntityTypeEnum,
   userRoleEnum2,
+  errorCodeEnum57,
   errorCodeEnum58,
   errorCodeEnum59,
-  errorCodeEnum60,
 } from "./types/'AuditlogsController/GetApiAuditlogsId.ts"
-export { resultRoleEnum4, errorCodeEnum29, errorCodeEnum30, errorCodeEnum31 } from "./types/'AuthController/GetApiAuthMe.ts"
-export { errorCodeEnum19, errorCodeEnum20 } from "./types/'AuthController/PostApiAuthRequestEmailVerification.ts"
-export { errorCodeEnum23, errorCodeEnum24 } from "./types/'AuthController/PostApiAuthRequestPasswordReset.ts"
-export { errorCodeEnum25, errorCodeEnum26 } from "./types/'AuthController/PostApiAuthResetPassword.ts"
-export { resultRoleEnum3, errorCodeEnum21, errorCodeEnum22 } from "./types/'AuthController/PostApiAuthSignin.ts"
-export { errorCodeEnum27, errorCodeEnum28 } from "./types/'AuthController/PostApiAuthSignout.ts"
-export { resultRoleEnum, errorCodeEnum14, errorCodeEnum15, errorCodeEnum16 } from "./types/'AuthController/PostApiAuthSignup.ts"
-export { resultRoleEnum2, errorCodeEnum17, errorCodeEnum18 } from "./types/'AuthController/PostApiAuthVerifyEmail.ts"
-export { errorCodeEnum50, errorCodeEnum51, errorCodeEnum52 } from "./types/'CategoriesController/DeleteApiCategories.ts"
+export { resultRoleEnum4, errorCodeEnum28, errorCodeEnum29, errorCodeEnum30 } from "./types/'AuthController/GetApiAuthMe.ts"
+export { errorCodeEnum18, errorCodeEnum19 } from "./types/'AuthController/PostApiAuthRequestEmailVerification.ts"
+export { errorCodeEnum22, errorCodeEnum23 } from "./types/'AuthController/PostApiAuthRequestPasswordReset.ts"
+export { errorCodeEnum24, errorCodeEnum25 } from "./types/'AuthController/PostApiAuthResetPassword.ts"
+export { resultRoleEnum3, errorCodeEnum20, errorCodeEnum21 } from "./types/'AuthController/PostApiAuthSignin.ts"
+export { errorCodeEnum26, errorCodeEnum27 } from "./types/'AuthController/PostApiAuthSignout.ts"
+export { resultRoleEnum, errorCodeEnum13, errorCodeEnum14, errorCodeEnum15 } from "./types/'AuthController/PostApiAuthSignup.ts"
+export { resultRoleEnum2, errorCodeEnum16, errorCodeEnum17 } from "./types/'AuthController/PostApiAuthVerifyEmail.ts"
+export { errorCodeEnum49, errorCodeEnum50, errorCodeEnum51 } from "./types/'CategoriesController/DeleteApiCategories.ts"
 export {
   getApiCategoriesQueryParamsOrderEnum,
   getApiCategoriesQueryParamsSortEnum,
+  errorCodeEnum43,
   errorCodeEnum44,
-  errorCodeEnum45,
 } from "./types/'CategoriesController/GetApiCategories.ts"
-export { errorCodeEnum53, errorCodeEnum54, errorCodeEnum55 } from "./types/'CategoriesController/GetApiCategoriesId.ts"
-export { errorCodeEnum48, errorCodeEnum49 } from "./types/'CategoriesController/PatchApiCategories.ts"
-export { errorCodeEnum46, errorCodeEnum47 } from "./types/'CategoriesController/PostApiCategories.ts"
-export { errorCodeEnum } from "./types/'HomeController/GetApiV1.ts"
-export { errorCodeEnum8, errorCodeEnum9, errorCodeEnum10 } from "./types/'InventoryController/DeleteApiInventory.ts"
+export { errorCodeEnum52, errorCodeEnum53, errorCodeEnum54 } from "./types/'CategoriesController/GetApiCategoriesId.ts"
+export { errorCodeEnum47, errorCodeEnum48 } from "./types/'CategoriesController/PatchApiCategories.ts"
+export { errorCodeEnum45, errorCodeEnum46 } from "./types/'CategoriesController/PostApiCategories.ts"
+export { errorCodeEnum7, errorCodeEnum8, errorCodeEnum9 } from "./types/'InventoryController/DeleteApiInventory.ts"
 export {
   getApiInventoryQueryParamsOrderEnum,
   getApiInventoryQueryParamsSortEnum,
+  errorCodeEnum,
   errorCodeEnum2,
-  errorCodeEnum3,
 } from "./types/'InventoryController/GetApiInventory.ts"
-export { errorCodeEnum11, errorCodeEnum12, errorCodeEnum13 } from "./types/'InventoryController/GetApiInventoryId.ts"
-export { errorCodeEnum6, errorCodeEnum7 } from "./types/'InventoryController/PatchApiInventory.ts"
-export { errorCodeEnum4, errorCodeEnum5 } from "./types/'InventoryController/PostApiInventory.ts"
-export { errorCodeEnum38, errorCodeEnum39, errorCodeEnum40 } from "./types/'UsersController/DeleteApiUsers.ts"
+export { errorCodeEnum10, errorCodeEnum11, errorCodeEnum12 } from "./types/'InventoryController/GetApiInventoryId.ts"
+export { errorCodeEnum5, errorCodeEnum6 } from "./types/'InventoryController/PatchApiInventory.ts"
+export { errorCodeEnum3, errorCodeEnum4 } from "./types/'InventoryController/PostApiInventory.ts"
+export { errorCodeEnum37, errorCodeEnum38, errorCodeEnum39 } from "./types/'UsersController/DeleteApiUsers.ts"
 export {
   getApiUsersQueryParamsOrderEnum,
   getApiUsersQueryParamsSortEnum,
   itemsRoleEnum,
+  errorCodeEnum31,
   errorCodeEnum32,
-  errorCodeEnum33,
 } from "./types/'UsersController/GetApiUsers.ts"
-export { resultRoleEnum7, errorCodeEnum41, errorCodeEnum42, errorCodeEnum43 } from "./types/'UsersController/GetApiUsersId.ts"
-export { resultRoleEnum6, errorCodeEnum36, errorCodeEnum37, patchApiUsersMutationRequestRoleEnum } from "./types/'UsersController/PatchApiUsers.ts"
-export { resultRoleEnum5, errorCodeEnum34, errorCodeEnum35, postApiUsersMutationRequestRoleEnum } from "./types/'UsersController/PostApiUsers.ts"
+export { resultRoleEnum7, errorCodeEnum40, errorCodeEnum41, errorCodeEnum42 } from "./types/'UsersController/GetApiUsersId.ts"
+export { resultRoleEnum6, errorCodeEnum35, errorCodeEnum36, patchApiUsersMutationRequestRoleEnum } from "./types/'UsersController/PatchApiUsers.ts"
+export { resultRoleEnum5, errorCodeEnum33, errorCodeEnum34, postApiUsersMutationRequestRoleEnum } from "./types/'UsersController/PostApiUsers.ts"
 export {
   getApiAuditlogsIdPathParamsSchema,
   getApiAuditlogsId200Schema,

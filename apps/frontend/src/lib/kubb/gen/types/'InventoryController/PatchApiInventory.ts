@@ -80,7 +80,7 @@ export type PatchApiInventory200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum6 = {
+export const errorCodeEnum5 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -90,7 +90,7 @@ export const errorCodeEnum6 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum6 = (typeof errorCodeEnum6)[keyof typeof errorCodeEnum6]
+export type ErrorCodeEnum5 = (typeof errorCodeEnum5)[keyof typeof errorCodeEnum5]
 
 /**
  * @description Inventory update validation error
@@ -108,7 +108,7 @@ export type PatchApiInventory400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum6 | undefined
+    code?: ErrorCodeEnum5 | undefined
     /**
      * @type object | undefined
      */
@@ -129,7 +129,7 @@ export type PatchApiInventory400 = {
   } | null
 }
 
-export const errorCodeEnum7 = {
+export const errorCodeEnum6 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -139,7 +139,7 @@ export const errorCodeEnum7 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum7 = (typeof errorCodeEnum7)[keyof typeof errorCodeEnum7]
+export type ErrorCodeEnum6 = (typeof errorCodeEnum6)[keyof typeof errorCodeEnum6]
 
 /**
  * @description Inventory update internal server error
@@ -157,7 +157,7 @@ export type PatchApiInventory500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum7 | undefined
+    code?: ErrorCodeEnum6 | undefined
     /**
      * @type object | undefined
      */

@@ -37,6 +37,55 @@ export type GetApiCategoriesId200 = {
   error?: unknown | undefined
 }
 
+export const errorCodeEnum52 = {
+  'login-required': 'login-required',
+  'admin-required': 'admin-required',
+  'parameters-required': 'parameters-required',
+  'query-parametersRequired-required': 'query-parametersRequired-required',
+  'payload-required': 'payload-required',
+  'internal-server-error': 'internal-server-error',
+  'not-found': 'not-found',
+} as const
+
+export type ErrorCodeEnum52 = (typeof errorCodeEnum52)[keyof typeof errorCodeEnum52]
+
+/**
+ * @description Category by id validation error
+ */
+export type GetApiCategoriesId400 = {
+  result?: unknown | undefined
+  /**
+   * @type object
+   */
+  error: {
+    /**
+     * @type string
+     */
+    message: string
+    /**
+     * @type string | undefined
+     */
+    code?: ErrorCodeEnum52 | undefined
+    /**
+     * @type object | undefined
+     */
+    data?:
+      | {
+          [key: string]: {
+            /**
+             * @type string
+             */
+            code: string
+            /**
+             * @type string
+             */
+            message: string
+          }
+        }
+      | undefined
+  } | null
+}
+
 export const errorCodeEnum53 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
@@ -50,9 +99,9 @@ export const errorCodeEnum53 = {
 export type ErrorCodeEnum53 = (typeof errorCodeEnum53)[keyof typeof errorCodeEnum53]
 
 /**
- * @description Category by id validation error
+ * @description Category by id not found error
  */
-export type GetApiCategoriesId400 = {
+export type GetApiCategoriesId404 = {
   result?: unknown | undefined
   /**
    * @type object
@@ -99,55 +148,6 @@ export const errorCodeEnum54 = {
 export type ErrorCodeEnum54 = (typeof errorCodeEnum54)[keyof typeof errorCodeEnum54]
 
 /**
- * @description Category by id not found error
- */
-export type GetApiCategoriesId404 = {
-  result?: unknown | undefined
-  /**
-   * @type object
-   */
-  error: {
-    /**
-     * @type string
-     */
-    message: string
-    /**
-     * @type string | undefined
-     */
-    code?: ErrorCodeEnum54 | undefined
-    /**
-     * @type object | undefined
-     */
-    data?:
-      | {
-          [key: string]: {
-            /**
-             * @type string
-             */
-            code: string
-            /**
-             * @type string
-             */
-            message: string
-          }
-        }
-      | undefined
-  } | null
-}
-
-export const errorCodeEnum55 = {
-  'login-required': 'login-required',
-  'admin-required': 'admin-required',
-  'parameters-required': 'parameters-required',
-  'query-parametersRequired-required': 'query-parametersRequired-required',
-  'payload-required': 'payload-required',
-  'internal-server-error': 'internal-server-error',
-  'not-found': 'not-found',
-} as const
-
-export type ErrorCodeEnum55 = (typeof errorCodeEnum55)[keyof typeof errorCodeEnum55]
-
-/**
  * @description Category by id internal server error
  */
 export type GetApiCategoriesId500 = {
@@ -163,7 +163,7 @@ export type GetApiCategoriesId500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum55 | undefined
+    code?: ErrorCodeEnum54 | undefined
     /**
      * @type object | undefined
      */

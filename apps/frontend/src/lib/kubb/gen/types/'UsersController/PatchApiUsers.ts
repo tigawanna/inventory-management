@@ -75,7 +75,7 @@ export type PatchApiUsers200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum36 = {
+export const errorCodeEnum35 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -85,7 +85,7 @@ export const errorCodeEnum36 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum36 = (typeof errorCodeEnum36)[keyof typeof errorCodeEnum36]
+export type ErrorCodeEnum35 = (typeof errorCodeEnum35)[keyof typeof errorCodeEnum35]
 
 /**
  * @description Users update validation error
@@ -103,7 +103,7 @@ export type PatchApiUsers400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum36 | undefined
+    code?: ErrorCodeEnum35 | undefined
     /**
      * @type object | undefined
      */
@@ -124,7 +124,7 @@ export type PatchApiUsers400 = {
   } | null
 }
 
-export const errorCodeEnum37 = {
+export const errorCodeEnum36 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -134,7 +134,7 @@ export const errorCodeEnum37 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum37 = (typeof errorCodeEnum37)[keyof typeof errorCodeEnum37]
+export type ErrorCodeEnum36 = (typeof errorCodeEnum36)[keyof typeof errorCodeEnum36]
 
 /**
  * @description Users update internal server error
@@ -152,7 +152,7 @@ export type PatchApiUsers500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum37 | undefined
+    code?: ErrorCodeEnum36 | undefined
     /**
      * @type object | undefined
      */

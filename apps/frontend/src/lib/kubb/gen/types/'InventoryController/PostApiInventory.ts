@@ -80,7 +80,7 @@ export type PostApiInventory200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum4 = {
+export const errorCodeEnum3 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -90,7 +90,7 @@ export const errorCodeEnum4 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum4 = (typeof errorCodeEnum4)[keyof typeof errorCodeEnum4]
+export type ErrorCodeEnum3 = (typeof errorCodeEnum3)[keyof typeof errorCodeEnum3]
 
 /**
  * @description Inventory creation validation error
@@ -108,7 +108,7 @@ export type PostApiInventory400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum4 | undefined
+    code?: ErrorCodeEnum3 | undefined
     /**
      * @type object | undefined
      */
@@ -129,7 +129,7 @@ export type PostApiInventory400 = {
   } | null
 }
 
-export const errorCodeEnum5 = {
+export const errorCodeEnum4 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -139,7 +139,7 @@ export const errorCodeEnum5 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum5 = (typeof errorCodeEnum5)[keyof typeof errorCodeEnum5]
+export type ErrorCodeEnum4 = (typeof errorCodeEnum4)[keyof typeof errorCodeEnum4]
 
 /**
  * @description Inventory creation internal server error
@@ -157,7 +157,7 @@ export type PostApiInventory500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum5 | undefined
+    code?: ErrorCodeEnum4 | undefined
     /**
      * @type object | undefined
      */

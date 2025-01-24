@@ -14,7 +14,7 @@ export type PostApiAuthResetPassword200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum25 = {
+export const errorCodeEnum24 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -24,7 +24,7 @@ export const errorCodeEnum25 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum25 = (typeof errorCodeEnum25)[keyof typeof errorCodeEnum25]
+export type ErrorCodeEnum24 = (typeof errorCodeEnum24)[keyof typeof errorCodeEnum24]
 
 /**
  * @description Password reset validation error
@@ -42,7 +42,7 @@ export type PostApiAuthResetPassword400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum25 | undefined
+    code?: ErrorCodeEnum24 | undefined
     /**
      * @type object | undefined
      */
@@ -83,7 +83,7 @@ export type PostApiAuthResetPassword404 = {
   }
 }
 
-export const errorCodeEnum26 = {
+export const errorCodeEnum25 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -93,7 +93,7 @@ export const errorCodeEnum26 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum26 = (typeof errorCodeEnum26)[keyof typeof errorCodeEnum26]
+export type ErrorCodeEnum25 = (typeof errorCodeEnum25)[keyof typeof errorCodeEnum25]
 
 /**
  * @description Password reset internal error
@@ -111,7 +111,7 @@ export type PostApiAuthResetPassword500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum26 | undefined
+    code?: ErrorCodeEnum25 | undefined
     /**
      * @type object | undefined
      */

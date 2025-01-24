@@ -55,7 +55,7 @@ export type PostApiAuthVerifyEmail200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum17 = {
+export const errorCodeEnum16 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -65,7 +65,7 @@ export const errorCodeEnum17 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum17 = (typeof errorCodeEnum17)[keyof typeof errorCodeEnum17]
+export type ErrorCodeEnum16 = (typeof errorCodeEnum16)[keyof typeof errorCodeEnum16]
 
 /**
  * @description Email verification validation error
@@ -83,7 +83,7 @@ export type PostApiAuthVerifyEmail400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum17 | undefined
+    code?: ErrorCodeEnum16 | undefined
     /**
      * @type object | undefined
      */
@@ -124,7 +124,7 @@ export type PostApiAuthVerifyEmail404 = {
   }
 }
 
-export const errorCodeEnum18 = {
+export const errorCodeEnum17 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -134,7 +134,7 @@ export const errorCodeEnum18 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum18 = (typeof errorCodeEnum18)[keyof typeof errorCodeEnum18]
+export type ErrorCodeEnum17 = (typeof errorCodeEnum17)[keyof typeof errorCodeEnum17]
 
 /**
  * @description Email verification internal error
@@ -152,7 +152,7 @@ export type PostApiAuthVerifyEmail500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum18 | undefined
+    code?: ErrorCodeEnum17 | undefined
     /**
      * @type object | undefined
      */

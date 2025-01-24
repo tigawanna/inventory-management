@@ -22,6 +22,55 @@ export type DeleteApiCategories200 = {
   error?: unknown | undefined
 }
 
+export const errorCodeEnum49 = {
+  'login-required': 'login-required',
+  'admin-required': 'admin-required',
+  'parameters-required': 'parameters-required',
+  'query-parametersRequired-required': 'query-parametersRequired-required',
+  'payload-required': 'payload-required',
+  'internal-server-error': 'internal-server-error',
+  'not-found': 'not-found',
+} as const
+
+export type ErrorCodeEnum49 = (typeof errorCodeEnum49)[keyof typeof errorCodeEnum49]
+
+/**
+ * @description Categories deletion validation error
+ */
+export type DeleteApiCategories400 = {
+  result?: unknown | undefined
+  /**
+   * @type object
+   */
+  error: {
+    /**
+     * @type string
+     */
+    message: string
+    /**
+     * @type string | undefined
+     */
+    code?: ErrorCodeEnum49 | undefined
+    /**
+     * @type object | undefined
+     */
+    data?:
+      | {
+          [key: string]: {
+            /**
+             * @type string
+             */
+            code: string
+            /**
+             * @type string
+             */
+            message: string
+          }
+        }
+      | undefined
+  } | null
+}
+
 export const errorCodeEnum50 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
@@ -35,9 +84,9 @@ export const errorCodeEnum50 = {
 export type ErrorCodeEnum50 = (typeof errorCodeEnum50)[keyof typeof errorCodeEnum50]
 
 /**
- * @description Categories deletion validation error
+ * @description Categories deletion not found error
  */
-export type DeleteApiCategories400 = {
+export type DeleteApiCategories404 = {
   result?: unknown | undefined
   /**
    * @type object
@@ -84,55 +133,6 @@ export const errorCodeEnum51 = {
 export type ErrorCodeEnum51 = (typeof errorCodeEnum51)[keyof typeof errorCodeEnum51]
 
 /**
- * @description Categories deletion not found error
- */
-export type DeleteApiCategories404 = {
-  result?: unknown | undefined
-  /**
-   * @type object
-   */
-  error: {
-    /**
-     * @type string
-     */
-    message: string
-    /**
-     * @type string | undefined
-     */
-    code?: ErrorCodeEnum51 | undefined
-    /**
-     * @type object | undefined
-     */
-    data?:
-      | {
-          [key: string]: {
-            /**
-             * @type string
-             */
-            code: string
-            /**
-             * @type string
-             */
-            message: string
-          }
-        }
-      | undefined
-  } | null
-}
-
-export const errorCodeEnum52 = {
-  'login-required': 'login-required',
-  'admin-required': 'admin-required',
-  'parameters-required': 'parameters-required',
-  'query-parametersRequired-required': 'query-parametersRequired-required',
-  'payload-required': 'payload-required',
-  'internal-server-error': 'internal-server-error',
-  'not-found': 'not-found',
-} as const
-
-export type ErrorCodeEnum52 = (typeof errorCodeEnum52)[keyof typeof errorCodeEnum52]
-
-/**
  * @description Categories deletion internal server error
  */
 export type DeleteApiCategories500 = {
@@ -148,7 +148,7 @@ export type DeleteApiCategories500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum52 | undefined
+    code?: ErrorCodeEnum51 | undefined
     /**
      * @type object | undefined
      */

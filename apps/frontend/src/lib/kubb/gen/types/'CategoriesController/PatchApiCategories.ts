@@ -38,7 +38,7 @@ export type PatchApiCategories200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum48 = {
+export const errorCodeEnum47 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -48,7 +48,7 @@ export const errorCodeEnum48 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum48 = (typeof errorCodeEnum48)[keyof typeof errorCodeEnum48]
+export type ErrorCodeEnum47 = (typeof errorCodeEnum47)[keyof typeof errorCodeEnum47]
 
 /**
  * @description Categories update validation error
@@ -66,7 +66,7 @@ export type PatchApiCategories400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum48 | undefined
+    code?: ErrorCodeEnum47 | undefined
     /**
      * @type object | undefined
      */
@@ -87,7 +87,7 @@ export type PatchApiCategories400 = {
   } | null
 }
 
-export const errorCodeEnum49 = {
+export const errorCodeEnum48 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -97,7 +97,7 @@ export const errorCodeEnum49 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum49 = (typeof errorCodeEnum49)[keyof typeof errorCodeEnum49]
+export type ErrorCodeEnum48 = (typeof errorCodeEnum48)[keyof typeof errorCodeEnum48]
 
 /**
  * @description Categories update internal server error
@@ -115,7 +115,7 @@ export type PatchApiCategories500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum49 | undefined
+    code?: ErrorCodeEnum48 | undefined
     /**
      * @type object | undefined
      */

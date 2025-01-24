@@ -1,4 +1,4 @@
-import { createRoute } from "@hono/zod-openapi";
+import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import { jsonContent } from "stoker/openapi/helpers";
 import { createMessageObjectSchema } from "stoker/openapi/schemas";
@@ -13,7 +13,12 @@ const router = createRouter().openapi(
     path: "/api/v1",
     responses: {
       [HttpStatusCodes.OK]: jsonContent(
-        baseResponseSchema,
+        baseResponseSchema.extend({
+          result:z.object({
+            message: z.string(),
+          }),
+          error: z.null().optional(),
+        }),
         "Welcome to the Inventory API",
       ),
     },

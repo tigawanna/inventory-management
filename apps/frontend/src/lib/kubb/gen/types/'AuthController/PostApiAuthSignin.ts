@@ -55,7 +55,7 @@ export type PostApiAuthSignin200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum21 = {
+export const errorCodeEnum20 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -65,7 +65,7 @@ export const errorCodeEnum21 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum21 = (typeof errorCodeEnum21)[keyof typeof errorCodeEnum21]
+export type ErrorCodeEnum20 = (typeof errorCodeEnum20)[keyof typeof errorCodeEnum20]
 
 /**
  * @description User signin validation error
@@ -83,7 +83,7 @@ export type PostApiAuthSignin400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum21 | undefined
+    code?: ErrorCodeEnum20 | undefined
     /**
      * @type object | undefined
      */
@@ -104,7 +104,7 @@ export type PostApiAuthSignin400 = {
   } | null
 }
 
-export const errorCodeEnum22 = {
+export const errorCodeEnum21 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -114,7 +114,7 @@ export const errorCodeEnum22 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum22 = (typeof errorCodeEnum22)[keyof typeof errorCodeEnum22]
+export type ErrorCodeEnum21 = (typeof errorCodeEnum21)[keyof typeof errorCodeEnum21]
 
 /**
  * @description User signin internal error
@@ -132,7 +132,7 @@ export type PostApiAuthSignin500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum22 | undefined
+    code?: ErrorCodeEnum21 | undefined
     /**
      * @type object | undefined
      */
