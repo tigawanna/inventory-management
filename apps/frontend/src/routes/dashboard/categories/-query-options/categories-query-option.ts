@@ -38,7 +38,7 @@ export function categoriesListQueryOptions({
           items: [],
         }
       }
-      return response.data;
+      return response.data.result;
     },
     staleTime: 1000,
   });

@@ -18,6 +18,7 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
   const query = useSuspenseQuery(
     categoriesListQueryOptions({
       ...sq,
+      sort: sq.sort ?? "created_at",
       keyword,
       page,
       limit: sq.limit ?? "10",
