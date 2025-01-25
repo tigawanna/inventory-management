@@ -1,6 +1,6 @@
 import type { HttpBindings } from "@hono/node-server";
 import type { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
-import type { PinoLogger } from "hono-pino";
+import type { PinoLogger } from "@tigawanna/hono-pino";
 import type { Logger } from "pino";
 
 import type { UserJWTPayload } from "@/api/users/schema";

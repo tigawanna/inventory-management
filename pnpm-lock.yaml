@@ -463,6 +463,9 @@ importers:
       '@scalar/hono-api-reference':
         specifier: ^0.5.165
         version: 0.5.165(hono@4.6.16)
+      '@tigawanna/hono-pino':
+        specifier: ^0.7.1
+        version: 0.7.1(hono@4.6.16)(pino@9.6.0)
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
@@ -481,9 +484,6 @@ importers:
       hono:
         specifier: ^4.6.16
         version: 4.6.16
-      hono-pino:
-        specifier: link:/home/dennis/Desktop/code/clone/hono-pino
-        version: link:../../../code/clone/hono-pino
       nodemailer:
         specifier: ^6.9.16
         version: 6.9.16
@@ -3189,6 +3189,13 @@ packages:
     peerDependencies:
       zod: ^3.x
 
+  '@tigawanna/hono-pino@0.7.1':
+    resolution: {integrity: sha512-Nteh7yQLdKi4vZOoNk6kucLn4lAwQS/MQIR33NIjTuPF3Z8S0pljQa7y2E/EMdSzSJWpRkuGhDHDmtftxpw2HQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      hono: '>=4.0.0'
+      pino: '>=7.1.0'
+
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
@@ -4493,6 +4500,9 @@ packages:
   define-properties@1.2.1:
     resolution: {integrity: sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg==}
     engines: {node: '>= 0.4'}
+
+  defu@6.1.4:
+    resolution: {integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==}
 
   degenerator@5.0.1:
     resolution: {integrity: sha512-TllpMR/t0M5sqCXfj85i4XaAzxmS5tVA16dqvdkMwGmzI+dXLXnw3J+3Vdv7VKw+ThlTMboK6i9rnZ6Nntj5CQ==}
@@ -11433,6 +11443,12 @@ snapshots:
       '@tanstack/form-core': 0.33.0
       zod: 3.24.1
 
+  '@tigawanna/hono-pino@0.7.1(hono@4.6.16)(pino@9.6.0)':
+    dependencies:
+      defu: 6.1.4
+      hono: 4.6.16
+      pino: 9.6.0
+
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
   '@tsconfig/node10@1.0.11': {}
@@ -13070,6 +13086,8 @@ snapshots:
       define-data-property: 1.1.4
       has-property-descriptors: 1.0.2
       object-keys: 1.1.1
+
+  defu@6.1.4: {}
 
   degenerator@5.0.1:
     dependencies:

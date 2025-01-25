@@ -31,7 +31,6 @@ export function createApp() {
       credentials: true,
     }));
   app.use(requestId());
-  // @ts-expect-error its fine
   app.use(pinoLogger());
   app.use("/api/*", (c, next) => corsHeaders(c, next));
   app.use(contextStorage());

@@ -1,4 +1,4 @@
-import { pinoLogger as logger } from "hono-pino";
+import { pinoLogger as logger } from "@tigawanna/hono-pino";
 import pino from "pino";
 import pretty from "pino-pretty";
 
