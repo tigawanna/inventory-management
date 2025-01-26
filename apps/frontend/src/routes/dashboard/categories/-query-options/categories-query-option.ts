@@ -8,8 +8,8 @@ interface categoriesQueryOptionPropss extends GetApiCategoriesQueryParams {
 }
 export function categoriesListQueryOptions({
   keyword,
-  page = "1",
-  limit = "10",
+  page,
+  limit,
   order = "desc",
   sort = "name",
 }: categoriesQueryOptionPropss) {
@@ -17,7 +17,7 @@ export function categoriesListQueryOptions({
     queryKey: ["categories", keyword, page, limit, order, sort],
     queryFn: async () => {
       const response = await categoriesService().getApiCategoriesClient({
-        limit: "12",
+        limit: "3",
         page,
         order,
         search: keyword,

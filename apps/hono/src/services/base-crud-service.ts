@@ -106,8 +106,6 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     const oldItem = await this.findById(id);
     const ctx = getContext<AppBindings>();
     const userId = ctx?.var?.viewer?.id;
-    console.log(" viewr  === ",ctx.var);
-    console.log({userId});
     const item = await db
       .update(this.table)
       .set(data as any)

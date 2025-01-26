@@ -5,7 +5,7 @@ import { CategoriesPage } from "@/routes/dashboard/categories/-components/Catego
 import { getApiCategoriesQueryParamsSchema } from "@/lib/kubb/gen";
 
 
-const searchparams = getApiCategoriesQueryParamsSchema;
+const searchparams = getApiCategoriesQueryParamsSchema
 
 export const Route = createFileRoute("/dashboard/categories/")({
   validateSearch: (search) => searchparams.parse(search),

@@ -6,9 +6,7 @@ import type { UserJWTPayload } from "@/api/users/schema";
 import type { AppBindings } from "@/lib/types";
 
 import { envVariables } from "@/env";
-import {
-  setAccessTokenCookie,
-} from "@/services/cookie-service";
+import { setAccessTokenCookie } from "@/services/cookie-service";
 import { verifiedAccessToken } from "@/services/token-service";
 import { verifyRefreshTokenAndrefreshAccessToken } from "@/shared/utils/refresh-if-possible-util";
 
@@ -37,9 +35,20 @@ export async function authenticateUserMiddleware(
       );
       setAccessTokenCookie(c, newAccessToken);
       c.var.logger.info("refreshAccessToken: Access token refreshed");
+    } else {
+      return c.json({
+        result: null,
+        error: {
+          error: "Unauthorized",
+          message: "Missing credentials",
+          code: 401,
+        },
+      });
     }
-
+  }
+  if(!user){
     return c.json({
+      reult: null,
       error: {
         error: "Unauthorized",
         message: "Missing credentials",
@@ -47,8 +56,9 @@ export async function authenticateUserMiddleware(
       },
     });
   }
-  if (role && role !== user.role) {
+  if (role && (role !== user?.role && user?.role !== "admin")) {
     return c.json({
+      result: null,
       error: {
         error: "Unauthorized",
         message: "Missing credentials",
@@ -56,5 +66,6 @@ export async function authenticateUserMiddleware(
       },
     });
   }
-  next();
+  c.set("viewer", user);
+ await next();
 }

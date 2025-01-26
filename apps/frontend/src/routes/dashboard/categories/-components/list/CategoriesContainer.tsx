@@ -21,7 +21,7 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
       sort: sq.sort ?? "created_at",
       keyword,
       page,
-      limit: sq.limit ?? "10",
+      limit: sq.limit ?? "12",
       order: sq.order ?? "desc",
     }),
   );
@@ -44,7 +44,7 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
   }
   const items = data.items;
   return (
-    <div className="flex h-full w-full flex-col items-center ">
+    <div className="flex h-full w-full flex-col items-center gap-5 ">
       <div className="hidden w-full max-w-[99vw] lg:flex">
         <CategoryTable items={items} />
       </div>
@@ -53,10 +53,11 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
       </div>
       <div className="flex w-full items-center justify-center">
         <ResponsivePagination
-          current={page ?? 1}
+          current={Number(page) ?? 1}
           total={data.totalPages??-1}
           onPageChange={(e) => {
-            updatePage(e);
+            // @ts-expect-error
+            updatePage(String(e));
           }}
         />
       </div>
