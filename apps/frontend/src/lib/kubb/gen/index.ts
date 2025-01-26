@@ -1,6 +1,8 @@
 export type {
   GetApiAuditlogsQueryParamsOrderEnum,
   GetApiAuditlogsQueryParamsSortEnum,
+  GetApiAuditlogsQueryParamsEntityEnum,
+  GetApiAuditlogsQueryParamsActionEnum,
   GetApiAuditlogsQueryParams,
   ItemsActionEnum,
   ItemsEntityTypeEnum,
@@ -344,6 +346,8 @@ export { usersService } from './clients/UsersService/usersService.ts'
 export {
   getApiAuditlogsQueryParamsOrderEnum,
   getApiAuditlogsQueryParamsSortEnum,
+  getApiAuditlogsQueryParamsEntityEnum,
+  getApiAuditlogsQueryParamsActionEnum,
   itemsActionEnum,
   itemsEntityTypeEnum,
   userRoleEnum,

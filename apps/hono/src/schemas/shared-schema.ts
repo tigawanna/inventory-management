@@ -2,8 +2,8 @@ import { notFound } from "stoker/middlewares";
 import { z } from "zod";
 
 export const genericQueryParamsSchema = z.object({
-  page: z.string().default("1"),
-  limit: z.string().default("10"),
+  page: z.coerce.number().default(1),
+  limit: z.coerce.number().default(10),
   //   sort: z.enum(sortBy).optional(),
   order: z.enum(["asc", "desc"]).default("desc"),
   search: z.string().optional(),

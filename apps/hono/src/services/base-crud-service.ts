@@ -14,8 +14,8 @@ import type { EntityType } from "./audit-log.service";
 import { auditAction, AuditLogService } from "./audit-log.service";
 
 export interface PaginatedQuery {
-  page: string;
-  limit: string;
+  page: number;
+  limit: number;
   sort?: string;
   order?: "asc" | "desc";
 }

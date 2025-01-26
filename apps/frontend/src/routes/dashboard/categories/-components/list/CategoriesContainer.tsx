@@ -7,6 +7,7 @@ import { categoriesListQueryOptions } from "../../-query-options/categories-quer
 import { CategoryTable } from "./CategoryTable";
 import { CategoriesList } from "./CategoriesList";
 import ResponsivePagination from "react-responsive-pagination";
+import { DEFAULT_PAGE_SIZE } from "@/utils/constnants";
 
 interface CategoriesContainerProps {
   keyword: string;
@@ -21,7 +22,7 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
       sort: sq.sort ?? "created_at",
       keyword,
       page,
-      limit: sq.limit ?? "12",
+      limit: sq.limit,
       order: sq.order ?? "desc",
     }),
   );
@@ -53,11 +54,10 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
       </div>
       <div className="flex w-full items-center justify-center">
         <ResponsivePagination
-          current={Number(page) ?? 1}
+          current={page ?? 1}
           total={data.totalPages??-1}
           onPageChange={(e) => {
-            // @ts-expect-error
-            updatePage(String(e));
+            updatePage(e);
           }}
         />
       </div>

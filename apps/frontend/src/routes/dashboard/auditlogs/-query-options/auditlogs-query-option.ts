@@ -1,5 +1,6 @@
 import { makeHotToast } from "@/components/toasters";
 import { auditlogsService } from "@/lib/kubb/gen";
+import { DEFAULT_PAGE_SIZE } from "@/utils/constnants";
 import { queryOptions } from "@tanstack/react-query";
 
 
@@ -26,8 +27,8 @@ export function auditlogsListQueryOptions(
     queryKey: [basekey, page, action, entity],
     queryFn: async () => {
     const response = await auditlogsService().getApiAuditlogsClient({
-        limit: "10",
-        page: String(page),
+        limit:DEFAULT_PAGE_SIZE,
+        page,
         order: "desc",
         sort: "created_at",
         action,

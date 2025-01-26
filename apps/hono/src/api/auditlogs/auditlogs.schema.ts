@@ -41,10 +41,10 @@ const sortBy = ["created_at"] as const satisfies Array<keyof AuditlogsItem>;
 
 export const listAuditlogsQueryParamsSchema = genericQueryParamsSchema.extend({
   sort: z.enum(sortBy).optional(),
-  entity: z.string().optional(),
-  action: z.string().optional(),
-  // entity: z.enum(entityType).optional(),
-  // action: z.enum(auditAction).optional(),
+  // entity: z.string().optional(),
+  // action: z.string().optional(),
+  entity: z.enum(entityType).optional(),
+  action: z.enum(auditAction).optional(),
 });
 
 export const viewAuditlogsParamsSchema = z.object({

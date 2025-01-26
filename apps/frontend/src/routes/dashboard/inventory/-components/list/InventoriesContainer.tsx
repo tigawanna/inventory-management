@@ -21,7 +21,7 @@ export function InventoriesContainer({ keyword }: InventoriesContainerProps) {
       keyword: keyword ?? "",
       page: searchParams.page ?? 1,
       categoryId: searchParams.categoryId ?? "",
-      limit: searchParams.limit ?? 12,
+      limit: searchParams.limit,
       order: searchParams.order ?? "desc",
       sort: searchParams.sort ?? "name",
     };

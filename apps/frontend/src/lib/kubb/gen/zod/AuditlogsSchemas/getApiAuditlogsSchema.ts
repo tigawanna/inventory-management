@@ -10,13 +10,13 @@ import { z } from 'zod'
 
 export const getApiAuditlogsQueryParamsSchema = z
   .object({
-    page: z.string().default('1'),
-    limit: z.string().default('10'),
+    page: z.number().default(1).nullable().nullish(),
+    limit: z.number().default(10).nullable().nullish(),
     order: z.enum(['asc', 'desc']).default('desc'),
     search: z.string().optional(),
     sort: z.enum(['created_at']).optional(),
-    entity: z.string().optional(),
-    action: z.string().optional(),
+    entity: z.enum(['USER', 'INVENTORY', 'CATEGORY']).optional(),
+    action: z.enum(['CREATE', 'UPDATE', 'DELETE', 'LOGIN', 'LOGOUT', 'PASSWORD_RESET', 'EMAIL_VERIFY']).optional(),
   })
   .optional() as unknown as ToZod<GetApiAuditlogsQueryParams>
 

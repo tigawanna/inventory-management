@@ -10,8 +10,8 @@ import { z } from 'zod'
 
 export const getApiInventoryQueryParamsSchema = z
   .object({
-    page: z.string().default('1'),
-    limit: z.string().default('10'),
+    page: z.number().default(1).nullable().nullish(),
+    limit: z.number().default(10).nullable().nullish(),
     order: z.enum(['asc', 'desc']).default('desc'),
     search: z.string().optional(),
     sort: z.enum(['name', 'price', 'quantity']).optional(),

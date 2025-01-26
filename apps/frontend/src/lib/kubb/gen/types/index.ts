@@ -1,6 +1,8 @@
 export type {
   GetApiAuditlogsQueryParamsOrderEnum,
   GetApiAuditlogsQueryParamsSortEnum,
+  GetApiAuditlogsQueryParamsEntityEnum,
+  GetApiAuditlogsQueryParamsActionEnum,
   GetApiAuditlogsQueryParams,
   ItemsActionEnum,
   ItemsEntityTypeEnum,
@@ -305,6 +307,8 @@ export type {
 export {
   getApiAuditlogsQueryParamsOrderEnum,
   getApiAuditlogsQueryParamsSortEnum,
+  getApiAuditlogsQueryParamsEntityEnum,
+  getApiAuditlogsQueryParamsActionEnum,
   itemsActionEnum,
   itemsEntityTypeEnum,
   userRoleEnum,

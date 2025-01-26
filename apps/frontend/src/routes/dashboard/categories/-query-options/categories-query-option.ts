@@ -1,6 +1,7 @@
 import { categoriesService, GetApiCategoriesQueryParams } from "@/lib/kubb/gen";
 import { queryOptions } from "@tanstack/react-query";
 import { makeHotToast } from "@/components/toasters";
+import { DEFAULT_PAGE_SIZE } from "@/utils/constnants";
 
 
 interface categoriesQueryOptionPropss extends GetApiCategoriesQueryParams {
@@ -9,7 +10,7 @@ interface categoriesQueryOptionPropss extends GetApiCategoriesQueryParams {
 export function categoriesListQueryOptions({
   keyword,
   page,
-  limit,
+  limit=DEFAULT_PAGE_SIZE,
   order = "desc",
   sort = "name",
 }: categoriesQueryOptionPropss) {
@@ -17,7 +18,7 @@ export function categoriesListQueryOptions({
     queryKey: ["categories", keyword, page, limit, order, sort],
     queryFn: async () => {
       const response = await categoriesService().getApiCategoriesClient({
-        limit: "3",
+        limit,
         page,
         order,
         search: keyword,

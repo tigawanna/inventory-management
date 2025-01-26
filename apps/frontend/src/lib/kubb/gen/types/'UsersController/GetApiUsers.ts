@@ -13,15 +13,15 @@ export type GetApiUsersQueryParamsSortEnum = (typeof getApiUsersQueryParamsSortE
 
 export type GetApiUsersQueryParams = {
   /**
-   * @default "1"
-   * @type string | undefined
+   * @default 1
+   * @type number
    */
-  page?: string | undefined
+  page?: (number | null) | undefined
   /**
-   * @default "10"
-   * @type string | undefined
+   * @default 10
+   * @type number
    */
-  limit?: string | undefined
+  limit?: (number | null) | undefined
   /**
    * @default "desc"
    * @type string | undefined

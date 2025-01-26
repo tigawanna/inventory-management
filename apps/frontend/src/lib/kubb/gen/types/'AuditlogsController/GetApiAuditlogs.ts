@@ -11,17 +11,37 @@ export const getApiAuditlogsQueryParamsSortEnum = {
 
 export type GetApiAuditlogsQueryParamsSortEnum = (typeof getApiAuditlogsQueryParamsSortEnum)[keyof typeof getApiAuditlogsQueryParamsSortEnum]
 
+export const getApiAuditlogsQueryParamsEntityEnum = {
+  USER: 'USER',
+  INVENTORY: 'INVENTORY',
+  CATEGORY: 'CATEGORY',
+} as const
+
+export type GetApiAuditlogsQueryParamsEntityEnum = (typeof getApiAuditlogsQueryParamsEntityEnum)[keyof typeof getApiAuditlogsQueryParamsEntityEnum]
+
+export const getApiAuditlogsQueryParamsActionEnum = {
+  CREATE: 'CREATE',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
+  PASSWORD_RESET: 'PASSWORD_RESET',
+  EMAIL_VERIFY: 'EMAIL_VERIFY',
+} as const
+
+export type GetApiAuditlogsQueryParamsActionEnum = (typeof getApiAuditlogsQueryParamsActionEnum)[keyof typeof getApiAuditlogsQueryParamsActionEnum]
+
 export type GetApiAuditlogsQueryParams = {
   /**
-   * @default "1"
-   * @type string | undefined
+   * @default 1
+   * @type number
    */
-  page?: string | undefined
+  page?: (number | null) | undefined
   /**
-   * @default "10"
-   * @type string | undefined
+   * @default 10
+   * @type number
    */
-  limit?: string | undefined
+  limit?: (number | null) | undefined
   /**
    * @default "desc"
    * @type string | undefined
@@ -38,11 +58,11 @@ export type GetApiAuditlogsQueryParams = {
   /**
    * @type string | undefined
    */
-  entity?: string | undefined
+  entity?: GetApiAuditlogsQueryParamsEntityEnum | undefined
   /**
    * @type string | undefined
    */
-  action?: string | undefined
+  action?: GetApiAuditlogsQueryParamsActionEnum | undefined
 }
 
 export const itemsActionEnum = {
