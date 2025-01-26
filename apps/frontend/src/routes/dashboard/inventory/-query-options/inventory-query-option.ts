@@ -14,9 +14,7 @@ export type InventoryQueryVariables= {
   categoryId?: string;
 }
 
-interface inventoryQueryOptionPropss{
 
-}
 export function inventoryListQueryOptions({
   basekey,
   keyword,

@@ -8,12 +8,15 @@ import { CategoryTable } from "./CategoryTable";
 import { CategoriesList } from "./CategoriesList";
 import ResponsivePagination from "react-responsive-pagination";
 import { DEFAULT_PAGE_SIZE } from "@/utils/constnants";
+import { useState } from "react";
+import { CategoryItem } from "../types";
 
 interface CategoriesContainerProps {
   keyword: string;
 }
 
 export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
+  const [selected,setSelected] = useState<never[] | CategoryItem[]>([])
   const { page, updatePage } = usePageSearchQuery("/dashboard/categories");
   const sq = useSearch({ from: "/dashboard/categories/" });
   const query = useSuspenseQuery(
@@ -28,6 +31,7 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
   );
   const data = query.data;
   const error = query.error;
+
 
   if (error) {
     return (
@@ -45,17 +49,27 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
   }
   const items = data.items;
   return (
-    <div className="flex h-full w-full flex-col items-center gap-5 ">
+    <div className="flex h-full w-full flex-col items-center gap-5">
       <div className="hidden w-full max-w-[99vw] lg:flex">
-        <CategoryTable items={items} />
+        <CategoryTable
+          items={items}
+          selected={selected}
+          setSelected={setSelected}
+          maxSelect={1}
+        />
       </div>
       <div className="flex w-full lg:hidden">
-        <CategoriesList items={items} />
+        <CategoriesList
+          items={items}
+          selected={selected}
+          setSelected={setSelected}
+          maxSelect={1}
+        />
       </div>
       <div className="flex w-full items-center justify-center">
         <ResponsivePagination
           current={page ?? 1}
-          total={data.totalPages??-1}
+          total={data.totalPages ?? -1}
           onPageChange={(e) => {
             updatePage(e);
           }}
