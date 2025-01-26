@@ -10,20 +10,22 @@ export function pinoLogger() {
       {
         level: envVariables.LOG_LEVEL || "info",
       },
-      envVariables.NODE_ENV === "production" ? undefined : pretty({
-        colorize: true,
-      }),
+      envVariables.NODE_ENV === "production"
+        ? undefined
+        : pretty({
+            colorize: true,
+          }),
     ),
     http: {
       reqId: () => crypto.randomUUID(),
-      minimalMessage:true,
+      minimalMessage: envVariables.LOG_LEVEL !== "debug",
       // minimalMessage:(b,c)=>{
       //   return {
       //     extra:"i want to log this too",
-      //     ...b,
+      //     // body:c.req.json(),
+      //     // ...b
       //   }
       // }
     },
   });
 }
-

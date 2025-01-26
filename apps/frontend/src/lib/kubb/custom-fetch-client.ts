@@ -57,6 +57,7 @@ export async function fetchClient<
   config: RequestConfig<TVariables>,
 ): Promise<SuccessResponse<TData> | NotSuccessResponse> {
   config.baseURL = config.baseURL || envVariables.VITE_API_URL;
+  config.headers = {...config.headers, "Content-Type": "application/json"}
   const url = new URL(
     config.url || "",
     config.baseURL ? new URL(config.baseURL) : undefined,

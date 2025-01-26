@@ -64,6 +64,7 @@ export type CreateCategoriesRoute = typeof categoriesCreateRoute;
 const categoriesService = new CategoriesService();
 export const categoriesCreateHandler: AppRouteHandler<CreateCategoriesRoute> = async (c) => {
   try {
+    console.log(" categories input  ====  ",c.req.valid("json"))
     const categories = await categoriesService.create(c.req.valid("json")) as CategoriesItem;
     return c.json({
       result: categories,
@@ -83,7 +84,7 @@ export const categoriesCreateHandler: AppRouteHandler<CreateCategoriesRoute> = a
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("Categories creation  error:", error.name);
+      c.var.logger.error("Categories creation  error:", error.message);
       return c.json({
         result: null,
         error: {
