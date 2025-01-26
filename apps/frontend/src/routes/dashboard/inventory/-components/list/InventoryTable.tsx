@@ -24,9 +24,9 @@ export function InventoryTable({ items }: InventoryTableProps) {
       accessor: "description",
     },
     { label: "SKU", accessor: "sku" },
-    { label: "Year", accessor: "price" },
+    { label: "qty", accessor: "quantity" },
     { label: "price", accessor: "price" },
-    { label: "Category", accessor: "categoryId" },
+    { label: "Cat", accessor: "categoryId" },
     { label: "Created", accessor: "created_at" },
   ];
   const { viewer } = useViewer();
