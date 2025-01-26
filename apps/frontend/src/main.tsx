@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import {  createRouter,ErrorComponent } from "@tanstack/react-router";
+import { createRouter, ErrorComponent } from "@tanstack/react-router";
 import {
   MutationCache,
   QueryClient,
@@ -12,12 +12,14 @@ import { RouterErrorComponent } from "./lib/tanstack/router/routerErrorComponent
 import { RouterNotFoundComponent } from "./lib/tanstack/router/RouterNotFoundComponent";
 import { App } from "./App";
 
-
 export const queryClient = new QueryClient({
   mutationCache: new MutationCache({
-    onSuccess: async (_, __, ___, mutation) => {
+    onSuccess: async (data, __, ___, mutation) => {
+      // @ts-expect-error : something returned data type of error so don't nvalidate queries yet
+      if (data && data?.type === "error") {
+        return;
+      }
       if (Array.isArray(mutation.meta?.invalidates)) {
-        // biome-ignore lint/complexity/noForEach: <explanation>
         mutation.meta?.invalidates.forEach((key) => {
           return queryClient.invalidateQueries({
             queryKey: [key.trim()],
@@ -35,12 +37,11 @@ export const queryClient = new QueryClient({
   },
 });
 
-
 // Set up a Router instance
 export const router = createRouter({
   routeTree,
   defaultPreload: "intent",
-  defaultViewTransition:true,
+  defaultViewTransition: true,
   defaultPendingComponent: () => <RouterPendingComponent />,
   defaultNotFoundComponent: () => <RouterNotFoundComponent />,
   defaultErrorComponent: ({ error }) => <RouterErrorComponent error={error} />,
@@ -56,8 +57,6 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
-
-
 
 const rootElement = document.getElementById("app")!;
 

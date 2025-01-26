@@ -6,24 +6,29 @@ import { Edit } from "lucide-react";
 import { makeHotToast } from "@/components/toasters";
 import { BaseCategoriesForm } from "./base";
 import { useMutation } from "@tanstack/react-query";
+import { CategoryItem } from "../types";
+import { categoriesService } from "@/lib/kubb/gen";
 
 interface UpdateCategoriesformInterface {
-  item: Record<string, any> & { id: string };
+  item:CategoryItem
 }
 export function UpdateCategoriesform({ item }: UpdateCategoriesformInterface) {
   const [open, setOpen] = useState(false);
   const mutation = useMutation({
-    mutationFn: (value: {}) => {
-      return new Promise<{}>((resolve) => {
-        setTimeout(() => {
-          resolve(value);
-        }, 2000);
-      });
+    mutationFn: (value:CategoryItem) => {
+      return categoriesService().patchApiCategoriesClient(value);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if(data.type==="error"){
+        return makeHotToast({
+          title: "Something went wrong",
+          description: data.data.error.message,
+          variant: "error",
+        });
+      }
       makeHotToast({
-        title: "Categories added",
-        description: "Categories has been added successfully",
+        title: "Success",
+        description: "Category has been updated successfully",
         variant: "success",
       });
       setOpen(false);
@@ -43,12 +48,12 @@ export function UpdateCategoriesform({ item }: UpdateCategoriesformInterface) {
     <DiaDrawer
       open={open}
       setOpen={setOpen}
-      title="Add Categories"
-      description="Add a new staff"
+      title="Update Category"
+      description="Update category entry"
       trigger={<Edit className="size-5" />}
     >
-      <div className="flex h-full max-h-[80vh] w-fit flex-col gap-2 overflow-auto">
-        <BaseCategoriesForm mutation={mutation} row={{item}} />
+      <div className="flex h-full max-h-[80vh] w-full flex-col gap-2 overflow-auto">
+        <BaseCategoriesForm mutation={mutation} row={item} />
       </div>
     </DiaDrawer>
   );

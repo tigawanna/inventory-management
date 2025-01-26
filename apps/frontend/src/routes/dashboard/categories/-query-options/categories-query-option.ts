@@ -14,7 +14,7 @@ export function categoriesListQueryOptions({
   sort = "name",
 }: categoriesQueryOptionPropss) {
   return queryOptions({
-    queryKey: ["categories_list", keyword, page, limit, order, sort],
+    queryKey: ["categories", keyword, page, limit, order, sort],
     queryFn: async () => {
       const response = await categoriesService().getApiCategoriesClient({
         limit: "12",

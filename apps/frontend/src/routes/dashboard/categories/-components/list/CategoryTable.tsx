@@ -1,5 +1,7 @@
-import { CategoryItem } from "@/lib/api/category";
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
+import { CategoryItem } from "../types";
+import { UpdateCategoriesform } from "../form/update";
+import { DeleteCategoryForm } from "../form/delete";
 
 interface CategoryTableProps {
   items: never[] | CategoryItem[];
@@ -54,11 +56,11 @@ export function CategoryTable({ items }: CategoryTableProps) {
                 })}
                 {role === "admin" && (
                   <td key={"update" + row.id}>
-                    {/* <UpdateInventoryform item={row} /> */}
+                    <UpdateCategoriesform item={row} />
                   </td>
                 )}
                 <td key={"delete" + row.id}>
-                  {/* <DeleteInventoryForm id={row.id} /> */}
+                  <DeleteCategoryForm id={row.id} />
                 </td>
               </tr>
             );

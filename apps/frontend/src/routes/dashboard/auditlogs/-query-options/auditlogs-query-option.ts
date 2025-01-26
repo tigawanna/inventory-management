@@ -1,7 +1,5 @@
 import { makeHotToast } from "@/components/toasters";
-import { envVariables } from "@/lib/env";
 import { auditlogsService } from "@/lib/kubb/gen";
-import { createApiClient } from "@/lib/zod-openapi/generated/Auditlogs";
 import { queryOptions } from "@tanstack/react-query";
 
 

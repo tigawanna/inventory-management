@@ -5,8 +5,6 @@ import { ListPageHeader } from "@/components/wrappers/ListPageHeader";
 import { Helmet } from "@/components/wrappers/custom-helmet";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { CreateCategoriesForm } from "./form/create";
-import { CategoriesList } from "./list/CategoriesList";
-import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
 import { CategoriesContainer } from "./list/CategoriesContainer";
 import { ResponsiveSuspenseFallbacks } from "@/components/wrappers/ResponsiveSuspenseFallbacks";
 
