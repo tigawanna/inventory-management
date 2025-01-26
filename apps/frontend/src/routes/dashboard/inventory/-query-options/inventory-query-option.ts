@@ -33,7 +33,8 @@ export function inventoryListQueryOptions({
         categoryId,
         order,
         sort,
-        
+        page,
+        limit
       })
        if(response.type === "error"){
          makeHotToast({

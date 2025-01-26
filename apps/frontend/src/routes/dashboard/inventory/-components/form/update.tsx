@@ -4,7 +4,7 @@ import { Edit } from "lucide-react";
 import { makeHotToast } from "@/components/toasters";
 import { BaseInventoryForm } from "./base";
 import { useMutation } from "@tanstack/react-query";
-import { updateInventoryItem } from "@/lib/api/inventory";
+import { inventoryService } from "@/lib/kubb/gen";
 
 interface UpdateInventoryformInterface {
   item: Record<string, any> & { id: string };
@@ -13,22 +13,23 @@ export function UpdateInventoryform({ item }: UpdateInventoryformInterface) {
   const [open, setOpen] = useState(false);
   const mutation = useMutation({
     mutationFn: (value: any) => {
-      return updateInventoryItem(item.id, value);
+      console.log({ value });
+      return  inventoryService().patchApiInventoryClient(value);
     },
 
     onSuccess: (data) => {
       console.log({ data });
-      if (data.error) {
+      if (data.type === "error") {
         makeHotToast({
           title: "Something went wrong",
-          description: data.error.message,
+          description: data.data.error.message,
           variant: "error",
         });
         return;
       }
       makeHotToast({
-        title: "Inventory added",
-        description: "Inventory has been added successfully",
+        title: "Inventory updated",
+        description: "Inventory has been updated successfully",
         variant: "success",
       });
       setOpen(false);

@@ -56,7 +56,7 @@ export async function authenticateUserMiddleware(
       },
     });
   }
-  if (role && (role !== user?.role && user?.role !== "admin")) {
+  if (role && user?.role !== "admin" && (role !== user?.role)) {
     return c.json({
       result: null,
       error: {

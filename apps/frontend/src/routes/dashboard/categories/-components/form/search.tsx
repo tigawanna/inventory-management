@@ -18,6 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { Check, X } from "lucide-react";
+import { CreateCategoriesForm } from "./create";
 interface SearchCategoryInputProps {
   trigger?: JSX.Element;
   setCategory: (categories: CategoryItem[]) => void;
@@ -130,7 +131,9 @@ export function SearchCategoryList({
   }
   const items = data.items;
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center overflow-auto">
+    <div className="flex h-full w-full max-h-[70vh] flex-col items-center justify-center overflow-auto gap-2">
+      <CreateCategoriesForm/>
+    <div className="flex w-full max-h-[70vh] flex-col items-center justify-center overflow-auto">
       <CategoriesList
         items={items}
         selected={selected}
@@ -138,6 +141,7 @@ export function SearchCategoryList({
         maxSelect={1}
         searchMode
       />
+    </div>
     </div>
   );
 }

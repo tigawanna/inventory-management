@@ -50,7 +50,11 @@ export function InventoryTable({ items }: InventoryTableProps) {
         <tbody>
           {items.map((row) => {
             return (
-              <tr key={row.id}>
+              <tr
+                key={row.id}
+                data-active={row.isActive ?? "false"}
+                className="data-[active=false]:brightness-75"
+              >
                 {columns.map((column, idx) => {
                   return (
                     <td key={column.accessor + row.id + idx}>
@@ -64,7 +68,11 @@ export function InventoryTable({ items }: InventoryTableProps) {
                   </td>
                 )}
                 <td key={"delete" + row.id}>
+                  <div className="flex gap-2">
                   <DeleteInventoryForm id={row.id} />
+                  {!row.isActive && <div className="badge badge-primary">soft deleted</div>}
+
+                  </div>
                 </td>
               </tr>
             );

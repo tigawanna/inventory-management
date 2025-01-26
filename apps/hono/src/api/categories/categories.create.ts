@@ -71,6 +71,7 @@ export const categoriesCreateHandler: AppRouteHandler<CreateCategoriesRoute> = a
     }, HttpStatusCodes.OK);
   }
   catch (error) {
+    console.log("error creating categories == ",error)
     if (error instanceof ZodError) {
       c.var.logger.error("Categories creation  error:", error.message);
       return c.json({
@@ -83,7 +84,7 @@ export const categoriesCreateHandler: AppRouteHandler<CreateCategoriesRoute> = a
       }, HttpStatusCodes.BAD_REQUEST);
     }
     if (error instanceof Error) {
-      c.var.logger.error("Categories creation  error:", error.message);
+      c.var.logger.error("Categories creation  error:", error);
       return c.json({
         result: null,
         error: {

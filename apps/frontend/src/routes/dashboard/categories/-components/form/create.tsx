@@ -14,7 +14,8 @@ export function CreateCategoriesForm() {
 
   const mutation = useMutation({
     mutationFn: (value:CategoryItem) => {
-      return categoriesService().postApiCategoriesClient(value);
+      const {id, ...rest} = value
+      return categoriesService().postApiCategoriesClient(rest);
     },
     onSuccess: (data) => {
       if(data.type==="error"){

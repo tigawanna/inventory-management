@@ -4,20 +4,21 @@ import { Plus } from "lucide-react";
 import { makeHotToast } from "@/components/toasters";
 import { BaseInventoryForm } from "./base";
 import { useMutation } from "@tanstack/react-query";
-import { createInventoryItem } from "@/lib/api/inventory";
+import { inventoryService } from "@/lib/kubb/gen";
 
 export function CreateInventoryForm() {
   const [open, setOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: (value: any) => {
-      return createInventoryItem(value);
+      const {id, ...rest} = value
+      return inventoryService().postApiInventoryClient(rest);
     },
     onSuccess: (data) => {
-      if(data.error){
+      if(data.type === "error"){
         makeHotToast({
           title: "Something went wrong",
-          description: data.error.message,
+          description: data.data?.error.message,
           variant: "error",
         });
         return

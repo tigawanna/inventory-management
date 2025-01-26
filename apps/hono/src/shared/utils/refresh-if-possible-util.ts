@@ -64,7 +64,7 @@ export async function verifyRefreshTokenAndrefreshAccessToken(
   }
   const { password, verificationToken, refreshToken, ...newuserPayload }
     = matchingUser;
-  if (newuserPayload.role !== role) {
+  if (role && role !== "admin" && newuserPayload.role !== role) {
     c.var.logger.error(
       `verifyRefreshToken: User role does not match requested role: ${matchingUser.role} != ${role}`,
     );
