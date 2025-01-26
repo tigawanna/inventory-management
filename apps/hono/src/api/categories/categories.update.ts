@@ -64,6 +64,7 @@ export const categoriesUpdateHandler: AppRouteHandler<UpdateCategoriesRoute> =
   async (c) => {
     try {
       const newItem = c.req.valid("json");
+          console.log(" categories input  ====  ",c.req.valid("json"))
       const categories = await categoriesService.update(
         newItem.id,
         newItem

@@ -18,7 +18,7 @@ export function pinoLogger() {
     ),
     http: {
       reqId: () => crypto.randomUUID(),
-      minimalMessage: envVariables.LOG_LEVEL !== "debug",
+      minimalMessage: envVariables.LOG_LEVEL === "debug",
       // minimalMessage:(b,c)=>{
       //   return {
       //     extra:"i want to log this too",

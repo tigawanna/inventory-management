@@ -64,7 +64,6 @@ export type CreateCategoriesRoute = typeof categoriesCreateRoute;
 const categoriesService = new CategoriesService();
 export const categoriesCreateHandler: AppRouteHandler<CreateCategoriesRoute> = async (c) => {
   try {
-    console.log(" categories input  ====  ",c.req.valid("json"))
     const categories = await categoriesService.create(c.req.valid("json")) as CategoriesItem;
     return c.json({
       result: categories,

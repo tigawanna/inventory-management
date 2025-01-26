@@ -38,7 +38,7 @@ export function CategoriesPage({}: CategoriesPageProps) {
 
       <div className="m-3 flex h-full w-full  p-5">
         <Suspense fallback={<ResponsiveSuspenseFallbacks />}>
-          <CategoriesContainer keyword={keyword} />
+          <CategoriesContainer keyword={debouncedValue} />
         </Suspense>
       </div>
     </div>
