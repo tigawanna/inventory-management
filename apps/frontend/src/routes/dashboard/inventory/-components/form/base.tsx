@@ -26,7 +26,7 @@ export function BaseInventoryForm<T extends InventoryItem>({
   const form = useForm<InventoryForm>({
     defaultValues: {
       id: row?.id ?? "",
-      sku: row?.sku ?? "",
+      // sku: row?.sku ?? "",
       name: row?.name ?? "",
       description: row?.description ?? "",
       quantity: row?.quantity ?? 50,

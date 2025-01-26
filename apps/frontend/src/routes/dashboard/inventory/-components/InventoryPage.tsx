@@ -5,7 +5,6 @@ import { Helmet } from "@/components/wrappers/custom-helmet";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { CreateInventoryForm } from "./form/create";
 import {
-  InventoryCategoriesSelect,
   InventoryOrderSelect,
   InventorySortSelect,
 } from "./list/InventorySortSelect";
