@@ -9,7 +9,6 @@ import usersRoutes from "./users/users.index";
 const mainrouter = createRouter();
 mainrouter.route("/api/inventory", invemtoryRoutes);
 mainrouter.route("/api/auth", authRoutes);
-
 mainrouter.route("/api/users", usersRoutes);
 mainrouter.route("/api/categories", categoriesRoutes);
 mainrouter.route("/api/auditlogs", auditlogsRoutes);
