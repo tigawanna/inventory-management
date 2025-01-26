@@ -16,7 +16,7 @@ import { InventoryService } from "./inventory.service";
 const tags = ["Inventory"];
 
 export const inventoryGetOneRoute = createRoute({
-  path: "/:id",
+  path: "/{id}",
   method: "get",
   tags,
   request: {

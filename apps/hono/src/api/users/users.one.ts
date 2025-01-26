@@ -17,7 +17,7 @@ import { UsersService } from "./users.service";
 const tags = ["Users"];
 
 export const usersGetOneRoute = createRoute({
-  path: "/:id",
+  path: "/{id}",
   method: "get",
   tags,
   request: {

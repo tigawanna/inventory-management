@@ -9,7 +9,7 @@ import type {
 import type { RequestConfig, ResponseErrorConfig } from '@/lib/kubb/custom-fetch-client.ts'
 
 export function getGetApiCategoriesIdUrlClient({ id }: { id: GetApiCategoriesIdPathParams['id'] }) {
-  return `/api/categories/:id` as const
+  return `/api/categories/${id}` as const
 }
 
 /**

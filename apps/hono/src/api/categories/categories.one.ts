@@ -1,4 +1,3 @@
-
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -17,7 +16,7 @@ import { CategoriesService } from "./categories.service";
 const tags = ["Categories"];
 
 export const categoriesGetOneRoute = createRoute({
-  path: "/:id",
+  path: "/{id}",
   method: "get",
   tags,
   request: {
@@ -103,5 +102,3 @@ export const categoriesGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) 
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
-
-    

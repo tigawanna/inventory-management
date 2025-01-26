@@ -9,7 +9,7 @@ import type {
 import type { RequestConfig, ResponseErrorConfig } from '@/lib/kubb/custom-fetch-client.ts'
 
 export function getGetApiAuditlogsIdUrlClient({ id }: { id: GetApiAuditlogsIdPathParams['id'] }) {
-  return `/api/auditlogs/:id` as const
+  return `/api/auditlogs/${id}` as const
 }
 
 /**

@@ -17,7 +17,7 @@ import { AuditlogsService } from "./auditlogs.service";
 const tags = ["Auditlogs"];
 
 export const auditlogsGetOneRoute = createRoute({
-  path: "/:id",
+  path: "/{id}",
   method: "get",
   tags,
   request: {

@@ -25,7 +25,7 @@ import { ${capitalizedRoutename}Service } from "./${routename}.service";
 const tags = ["${capitalizedRoutename}"];
 
 export const ${routename}GetOneRoute = createRoute({
-  path: "/:id",
+  path: "/{id}",
   method: "get",
   tags,
   request: {
