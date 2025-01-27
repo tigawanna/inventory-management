@@ -20,8 +20,8 @@ export function InventoryPage({}: InventoryPageProps) {
   return (
     <div className="flex h-full min-h-screen w-full flex-col items-center gap-5">
       <Helmet
-        title="Collabs | inventory"
-        description="The list of Collabs | inventory"
+        title="Inventory | inventory"
+        description="The list of Inventory | inventory"
       />
       <ListPageHeader
         title="Inventory"

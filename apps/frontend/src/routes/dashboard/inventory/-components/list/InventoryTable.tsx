@@ -1,4 +1,4 @@
-import { InventoryItem } from "@/lib/api/inventory";
+import { InventoryItem } from "../types";
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
 import { UpdateInventoryform } from "../form/update";
 import { DeleteInventoryForm } from "../form/delete";
@@ -69,9 +69,10 @@ export function InventoryTable({ items }: InventoryTableProps) {
                 )}
                 <td key={"delete" + row.id}>
                   <div className="flex gap-2">
-                  <DeleteInventoryForm id={row.id} />
-                  {!row.isActive && <div className="badge badge-primary">soft deleted</div>}
-
+                    <DeleteInventoryForm id={row.id} />
+                    {!row.isActive && (
+                      <div className="badge badge-primary">soft deleted</div>
+                    )}
                   </div>
                 </td>
               </tr>

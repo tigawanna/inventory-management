@@ -17,8 +17,8 @@ export function CategoriesPage({}: CategoriesPageProps) {
   return (
     <div className="flex h-full min-h-screen w-full flex-col gap-5">
       <Helmet
-        title="Collabs | categories"
-        description="The list of Collabs | categories"
+        title="Inventory | categories"
+        description="The list of Inventory | categories"
       />
       <ListPageHeader
         title="Categories"

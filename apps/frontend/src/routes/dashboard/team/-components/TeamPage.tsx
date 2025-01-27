@@ -16,7 +16,7 @@ export function TeamPage({}: TeamPageProps) {
     usePageSearchQuery("/dashboard/team");
   return (
     <div className="min-h-screen flex h-full w-full gap-5 flex-col items-center ">
-      <Helmet title="Collabs | team" description="The list of Collabs | team" />
+      <Helmet title="Inventory | team" description="The list of Inventory | team" />
       <ListPageHeader
         title="Team"
         formTrigger={<CreateTeamForm />}

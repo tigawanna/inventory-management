@@ -15,12 +15,11 @@ export function AuditlogsPage({}: AuditlogsPageProps) {
   return (
     <div className="flex h-full min-h-screen w-full flex-col items-center gap-5">
       <Helmet
-        title="Collabs | auditlogs"
-        description="The list of Collabs | auditlogs"
+        title="Inventory | auditlogs"
+        description="The list of Inventory | auditlogs"
       />
       <ListPageHeader
         title="Auditlogs"
-        // formTrigger={<CreateAuditlogsForm />}
         searchBox={
           <div className="flex w-full items-center justify-end gap-2">
             <div className="flex items-center justify-end gap-2">

@@ -25,7 +25,7 @@ export const Route = createFileRoute("/${path}/")({
 // /-components/${capitalpagename}Page
 export function rootPageComponentTemplate(pagename: string, path: string) {
 const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
-const pageTitle = `Collabs | ${pagename}`;
+const pageTitle = `Inventory | ${pagename}`;
 return `
 import { SearchBox } from "@/components/search/SearchBox";
 import { Suspense } from "react";
