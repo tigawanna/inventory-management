@@ -1,75 +1,13 @@
 import {
-  objectOutputType,
-  ZodString,
-  ZodNullable,
-  ZodOptional,
-  ZodUnknown,
-  ZodTypeAny,
-  objectInputType,
-  ZodEnum,
-  ZodObject,
-} from "zod";
-
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/shadcn/ui/popover";
-
 import { Fullscreen } from "lucide-react";
+import { AuditLogItem } from "../types";
 
 interface AuditlogscardProps {
-  item: objectOutputType<
-    {
-      id: ZodString;
-      updated_at: ZodNullable<ZodString>;
-      created_at: ZodNullable<ZodString>;
-      userId: ZodNullable<ZodString>;
-      action: ZodString;
-      entityType: ZodString;
-      entityId: ZodString;
-      ipAddress: ZodNullable<ZodString>;
-      oldData: ZodOptional<ZodNullable<ZodUnknown>>;
-      newData: ZodOptional<ZodNullable<ZodUnknown>>;
-      user: ZodNullable<
-        ZodObject<
-          {
-            name: ZodString;
-            email: ZodString;
-            avatarUrl: ZodNullable<ZodString>;
-            role: ZodNullable<ZodEnum<["admin", "user"]>>;
-            id: ZodString;
-          },
-          "passthrough",
-          ZodTypeAny,
-          objectOutputType<
-            {
-              name: ZodString;
-              email: ZodString;
-              avatarUrl: ZodNullable<ZodString>;
-              role: ZodNullable<ZodEnum<["admin", "user"]>>;
-              id: ZodString;
-            },
-            ZodTypeAny,
-            "passthrough"
-          >,
-          objectInputType<
-            {
-              name: ZodString;
-              email: ZodString;
-              avatarUrl: ZodNullable<ZodString>;
-              role: ZodNullable<ZodEnum<["admin", "user"]>>;
-              id: ZodString;
-            },
-            ZodTypeAny,
-            "passthrough"
-          >
-        >
-      >;
-    },
-    ZodTypeAny,
-    "passthrough"
-  >;
+  item: AuditLogItem;
 }
 
 export function Auditlogscard({ item }: AuditlogscardProps) {

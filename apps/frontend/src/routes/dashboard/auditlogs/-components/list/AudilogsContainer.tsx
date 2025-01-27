@@ -49,7 +49,7 @@ export function AudilogsContainer({}: AudilogsContainerProps) {
         <AudiLogsTable items={data.items} />
       </div>
       <div className="flex w-full lg:hidden justify-center">
-        <AuditlogsList data={data.items} />
+        <AuditlogsList items={data.items} />
       </div>
       <ResponsivePagination
         current={page ?? 1}
