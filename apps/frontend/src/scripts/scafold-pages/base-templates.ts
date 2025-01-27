@@ -1,10 +1,10 @@
 // const pagename = name.split("/").pop();
 // const capitalized = pagename.charAt(0).toUpperCase() + pagename.slice(1);
-export function rootPageTemplate(pagename:string,path:string) {
-// const pagename = name.split("/").pop();
-// const capitalized = page.charAt(0).toUpperCase() + page.slice(1);
-const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
-return `
+export function rootPageTemplate(pagename: string, path: string) {
+  // const pagename = name.split("/").pop();
+  // const capitalized = page.charAt(0).toUpperCase() + page.slice(1);
+  const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+  return `
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { ${capitalpagename}Page } from "@/routes/${path}/-components/${capitalpagename}Page";
@@ -24,15 +24,14 @@ export const Route = createFileRoute("/${path}/")({
 
 // /-components/${capitalpagename}Page
 export function rootPageComponentTemplate(pagename: string, path: string) {
-const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
-const pageTitle = `Inventory | ${pagename}`;
-return `
+  const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+  const pageTitle = `Inventory | ${pagename}`;
+  return `
 import { SearchBox } from "@/components/search/SearchBox";
 import { Suspense } from "react";
 import { ListPageHeader } from "@/components/wrappers/ListPageHeader";
 import { Helmet } from "@/components/wrappers/custom-helmet";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
-import { CardsListSuspenseFallback } from "@/components/loaders/GenericDataCardsListSuspenseFallback";
 import { Create${capitalpagename}Form } from "./form/create";
 import { ${capitalpagename}sContainer } from "./list/${capitalpagename}sContainer.tsx";
 import { ResponsiveSuspenseFallbacks } from "@/components/wrappers/ResponsiveSuspenseFallbacks";
@@ -72,11 +71,13 @@ export function ${capitalpagename}Page({}: ${capitalpagename}PageProps) {
 `;
 }
 
-
 // /-components/${capitalpagename}List
-export function rootPageContainerComponentsTemplate(pagename: string, path: string) {
-const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
-return `
+export function rootPageContainerComponentsTemplate(
+  pagename: string,
+  path: string,
+) {
+  const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+  return `
 import { ErrorWrapper } from "@/components/wrappers/ErrorWrapper";
 import { ItemNotFound } from "@/components/wrappers/ItemNotFound";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
@@ -90,18 +91,19 @@ import { ${capitalpagename}Table } from "./${capitalpagename}Table";
 interface ${capitalpagename}sContainerProps {}
 
 export function ${capitalpagename}sContainer({}: ${capitalpagename}sContainerProps) {
-  const { page, updatePage } = usePageSearchQuery("/dashboard/${pagename}");
-  const { action, entity } = useSearch({
-    from: "/dashboard/${pagename}/",
+  const { page, updatePage } = usePageSearchQuery("/${path}");
+  const sq = useSearch({
+    from: "/${path}/",
   });
   const queryVariables = {
     basekey: "${pagename}",
+    sq,
     page,
-    action,
-    entity,
+    //TODO: use individual query params based on what your query funtion needs 
+    ...Object.keys(sq)
   } as const;
   const query = useSuspenseQuery(
-    ${pagename}ListQueryOptions({ ...queryVariables }),
+    ${pagename}ListQueryOptions(queryVariables),
   );
   const data = query.data;
   const error = query.error;
@@ -141,30 +143,25 @@ export function ${capitalpagename}sContainer({}: ${capitalpagename}sContainerPro
   );
 }
 
-`
+`;
 }
 // /-components/${capitalpagename}List
 export function rootPageListComponentsTemplate(pagename: string, path: string) {
-const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
-return `
-import { ItemNotFound } from "@/components/wrappers/ItemNotFound";
-import { ErrorWrapper } from "@/components/wrappers/ErrorWrapper";
-import { useSuspenseQuery } from "@tanstack/react-query";
+  const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+  return `
 import { Link } from "@tanstack/react-router";
-import ResponsivePagination from "react-responsive-pagination";
-import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { Update${capitalpagename}form } from "@/routes/${path}/-components/form/update";
-import { ${pagename}ListQueryOptions } from "@/routes/${path}/-query-options/${pagename}-query-option";
+import { ${capitalpagename}Item } from "../types";
 
 interface ${capitalpagename}ListProps {
   items: never[] | ${capitalpagename}Item[];
 }
 
-export function ${capitalpagename}List({  }: ${capitalpagename}ListProps) {
+export function ${capitalpagename}List({ items}: ${capitalpagename}ListProps) {
  return (
     <div className="w-full h-full flex flex-col items-center justify-between ">
       <ul className="w-[95%] min-h-[80vh] flex flex-wrap justify-center p-2 gap-2">
-        {data.items.map((item) => {
+        {items.map((item) => {
           return (
             <li
               key={item.id}
@@ -178,11 +175,11 @@ export function ${capitalpagename}List({  }: ${capitalpagename}ListProps) {
               <Update${capitalpagename}form item={item} />
               </div>
                 <Link
-                  to={\`/${path}/\${item.id}/\`}
+                  to={\`/${path}/$${pagename}\`}
+                    params={{users:item.id}}
                   className="text-primary-foreground bg-primary p-2  w-full flex justify-between"
                 >
                   <div>see details</div>
-                   ➡️
                 </Link>
               </div>
             </li>
@@ -195,10 +192,16 @@ export function ${capitalpagename}List({  }: ${capitalpagename}ListProps) {
 `;
 }
 // /-components/${capitalpagename}List
-export function rootPageTableComponentsTemplate(pagename: string, path: string) {
-const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
-return `
+export function rootPageTableComponentsTemplate(
+  pagename: string,
+  path: string,
+) {
+  const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+  return `
 import { ${capitalpagename}Item } from "../types";
+import { Update${capitalpagename}form } from "@/routes/${path}/-components/form/update";
+import { Link } from "@tanstack/react-router";
+
 interface ${capitalpagename}TableExampleProps {
   items: never[] | ${capitalpagename}Item[];
 }
@@ -210,10 +213,10 @@ type TableColumn<T extends Record<string, any>> = {
 export function ${capitalpagename}Table({ items }: ${capitalpagename}TableExampleProps) {
   const columns: TableColumn<${capitalpagename}Item>[] = [
     {
-      accessor: "ID",
-      label: "id",
+      accessor: "id",
+      label: "ID",
     },
-    { label: "created", accessor: "created_at" },
+    { label: "created", accessor: "created_at" }
   ] as const;
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
@@ -227,6 +230,8 @@ export function ${capitalpagename}Table({ items }: ${capitalpagename}TableExampl
                 </th>
               );
             })}
+            <td>Edit</td>
+            <td>Details</td>
           </tr>
         </thead>
         <tbody>
@@ -240,6 +245,18 @@ export function ${capitalpagename}Table({ items }: ${capitalpagename}TableExampl
                     </td>
                   );
                 })}
+                  <td>
+                    <Update${capitalpagename}form item={row} />
+                  </td>
+                <td>
+                  <Link
+                    to={\`/${path}/$${pagename}\`}
+                      params={{users:row.id}}
+                    className="text-primary-foreground bg-primary p-2  w-full flex justify-between"
+                  >
+                    <div>see details</div>
+                  </Link>
+                </td>
               </tr>
             );
           })}
@@ -248,15 +265,11 @@ export function ${capitalpagename}Table({ items }: ${capitalpagename}TableExampl
     </div>
   );
 }
-);
-}
-
-
 `;
 }
 export function rootPageTypeTemplate(pagename: string, path: string) {
-const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
-return `
+  const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+  return `
 
 import { GetApi${capitalpagename}200 } from "@/lib/kubb/gen";
 
@@ -264,5 +277,3 @@ export type ${capitalpagename}Item = GetApi${capitalpagename}200["result"]["item
 
 `;
 }
-
-

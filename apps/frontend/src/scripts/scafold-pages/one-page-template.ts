@@ -68,7 +68,7 @@ export function One${capitalpagename}Details({}: One${capitalpagename}DetailsPro
   if (error) {
     return (
       <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
-           <ErrorWrapper error={error} />
+           <ErrorWrapper err={error} />
       </div>
     );
   }

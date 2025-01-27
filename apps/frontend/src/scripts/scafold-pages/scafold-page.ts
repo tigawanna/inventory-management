@@ -124,6 +124,7 @@ async function ensurePathExistsOrCreate(path: string, component: string) {
   const component_path = resolve("./src/routes", path);
   try {
     await access(component_path);
+    await writeFile(component_path, component);
   } catch (err: unknown) {
     if (err instanceof Error) {
       if (err.message.includes("no such file or directory")) {
