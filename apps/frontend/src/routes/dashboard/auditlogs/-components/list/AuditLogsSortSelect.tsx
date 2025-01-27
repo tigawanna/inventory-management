@@ -13,7 +13,7 @@ import { auditAction,entityType } from "../filters";
 interface AuditlogsFilterSelectProps {}
 
 export function AuditlogsEntityFilterSelect({}: AuditlogsFilterSelectProps) {
-  const navigate = useNavigate({ from: "/dashboard/auditlogs/" });
+  const navigate = useNavigate({ from: "/dashboard/auditlogs" });
   const { entity, ...rest } = useSearch({ from: "/dashboard/auditlogs/" });
 
   return (
@@ -50,7 +50,7 @@ export function AuditlogsEntityFilterSelect({}: AuditlogsFilterSelectProps) {
 interface AuditlogsFilterSelectProps {}
 
 export function AuditlogsActionFilterSelect({}: AuditlogsFilterSelectProps) {
-  const navigate = useNavigate({ from: "/dashboard/auditlogs/" });
+  const navigate = useNavigate({ from: "/dashboard/auditlogs" });
   const { action, ...rest } = useSearch({ from: "/dashboard/auditlogs/" });
 
   return (
@@ -86,7 +86,7 @@ export function AuditlogsActionFilterSelect({}: AuditlogsFilterSelectProps) {
 }
 export function AuditlogsOrderSelect({}: AuditlogsFilterSelectProps) {
   const {order , ...rest } = useSearch({ from: "/dashboard/auditlogs/" });
-  const navigate = useNavigate({ from: "/dashboard/auditlogs/" });
+  const navigate = useNavigate({ from: "/dashboard/auditlogs" });
   const paymentTypes = ["desc", "asc"] as const;
   return (
     <Select
