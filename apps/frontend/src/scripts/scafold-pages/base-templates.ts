@@ -34,8 +34,8 @@ import { Helmet } from "@/components/wrappers/custom-helmet";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { CardsListSuspenseFallback } from "@/components/loaders/GenericDataCardsListSuspenseFallback";
 import { Create${capitalpagename}Form } from "./form/create";
-import { ${capitalpagename}List } from "./list/${capitalpagename}List";
-
+import { ${capitalpagename}sContainer } from "./list/${capitalpagename}sContainer.tsx";
+import { ResponsiveSuspenseFallbacks } from "@/components/wrappers/ResponsiveSuspenseFallbacks";
 interface ${capitalpagename}PageProps {
 }
 
@@ -61,9 +61,9 @@ export function ${capitalpagename}Page({}: ${capitalpagename}PageProps) {
         }
       />
 
-     <div className="m-3 flex h-full w-full items-center justify-center p-5">
-        <Suspense fallback={<CardsListSuspenseFallback />}>
-          <${capitalpagename}List keyword={keyword} />
+      <div className="m-3 flex h-full w-full flex-col justify-center pb-4">
+        <Suspense fallback={<ResponsiveSuspenseFallbacks />}>
+          <${capitalpagename}sContainer />
         </Suspense>
       </div>
     </div>
@@ -73,6 +73,76 @@ export function ${capitalpagename}Page({}: ${capitalpagename}PageProps) {
 }
 
 
+// /-components/${capitalpagename}List
+export function rootPageContainerComponentsTemplate(pagename: string, path: string) {
+const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+return `
+import { ErrorWrapper } from "@/components/wrappers/ErrorWrapper";
+import { ItemNotFound } from "@/components/wrappers/ItemNotFound";
+import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSearch } from "@tanstack/react-router";
+import { ${pagename}ListQueryOptions } from "../../-query-options/${pagename}-query-option";
+import ResponsivePagination from "react-responsive-pagination";
+import { ${capitalpagename}List } from "./${capitalpagename}List";
+import { ${capitalpagename}Table } from "./${capitalpagename}Table";
+
+interface ${capitalpagename}sContainerProps {}
+
+export function ${capitalpagename}sContainer({}: ${capitalpagename}sContainerProps) {
+  const { page, updatePage } = usePageSearchQuery("/dashboard/${pagename}");
+  const { action, entity } = useSearch({
+    from: "/dashboard/${pagename}/",
+  });
+  const queryVariables = {
+    basekey: "${pagename}",
+    page,
+    action,
+    entity,
+  } as const;
+  const query = useSuspenseQuery(
+    ${pagename}ListQueryOptions({ ...queryVariables }),
+  );
+  const data = query.data;
+  const error = query.error;
+  const totalPages = query.data?.totalPages;
+
+  if (error) {
+    return (
+      <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
+        <ErrorWrapper err={error} />
+      </div>
+    );
+  }
+
+  if (!data || data?.items?.length === 0) {
+    return (
+      <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
+        <ItemNotFound label="${capitalpagename}" />
+      </div>
+    );
+  }
+  return (
+    <div className="flex h-full w-full flex-col items-center gap-5 p-2">
+      <div className="hidden w-full max-w-[99vw] lg:flex justify-center">
+        <${capitalpagename}Table items={data.items} />
+      </div>
+      <div className="flex w-full lg:hidden justify-center">
+        <${capitalpagename}List items={data.items} />
+      </div>
+      <ResponsivePagination
+        current={page ?? 1}
+        total={totalPages ?? -1}
+        onPageChange={(e) => {
+          updatePage(e);
+        }}
+      />
+    </div>
+  );
+}
+
+`
+}
 // /-components/${capitalpagename}List
 export function rootPageListComponentsTemplate(pagename: string, path: string) {
 const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
@@ -87,30 +157,11 @@ import { Update${capitalpagename}form } from "@/routes/${path}/-components/form/
 import { ${pagename}ListQueryOptions } from "@/routes/${path}/-query-options/${pagename}-query-option";
 
 interface ${capitalpagename}ListProps {
-  keyword?: string;
+  items: never[] | ${capitalpagename}Item[];
 }
 
-export function ${capitalpagename}List({ keyword = "" }: ${capitalpagename}ListProps) {
-  const { page,updatePage } = usePageSearchQuery("/${path}");
-  const query = useSuspenseQuery(${pagename}ListQueryOptions({ keyword,page }));
-  const data = query.data;
-  const error = query.error;
-
-  if (error) {
-    return (
-      <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
-        <ErrorWrapper error={error} />
-      </div>
-    );
-  }
-  if (!data || data.items.length === 0) {
-    return (
-      <div className="flex h-full min-h-[90vh] w-full flex-col items-center justify-center">
-        <ItemNotFound label="${capitalpagename}" />
-      </div>
-    );
-  }
-  return (
+export function ${capitalpagename}List({  }: ${capitalpagename}ListProps) {
+ return (
     <div className="w-full h-full flex flex-col items-center justify-between ">
       <ul className="w-[95%] min-h-[80vh] flex flex-wrap justify-center p-2 gap-2">
         {data.items.map((item) => {
@@ -138,19 +189,78 @@ export function ${capitalpagename}List({ keyword = "" }: ${capitalpagename}ListP
           );
         })}
       </ul>
-            <div className="flex w-full items-center justify-center">
-        <ResponsivePagination
-          current={page ?? 1}
-          total={data.totalPages}
-          onPageChange={(e) => {
-            updatePage(e);
-          }}
-        />
-      </div>
     </div>
   );
 }
+`;
+}
+// /-components/${capitalpagename}List
+export function rootPageTableComponentsTemplate(pagename: string, path: string) {
+const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+return `
+import { ${capitalpagename}Item } from "../types";
+interface ${capitalpagename}TableExampleProps {
+  items: never[] | ${capitalpagename}Item[];
+}
 
+type TableColumn<T extends Record<string, any>> = {
+  label: string;
+  accessor: keyof T;
+};
+export function ${capitalpagename}Table({ items }: ${capitalpagename}TableExampleProps) {
+  const columns: TableColumn<${capitalpagename}Item>[] = [
+    {
+      accessor: "ID",
+      label: "id",
+    },
+    { label: "created", accessor: "created_at" },
+  ] as const;
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center">
+      <table className="table table-zebra table-lg w-full">
+        <thead>
+          <tr>
+            {columns.map((column, idx) => {
+              return (
+                <th key={column.accessor + column.label + idx}>
+                  {column.label}
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((row) => {
+            return (
+              <tr key={row.id}>
+                {columns.map((column, idx) => {
+                  return (
+                    <td key={column.accessor + column.label + idx}>
+                      {row[column.accessor]}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+);
+}
+
+
+`;
+}
+export function rootPageTypeTemplate(pagename: string, path: string) {
+const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+return `
+
+import { GetApi${capitalpagename}200 } from "@/lib/kubb/gen";
+
+export type ${capitalpagename}Item = GetApi${capitalpagename}200["result"]["items"][0];
 
 `;
 }

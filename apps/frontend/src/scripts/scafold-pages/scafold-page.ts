@@ -2,8 +2,11 @@ import { resolve } from "node:path";
 import { writeFile, access, mkdir } from "node:fs/promises";
 import {
   rootPageComponentTemplate,
+  rootPageContainerComponentsTemplate,
   rootPageListComponentsTemplate,
+  rootPageTableComponentsTemplate,
   rootPageTemplate,
+  rootPageTypeTemplate,
 } from "./base-templates";
 import {
   rootPageBaseFormComponentsTemplate,
@@ -43,9 +46,21 @@ export async function scaffoldPage(pagename: string, path: string) {
     path: `${rootPath}/-components/${capitalpagename}Page.tsx`,
     component: rootPageComponentTemplate(pagename, rootPath),
   };
+  const indexPageTypes = {
+    path: `${rootPath}/-components/types.ts`,
+    component: rootPageTypeTemplate(pagename, rootPath),
+  };
+  const indexPageContainerComponent = {
+    path: `${rootPath}/-components/list/${capitalpagename}sContainer.tsx`,
+    component: rootPageContainerComponentsTemplate(pagename, rootPath),
+  };
   const indexPageListComponent = {
     path: `${rootPath}/-components/list/${capitalpagename}List.tsx`,
     component: rootPageListComponentsTemplate(pagename, rootPath),
+  };
+  const indexPageTableComponent = {
+    path: `${rootPath}/-components/list/${capitalpagename}Table.tsx`,
+    component: rootPageTableComponentsTemplate(pagename, rootPath),
   };
 
   const baseForm = {
@@ -85,6 +100,7 @@ export async function scaffoldPage(pagename: string, path: string) {
   const allPaths = [
     indexPage,
     indexPageComponent,
+    indexPageTypes,
     baseForm,
     createForm,
     updateForm,
@@ -92,6 +108,8 @@ export async function scaffoldPage(pagename: string, path: string) {
     onePageComponent,
     onepageComponent,
     onepageDetailsComponent,
+    indexPageContainerComponent,
+    indexPageTableComponent,
     queryOptions,
   ];
 
