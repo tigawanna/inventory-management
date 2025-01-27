@@ -6,6 +6,7 @@ import { useSearch } from "@tanstack/react-router";
 import { auditlogsListQueryOptions } from "../../-query-options/auditlogs-query-option";
 import ResponsivePagination from "react-responsive-pagination";
 import { AuditlogsList } from "./AuditlogsList";
+import { AudiLogsTable } from "./AuditLogsTable";
 
 interface AudilogsContainerProps {}
 
@@ -43,14 +44,12 @@ export function AudilogsContainer({}: AudilogsContainerProps) {
     );
   }
   return (
-    <div className="flex h-full w-full flex-col items-center gap-5">
-
-      <div className="hidden w-full max-w-[99vw] lg:flex">
-        <AuditlogsList data={data.items} />
+    <div className="flex h-full w-full flex-col items justify-center gap-5 p-2">
+      <div className="hidden w-full max-w-[99vw] lg:flex justify-center">
+        <AudiLogsTable items={data.items} />
       </div>
-      <div className="flex w-full lg:hidden">
+      <div className="flex w-full lg:hidden justify-center">
         <AuditlogsList data={data.items} />
-
       </div>
       <ResponsivePagination
         current={page ?? 1}

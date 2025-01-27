@@ -76,7 +76,7 @@ export function Auditlogscard({ item }: AuditlogscardProps) {
   return (
     <li
       key={item.id}
-      className="flex h-36 w-[95%] items-center justify-center gap-2 rounded-xl bg-base-300 p-2 sm:w-[45%] lg:w-[30%]"
+      className="flex h-36 w-[95%] items-center flex-grow justify-center gap-2 rounded-xl bg-base-300 p-2 sm:w-[45%] lg:w-[30%]"
     >
       <div className="flex h-full w-full flex-col justify-between gap-2">
         <div className="flex w-full items-center justify-between gap-3 p-2">

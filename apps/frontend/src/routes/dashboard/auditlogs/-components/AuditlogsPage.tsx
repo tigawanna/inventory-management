@@ -32,7 +32,7 @@ export function AuditlogsPage({}: AuditlogsPageProps) {
         }
       />
 
-      <div className="m-3 flex h-full w-full flex-col pb-4">
+      <div className="m-3 flex h-full w-full flex-col justify-center pb-4">
         <Suspense fallback={<ResponsiveSuspenseFallbacks />}>
           <AudilogsContainer />
         </Suspense>
