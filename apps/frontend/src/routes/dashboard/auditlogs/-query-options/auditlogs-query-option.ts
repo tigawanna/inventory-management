@@ -23,6 +23,7 @@ import { queryOptions } from "@tanstack/react-query";
 export function auditlogsListQueryOptions(
   { basekey, action, entity, page = 1 }: QueryVariables,
 ) {
+  // console.log(" query key in query function == ", [basekey, page, action, entity]);
   return queryOptions({
     queryKey: [basekey, page, action, entity],
     queryFn: async () => {

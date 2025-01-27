@@ -61,6 +61,7 @@ export type ListRoute = typeof auditlogsListRoute;
 const auditlogsService = new AuditlogsService();
 export const auditlogsListHandler: AppRouteHandler<ListRoute> = async (c) => {
   try {
+    // console.log(" auditlogs input  ====  ",c.req.valid("query"))
     const auditlogs = await auditlogsService.findAll(c.req.valid("query"));
     return c.json({
       result: auditlogs,

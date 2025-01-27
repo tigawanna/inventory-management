@@ -44,7 +44,7 @@ export function AudilogsContainer({}: AudilogsContainerProps) {
     );
   }
   return (
-    <div className="flex h-full w-full flex-col items justify-center gap-5 p-2">
+    <div className="flex h-full w-full flex-col items-center gap-5 p-2">
       <div className="hidden w-full max-w-[99vw] lg:flex justify-center">
         <AudiLogsTable items={data.items} />
       </div>
