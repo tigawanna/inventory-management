@@ -15,7 +15,7 @@ interface CategoriesContainerProps {
 }
 
 export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
-  const [selected,setSelected] = useState<never[] | CategoryItem[]>([])
+
   const { page, updatePage } = usePageSearchQuery("/dashboard/categories");
   const sq = useSearch({ from: "/dashboard/categories/" });
   const query = useSuspenseQuery(
@@ -52,16 +52,12 @@ export function CategoriesContainer({ keyword }: CategoriesContainerProps) {
       <div className="hidden w-full max-w-[99vw] lg:flex">
         <CategoryTable
           items={items}
-          selected={selected}
-          setSelected={setSelected}
           maxSelect={1}
         />
       </div>
       <div className="flex w-full lg:hidden">
         <CategoriesList
           items={items}
-          selected={selected}
-          setSelected={setSelected}
           maxSelect={1}
         />
       </div>
