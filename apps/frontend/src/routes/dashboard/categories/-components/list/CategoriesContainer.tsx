@@ -7,7 +7,6 @@ import { categoriesListQueryOptions } from "../../-query-options/categories-quer
 import { CategoryTable } from "./CategoryTable";
 import { CategoriesList } from "./CategoriesList";
 import ResponsivePagination from "react-responsive-pagination";
-import { DEFAULT_PAGE_SIZE } from "@/utils/constnants";
 import { useState } from "react";
 import { CategoryItem } from "../types";
 

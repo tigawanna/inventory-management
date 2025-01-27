@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import { createRouter, ErrorComponent } from "@tanstack/react-router";
+import { createRouter } from "@tanstack/react-router";
 import {
   MutationCache,
   QueryClient,

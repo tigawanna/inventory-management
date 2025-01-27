@@ -6,6 +6,7 @@ import type { UserJWTPayload } from "@/api/users/schema";
 import type { AppBindings } from "@/lib/types";
 
 import { envVariables } from "@/env";
+import HttpStatusCodes from "@/lib/status-codes";
 import { setAccessTokenCookie } from "@/services/cookie-service";
 import { verifiedAccessToken } from "@/services/token-service";
 import { verifyRefreshTokenAndrefreshAccessToken } from "@/shared/utils/refresh-if-possible-util";
@@ -34,8 +35,10 @@ export async function authenticateUserMiddleware(
         ACCESS_TOKEN_SECRET,
       );
       setAccessTokenCookie(c, newAccessToken);
-      c.var.logger.info("refreshAccessToken: Access token refreshed");
-    } else {
+      c.var.logger.error("refreshAccessToken: Access token refreshed");
+    }
+    else {
+      c.var.logger.error("authenticateUserMiddleware: User not authorized");
       return c.json({
         result: null,
         error: {
@@ -43,10 +46,11 @@ export async function authenticateUserMiddleware(
           message: "Missing credentials",
           code: 401,
         },
-      });
+      }, HttpStatusCodes.UNAUTHORIZED);
     }
   }
-  if(!user){
+  if (!user) {
+    c.var.logger.error("authenticateUserMiddleware: User not authorized");
     return c.json({
       reult: null,
       error: {
@@ -54,18 +58,19 @@ export async function authenticateUserMiddleware(
         message: "Missing credentials",
         code: 401,
       },
-    });
+    }, HttpStatusCodes.UNAUTHORIZED);
   }
   if (role && user?.role !== "admin" && (role !== user?.role)) {
+    c.var.logger.error("authenticateUserMiddleware: User role not authorized");
     return c.json({
       result: null,
       error: {
-        error: "Unauthorized",
+        error: "Unauthorized role",
         message: "Missing credentials",
         code: 401,
       },
-    });
+    }, HttpStatusCodes.UNAUTHORIZED);
   }
   c.set("viewer", user);
- await next();
+  await next();
 }

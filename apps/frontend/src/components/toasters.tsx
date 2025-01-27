@@ -17,15 +17,15 @@ export function makeHotToast({
   const toastVariantStyle = (toastAvriant: typeof variant) => {
     switch (toastAvriant) {
       case "success":
-        return " to-success/20 text-success";
+        return " to-success/40 text-success";
       case "info":
-        return "to-info/20 text-info";
+        return "to-info/40 text-info";
       case "warning":
-        return "to-warning/20 text-warning";
+        return "to-warning/40 text-warning";
       case "error":
-        return "to-error/20 text-error";
+        return "to-error/40 text-error";
       default:
-        return "to-info/20 text-info";
+        return "to-info/40 text-info";
     }
   };
   return toast.custom(
@@ -34,7 +34,7 @@ export function makeHotToast({
         <div
           className={`${
             t.visible ? "animate-enter" : "animate-leave"
-          } ${toastVariantStyle(variant)} pointer-events-auto flex w-full max-w-md rounded-lg bg-gradient-to-r from-base-200  ring-1 ring-success ring-opacity-5 dark:shadow-sm`}
+          } ${toastVariantStyle(variant)} pointer-events-auto flex w-full max-w-md rounded-lg bg-gradient-to-r bg-base-200 from-base-200  ring-1 ring-success ring-opacity-5 dark:shadow-sm`}
         >
           <div className="w-0 flex-1 p-4">
             <div className="flex items-center justify-center">
