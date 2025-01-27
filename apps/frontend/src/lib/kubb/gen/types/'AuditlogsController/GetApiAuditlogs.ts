@@ -152,8 +152,18 @@ export type GetApiAuditlogs200 = {
        * @type string
        */
       ipAddress: string | null
-      oldData?: unknown | undefined
-      newData?: unknown | undefined
+      /**
+       * @type object
+       */
+      oldData: {
+        [key: string]: unknown
+      } | null
+      /**
+       * @type object
+       */
+      newData: {
+        [key: string]: unknown
+      } | null
       /**
        * @type object
        */

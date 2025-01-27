@@ -5,7 +5,7 @@ import { requestId } from "hono/request-id";
 import { notFound, serveEmojiFavicon } from "stoker/middlewares";
 
 import { authenticateUserMiddleware } from "@/middlewares/auth-middl-ware";
-import { allowedOrigins, corsHeaders } from "@/middlewares/cors-middlewares";
+import { allowedOrigins } from "@/middlewares/cors-middlewares";
 import { onHonoError } from "@/middlewares/error-middleware";
 import { pinoLogger } from "@/middlewares/loggermiddleware";
 

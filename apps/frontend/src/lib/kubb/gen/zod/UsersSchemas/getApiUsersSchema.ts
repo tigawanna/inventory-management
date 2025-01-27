@@ -37,6 +37,8 @@ export const getApiUsers200Schema = z.object({
         avatarUrl: z.string().nullable(),
         role: z.enum(['admin', 'user']).nullable(),
         isEmailVerified: z.boolean().nullable(),
+        lastLoginAt: z.string().nullable(),
+        metadata: z.object({}).catchall(z.unknown()).nullable(),
       }),
     ),
   }),

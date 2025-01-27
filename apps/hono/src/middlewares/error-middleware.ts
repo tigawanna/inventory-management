@@ -7,7 +7,7 @@ import type { AppBindings } from "@/lib/types";
 
 import { envVariables } from "@/env";
 import HttpStatusCodes from "@/lib/status-codes";
-import { parseZodError, returnValidationData } from "@/lib/zod";
+import {  returnValidationData } from "@/lib/zod";
 
 export async function onHonoError(
   err: Error | HTTPResponseError,

@@ -26,8 +26,8 @@ export const getApiAuditlogsId200Schema = z.object({
     entityType: z.enum(['USER', 'INVENTORY', 'CATEGORY']),
     entityId: z.string(),
     ipAddress: z.string().nullable(),
-    oldData: z.unknown().nullish(),
-    newData: z.unknown().nullish(),
+    oldData: z.object({}).catchall(z.unknown()).nullable(),
+    newData: z.object({}).catchall(z.unknown()).nullable(),
     user: z
       .object({
         name: z.string(),

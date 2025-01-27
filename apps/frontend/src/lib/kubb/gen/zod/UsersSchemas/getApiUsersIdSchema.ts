@@ -30,6 +30,8 @@ export const getApiUsersId200Schema = z.object({
     refreshTokenVersion: z.number().int().min(-2147483648).max(2147483647).nullable(),
     verificationToken: z.string().nullable(),
     isEmailVerified: z.boolean().nullable(),
+    lastLoginAt: z.string().nullable(),
+    metadata: z.object({}).catchall(z.unknown()).nullable(),
   }),
   error: z.unknown().nullish(),
 }) as unknown as ToZod<GetApiUsersId200>

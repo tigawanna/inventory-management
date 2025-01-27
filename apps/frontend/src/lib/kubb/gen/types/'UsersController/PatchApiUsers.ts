@@ -71,6 +71,16 @@ export type PatchApiUsers200 = {
      * @type boolean
      */
     isEmailVerified: boolean | null
+    /**
+     * @type string
+     */
+    lastLoginAt: string | null
+    /**
+     * @type object
+     */
+    metadata: {
+      [key: string]: unknown
+    } | null
   }
   error?: unknown | undefined
 }
@@ -231,6 +241,16 @@ export type PatchApiUsersMutationRequest = {
    * @type boolean
    */
   isEmailVerified?: (boolean | null) | undefined
+  /**
+   * @type string
+   */
+  lastLoginAt?: (string | null) | undefined
+  /**
+   * @type object
+   */
+  metadata: {
+    [key: string]: unknown
+  } | null
 }
 
 export type PatchApiUsersMutationResponse = PatchApiUsers200

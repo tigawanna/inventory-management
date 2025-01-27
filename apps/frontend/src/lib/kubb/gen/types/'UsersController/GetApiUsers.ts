@@ -104,6 +104,16 @@ export type GetApiUsers200 = {
        * @type boolean
        */
       isEmailVerified: boolean | null
+      /**
+       * @type string
+       */
+      lastLoginAt: string | null
+      /**
+       * @type object
+       */
+      metadata: {
+        [key: string]: unknown
+      } | null
     }[]
   }
   error?: unknown | undefined
