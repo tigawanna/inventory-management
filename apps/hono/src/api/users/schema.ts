@@ -4,7 +4,13 @@ import { z } from "zod";
 import { usersTable } from "@/db/schema/users";
 import { genericQueryParamsSchema } from "@/schemas/shared-schema";
 
-export const userSelectSchema = createSelectSchema(usersTable);
+
+export const baseUserSelectSchema = createSelectSchema(usersTable);
+export const userSelectSchema = baseUserSelectSchema.omit({
+  metadata: true
+}).extend({
+  metadata: z.record(z.string(), z.any()).nullable(),
+})
 export const userInsertSchema = createInsertSchema(usersTable);
 export const userUpdateSchema = createUpdateSchema(usersTable);
 

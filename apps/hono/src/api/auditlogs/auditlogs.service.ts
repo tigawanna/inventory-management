@@ -16,9 +16,7 @@ export class AuditlogsService {
     const { search, action, entity, ...paginationQuery } = query;
     const conditions = and(
       search ? ilike(auditLogsTable.entityType, `%${search}%`) : undefined,
-      // @ts-expect-error : this works just fine
       entity ? eq(auditLogsTable.entityType, entity) : undefined,
-      // @ts-expect-error : this works just fine
       action ? eq(auditLogsTable.action, action) : undefined,
     );
 

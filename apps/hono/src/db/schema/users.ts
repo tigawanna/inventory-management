@@ -16,6 +16,8 @@ export const usersTable = pgTable("users", {
   refreshTokenVersion: integer().default(0),
   verificationToken: text(),
   isEmailVerified: boolean().default(false),
+  metadata: jsonb("metadata").$type<Record<string, any>>().default({}),
+  lastLoginAt: timestamp("last_login_at").defaultNow(),
 });
 
 

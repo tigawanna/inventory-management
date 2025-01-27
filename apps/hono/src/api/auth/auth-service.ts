@@ -88,6 +88,7 @@ export class AuthService {
       throw new MyAuthError("Invalid credentials");
     }
     await tokenService.generateUserAuthTokens(filterUserJWTPayload(user));
+    await this.lastLogin(user.id);
     await this.auditLogService.logLogin(user.id);
     return filterUserJWTPayload(user);
   }
@@ -206,6 +207,9 @@ export class AuthService {
       await tx.delete(passwordResets).where(eq(passwordResets.token, token));
     });
     await tokenService.clearTokens();
+  }
+  async lastLogin(userId: string) {
+    await db.update(usersTable).set({ lastLoginAt: new Date() }).where(eq(usersTable.id, userId));
   }
 }
 

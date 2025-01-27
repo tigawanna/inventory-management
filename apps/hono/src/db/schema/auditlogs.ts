@@ -27,8 +27,8 @@ export const auditLogsTable = pgTable("audit_logs", {
   action: auditActionEnum("action").notNull(),
   entityType: entityTypenum("entity_type").notNull(),
   entityId: text("entity_id").notNull(),
-  oldData: jsonb("old_data"),
-  newData: jsonb("new_data"),
+  oldData: jsonb("old_data").$type<Record<string, any>>(),
+  newData: jsonb("new_data").$type<Record<string, any>>(),
   ipAddress: text("ip_address"),
 });
 

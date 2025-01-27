@@ -16,8 +16,8 @@ export const auditlogsSelectSchema = brokenauditlogsSelectSchema.omit({
   oldData: true,
   newData: true,
 }).extend({
-  oldData: z.any().nullable(),
-  newData: z.any().nullable(),
+  oldData: z.record(z.string(), z.any()).nullable().nullable(),
+  newData: z.record(z.string(), z.any()).nullable().nullable(),
 })
 // this will be used as the new select schema as the drizzle zod one causes infinte type error
 // export const auditlogsSelectSchema = z.object({
