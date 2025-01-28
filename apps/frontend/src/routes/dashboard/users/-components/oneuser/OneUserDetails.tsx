@@ -1,15 +1,15 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "@tanstack/react-router";
-import { oneTeamQueryOptions } from "@/routes/dashboard/team/-query-options/team-query-option";
+import { oneUserQueryOptions } from "@/routes/dashboard/users/-query-options/user-query-option";
 import { ErrorWrapper } from "@/components/wrappers/ErrorWrapper";
 
-interface OneTeamDetailsProps {
+interface OneUserDetailsProps {
 }
 
-export function OneTeamDetails({}: OneTeamDetailsProps) {
-  const { team } = useParams({ from: "/dashboard/team/$team" });
-  const query = useSuspenseQuery(oneTeamQueryOptions({ team }));
+export function OneUserDetails({}: OneUserDetailsProps) {
+  const { user } = useParams({ from: "/user/$user/" });
+  const query = useSuspenseQuery(oneUserQueryOptions({ user }));
   const data = query.data;
   const error = query.error;
 

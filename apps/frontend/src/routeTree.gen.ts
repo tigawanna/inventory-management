@@ -19,12 +19,11 @@ import { Route as AuthIndexImport } from './routes/auth/index'
 import { Route as AuthVerifyEmailImport } from './routes/auth/verify-email'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthForgortPasswordImport } from './routes/auth/forgort-password'
-import { Route as DashboardTeamLayoutImport } from './routes/dashboard/team/layout'
-import { Route as DashboardTeamIndexImport } from './routes/dashboard/team/index'
+import { Route as DashboardUsersIndexImport } from './routes/dashboard/users/index'
 import { Route as DashboardInventoryIndexImport } from './routes/dashboard/inventory/index'
 import { Route as DashboardCategoriesIndexImport } from './routes/dashboard/categories/index'
 import { Route as DashboardAuditlogsIndexImport } from './routes/dashboard/auditlogs/index'
-import { Route as DashboardTeamTeamImport } from './routes/dashboard/team/$team'
+import { Route as DashboardUsersUserIndexImport } from './routes/dashboard/users/$user/index'
 
 // Create/Update Routes
 
@@ -76,16 +75,10 @@ const AuthForgortPasswordRoute = AuthForgortPasswordImport.update({
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
-const DashboardTeamLayoutRoute = DashboardTeamLayoutImport.update({
-  id: '/team',
-  path: '/team',
+const DashboardUsersIndexRoute = DashboardUsersIndexImport.update({
+  id: '/users/',
+  path: '/users/',
   getParentRoute: () => DashboardLayoutRoute,
-} as any)
-
-const DashboardTeamIndexRoute = DashboardTeamIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => DashboardTeamLayoutRoute,
 } as any)
 
 const DashboardInventoryIndexRoute = DashboardInventoryIndexImport.update({
@@ -106,10 +99,10 @@ const DashboardAuditlogsIndexRoute = DashboardAuditlogsIndexImport.update({
   getParentRoute: () => DashboardLayoutRoute,
 } as any)
 
-const DashboardTeamTeamRoute = DashboardTeamTeamImport.update({
-  id: '/$team',
-  path: '/$team',
-  getParentRoute: () => DashboardTeamLayoutRoute,
+const DashboardUsersUserIndexRoute = DashboardUsersUserIndexImport.update({
+  id: '/users/$user/',
+  path: '/users/$user/',
+  getParentRoute: () => DashboardLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -136,13 +129,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardLayoutImport
       parentRoute: typeof rootRoute
-    }
-    '/dashboard/team': {
-      id: '/dashboard/team'
-      path: '/team'
-      fullPath: '/dashboard/team'
-      preLoaderRoute: typeof DashboardTeamLayoutImport
-      parentRoute: typeof DashboardLayoutImport
     }
     '/auth/forgort-password': {
       id: '/auth/forgort-password'
@@ -179,13 +165,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
-    '/dashboard/team/$team': {
-      id: '/dashboard/team/$team'
-      path: '/$team'
-      fullPath: '/dashboard/team/$team'
-      preLoaderRoute: typeof DashboardTeamTeamImport
-      parentRoute: typeof DashboardTeamLayoutImport
-    }
     '/dashboard/auditlogs/': {
       id: '/dashboard/auditlogs/'
       path: '/auditlogs'
@@ -207,12 +186,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardInventoryIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
-    '/dashboard/team/': {
-      id: '/dashboard/team/'
-      path: '/'
-      fullPath: '/dashboard/team/'
-      preLoaderRoute: typeof DashboardTeamIndexImport
-      parentRoute: typeof DashboardTeamLayoutImport
+    '/dashboard/users/': {
+      id: '/dashboard/users/'
+      path: '/users'
+      fullPath: '/dashboard/users'
+      preLoaderRoute: typeof DashboardUsersIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/dashboard/users/$user/': {
+      id: '/dashboard/users/$user/'
+      path: '/users/$user'
+      fullPath: '/dashboard/users/$user'
+      preLoaderRoute: typeof DashboardUsersUserIndexImport
+      parentRoute: typeof DashboardLayoutImport
     }
   }
 }
@@ -237,33 +223,22 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
   AuthLayoutRouteChildren,
 )
 
-interface DashboardTeamLayoutRouteChildren {
-  DashboardTeamTeamRoute: typeof DashboardTeamTeamRoute
-  DashboardTeamIndexRoute: typeof DashboardTeamIndexRoute
-}
-
-const DashboardTeamLayoutRouteChildren: DashboardTeamLayoutRouteChildren = {
-  DashboardTeamTeamRoute: DashboardTeamTeamRoute,
-  DashboardTeamIndexRoute: DashboardTeamIndexRoute,
-}
-
-const DashboardTeamLayoutRouteWithChildren =
-  DashboardTeamLayoutRoute._addFileChildren(DashboardTeamLayoutRouteChildren)
-
 interface DashboardLayoutRouteChildren {
-  DashboardTeamLayoutRoute: typeof DashboardTeamLayoutRouteWithChildren
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardAuditlogsIndexRoute: typeof DashboardAuditlogsIndexRoute
   DashboardCategoriesIndexRoute: typeof DashboardCategoriesIndexRoute
   DashboardInventoryIndexRoute: typeof DashboardInventoryIndexRoute
+  DashboardUsersIndexRoute: typeof DashboardUsersIndexRoute
+  DashboardUsersUserIndexRoute: typeof DashboardUsersUserIndexRoute
 }
 
 const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
-  DashboardTeamLayoutRoute: DashboardTeamLayoutRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardAuditlogsIndexRoute: DashboardAuditlogsIndexRoute,
   DashboardCategoriesIndexRoute: DashboardCategoriesIndexRoute,
   DashboardInventoryIndexRoute: DashboardInventoryIndexRoute,
+  DashboardUsersIndexRoute: DashboardUsersIndexRoute,
+  DashboardUsersUserIndexRoute: DashboardUsersUserIndexRoute,
 }
 
 const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
@@ -274,17 +249,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthLayoutRouteWithChildren
   '/dashboard': typeof DashboardLayoutRouteWithChildren
-  '/dashboard/team': typeof DashboardTeamLayoutRouteWithChildren
   '/auth/forgort-password': typeof AuthForgortPasswordRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/team/$team': typeof DashboardTeamTeamRoute
   '/dashboard/auditlogs': typeof DashboardAuditlogsIndexRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory': typeof DashboardInventoryIndexRoute
-  '/dashboard/team/': typeof DashboardTeamIndexRoute
+  '/dashboard/users': typeof DashboardUsersIndexRoute
+  '/dashboard/users/$user': typeof DashboardUsersUserIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -294,11 +268,11 @@ export interface FileRoutesByTo {
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/dashboard/team/$team': typeof DashboardTeamTeamRoute
   '/dashboard/auditlogs': typeof DashboardAuditlogsIndexRoute
   '/dashboard/categories': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory': typeof DashboardInventoryIndexRoute
-  '/dashboard/team': typeof DashboardTeamIndexRoute
+  '/dashboard/users': typeof DashboardUsersIndexRoute
+  '/dashboard/users/$user': typeof DashboardUsersUserIndexRoute
 }
 
 export interface FileRoutesById {
@@ -306,17 +280,16 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthLayoutRouteWithChildren
   '/dashboard': typeof DashboardLayoutRouteWithChildren
-  '/dashboard/team': typeof DashboardTeamLayoutRouteWithChildren
   '/auth/forgort-password': typeof AuthForgortPasswordRoute
   '/auth/signup': typeof AuthSignupRoute
   '/auth/verify-email': typeof AuthVerifyEmailRoute
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/dashboard/team/$team': typeof DashboardTeamTeamRoute
   '/dashboard/auditlogs/': typeof DashboardAuditlogsIndexRoute
   '/dashboard/categories/': typeof DashboardCategoriesIndexRoute
   '/dashboard/inventory/': typeof DashboardInventoryIndexRoute
-  '/dashboard/team/': typeof DashboardTeamIndexRoute
+  '/dashboard/users/': typeof DashboardUsersIndexRoute
+  '/dashboard/users/$user/': typeof DashboardUsersUserIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -325,17 +298,16 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/dashboard'
-    | '/dashboard/team'
     | '/auth/forgort-password'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth/'
     | '/dashboard/'
-    | '/dashboard/team/$team'
     | '/dashboard/auditlogs'
     | '/dashboard/categories'
     | '/dashboard/inventory'
-    | '/dashboard/team/'
+    | '/dashboard/users'
+    | '/dashboard/users/$user'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -344,27 +316,26 @@ export interface FileRouteTypes {
     | '/auth/verify-email'
     | '/auth'
     | '/dashboard'
-    | '/dashboard/team/$team'
     | '/dashboard/auditlogs'
     | '/dashboard/categories'
     | '/dashboard/inventory'
-    | '/dashboard/team'
+    | '/dashboard/users'
+    | '/dashboard/users/$user'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/dashboard'
-    | '/dashboard/team'
     | '/auth/forgort-password'
     | '/auth/signup'
     | '/auth/verify-email'
     | '/auth/'
     | '/dashboard/'
-    | '/dashboard/team/$team'
     | '/dashboard/auditlogs/'
     | '/dashboard/categories/'
     | '/dashboard/inventory/'
-    | '/dashboard/team/'
+    | '/dashboard/users/'
+    | '/dashboard/users/$user/'
   fileRoutesById: FileRoutesById
 }
 
@@ -410,19 +381,12 @@ export const routeTree = rootRoute
     "/dashboard": {
       "filePath": "dashboard/layout.tsx",
       "children": [
-        "/dashboard/team",
         "/dashboard/",
         "/dashboard/auditlogs/",
         "/dashboard/categories/",
-        "/dashboard/inventory/"
-      ]
-    },
-    "/dashboard/team": {
-      "filePath": "dashboard/team/layout.tsx",
-      "parent": "/dashboard",
-      "children": [
-        "/dashboard/team/$team",
-        "/dashboard/team/"
+        "/dashboard/inventory/",
+        "/dashboard/users/",
+        "/dashboard/users/$user/"
       ]
     },
     "/auth/forgort-password": {
@@ -445,10 +409,6 @@ export const routeTree = rootRoute
       "filePath": "dashboard/index.tsx",
       "parent": "/dashboard"
     },
-    "/dashboard/team/$team": {
-      "filePath": "dashboard/team/$team.tsx",
-      "parent": "/dashboard/team"
-    },
     "/dashboard/auditlogs/": {
       "filePath": "dashboard/auditlogs/index.tsx",
       "parent": "/dashboard"
@@ -461,9 +421,13 @@ export const routeTree = rootRoute
       "filePath": "dashboard/inventory/index.tsx",
       "parent": "/dashboard"
     },
-    "/dashboard/team/": {
-      "filePath": "dashboard/team/index.tsx",
-      "parent": "/dashboard/team"
+    "/dashboard/users/": {
+      "filePath": "dashboard/users/index.tsx",
+      "parent": "/dashboard"
+    },
+    "/dashboard/users/$user/": {
+      "filePath": "dashboard/users/$user/index.tsx",
+      "parent": "/dashboard"
     }
   }
 }

@@ -4,22 +4,20 @@ import { Suspense } from "react";
 import { ListPageHeader } from "@/components/wrappers/ListPageHeader";
 import { Helmet } from "@/components/wrappers/custom-helmet";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
-import { CreateTeamForm } from "./form/create";
-import { TeamList } from "./list/TeamList";
-import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
-
-interface TeamPageProps {
+import { UsersContainer } from "./list/UsersContainer.tsx";
+import { ResponsiveSuspenseFallbacks } from "@/components/wrappers/ResponsiveSuspenseFallbacks";
+interface UserPageProps {
 }
 
-export function TeamPage({}: TeamPageProps) {
+export function UserPage({}: UserPageProps) {
   const { debouncedValue, isDebouncing, keyword, setKeyword } =
-    usePageSearchQuery("/dashboard/team");
+    usePageSearchQuery("/dashboard/users");
   return (
     <div className="min-h-screen flex h-full w-full gap-5 flex-col items-center ">
-      <Helmet title="Inventory | team" description="The list of Inventory | team" />
+      <Helmet title="Inventory | users" description="The list of Inventory | user" />
       <ListPageHeader
-        title="Team"
-        formTrigger={<CreateTeamForm />}
+        title="Users"
+        // formTrigger={<CreateUserForm />}
         searchBox={
           <SearchBox
             inputProps={{
@@ -33,9 +31,9 @@ export function TeamPage({}: TeamPageProps) {
         }
       />
 
-     <div className="m-3 flex h-full w-full items-center justify-center p-5">
-        <Suspense fallback={<CardsListSuspenseFallback />}>
-          <TeamList keyword={keyword} />
+      <div className="m-3 flex h-full w-full flex-col justify-center pb-4">
+        <Suspense fallback={<ResponsiveSuspenseFallbacks />}>
+          <UsersContainer keyword={debouncedValue} />
         </Suspense>
       </div>
     </div>

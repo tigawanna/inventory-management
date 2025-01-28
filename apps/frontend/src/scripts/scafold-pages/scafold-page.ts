@@ -11,6 +11,7 @@ import {
 import {
   rootPageBaseFormComponentsTemplate,
   rootPageCreateFormComponentsTemplate,
+  rootPageDeleteFormComponentsTemplate,
   rootPageUpdateFormComponentsTemplate,
 } from "./form-templates";
 import {
@@ -74,6 +75,10 @@ export async function scaffoldPage(pagename: string, path: string) {
   const updateForm = {
     path: `${rootPath}/-components/form/update.tsx`,
     component: rootPageUpdateFormComponentsTemplate(pagename),
+  };
+  const deleteForm = {
+    path: `${rootPath}/-components/form/delete.tsx`,
+    component: rootPageDeleteFormComponentsTemplate(pagename),
   };
 
   // const listComponent = {
