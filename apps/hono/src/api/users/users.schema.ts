@@ -30,7 +30,7 @@ export type UsersItem = z.infer<typeof usersSelectSchema>;
 export type updateUsers = z.infer<typeof usersUpdateSchema>;
 export type createUsers = z.infer<typeof usersInsertSchema>;
 
-const sortBy = ["created_at",] as const satisfies Array<keyof UsersItem>;
+const sortBy = ["name", "email",] as const satisfies Array<keyof UsersItem>;
 
 export const listUsersQueryParamsSchema = genericQueryParamsSchema.extend({
   sort: z.enum(sortBy).optional(),

@@ -27,7 +27,8 @@ export const categoriesListRoute = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       baseResponseSchema.extend({ 
-        result: baseListResponseSchema.extend({ items: z.array(categoriesSelectSchema) }),
+        result: baseListResponseSchema.extend({ 
+          items: z.array(categoriesSelectSchema) }),
         error:z.null().optional(),
       })
       ,

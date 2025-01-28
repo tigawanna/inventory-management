@@ -1,7 +1,5 @@
 // /-components/form/create
-export function rootPageCreateFormComponentsTemplate(
-  pagename: string
-) {
+export function rootPageCreateFormComponentsTemplate(pagename: string) {
   const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
   return `
 
@@ -66,9 +64,7 @@ export function Create${capitalpagename}Form() {
  `;
 }
 // /-components/form/update
-export function rootPageUpdateFormComponentsTemplate(
-  pagename: string
-) {
+export function rootPageUpdateFormComponentsTemplate(pagename: string) {
   const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
   return `
 
@@ -129,10 +125,70 @@ export function Update${capitalpagename}form({ item }: Update${capitalpagename}f
 
  `;
 }
+// /-components/form/delete
+export function rootPageDeleteFormComponentsTemplate(pagename: string) {
+  const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
+  return `
+
+import { useState } from "react";
+import { DiaDrawer } from "@/components/wrappers/DiaDrawer";
+import { Edit } from "lucide-react";
+import { makeHotToast } from "@/components/toasters";
+import { Base${capitalpagename}Form } from "./base";
+import { useMutation } from "@tanstack/react-query";
+
+interface Delete${capitalpagename}formInterface {
+  item: Record<string, any> & { id: string };
+}
+export function Delete${capitalpagename}form({ item }: Delete${capitalpagename}formInterface) {
+  const [open, setOpen] = useState(false);
+  const mutation = useMutation({
+    mutationFn: (value: {}) => {
+      return new Promise<{}>((resolve) => {
+        setTimeout(() => {
+          resolve(value);
+        }, 2000);
+      });
+    },
+    onSuccess: () => {
+      makeHotToast({
+        title: "${capitalpagename} added",
+        description: "${capitalpagename} has been added successfully",
+        variant: "success",
+      });
+      setOpen(false);
+    },
+    onError(error) {
+      makeHotToast({
+        title: "Something went wrong",
+        description: error.message,
+        variant: "error",
+      });
+    },
+    meta: {
+      invalidates: ["${pagename}"],
+    },
+  });
+  return (
+    <DiaDrawer
+      open={open}
+      setOpen={setOpen}
+      title="Add ${capitalpagename}"
+      description="Add a new staff"
+      trigger={<Edit className="size-5" />}
+    >
+      <div className="flex h-full max-h-[80vh] w-fit flex-col gap-2 overflow-auto">
+        <Base${capitalpagename}Form mutation={mutation} row={{item}} />
+      </div>
+    </DiaDrawer>
+  );
+}
+
+
+ `;
+}
 // /-components/form/base
-export function rootPageBaseFormComponentsTemplate(
-  pagename: string
-) {
+export function rootPageBaseFormComponentsTemplate(pagename: string) {
   const capitalpagename = pagename.charAt(0).toUpperCase() + pagename.slice(1);
   return `
 

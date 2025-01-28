@@ -1,8 +1,8 @@
 import type { SQL } from "drizzle-orm";
-import type { PgTable, TableConfig } from "drizzle-orm/pg-core";
+import type { PgTable } from "drizzle-orm/pg-core";
 import type { Context } from "hono";
 
-import { asc, desc, eq, sql } from "drizzle-orm";
+import { asc, desc, eq, getTableColumns, sql } from "drizzle-orm";
 import { getContext } from "hono/context-storage";
 
 import type { AppBindings } from "@/lib/types";
@@ -20,15 +20,19 @@ export interface PaginatedQuery {
   order?: "asc" | "desc";
 }
 
-export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<string, any>, UpdateDTO extends Record<string, any>> {
+type GenerictableColumns<Table extends PgTable<any>> = Table["_"]["columns"]
+
+export class BaseCrudServiceWithColumns<T extends PgTable<any>, CreateDTO extends Record<string, any>, UpdateDTO extends Record<string, any>> {
   protected table: T;
   protected entityType: EntityType;
   private auditLogService: AuditLogService;
+  private selectedColumns?: GenerictableColumns<T> | Partial<GenerictableColumns<T>>
 
-  constructor(table: T, entityType: EntityType) {
+  constructor(table: T, entityType: EntityType,selectedColumns?:Partial<GenerictableColumns<T>>) {
     this.table = table;
     this.entityType = entityType;
     this.auditLogService = new AuditLogService();
+    this.selectedColumns = selectedColumns ?? getTableColumns(this.table)
   }
 
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>) {
@@ -42,7 +46,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
 
     // Build query
     const dbQuery = db
-      .select()
+      .select({ ...this.selectedColumns })
       .from(this.table)
       .where(conditions)
       .limit(Number(limit))
@@ -70,7 +74,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
 
   async findById(id: string) {
     const item = await db
-      .select()
+      .select({ ...this.selectedColumns })
       .from(this.table)
     // TODO : extend type PgTable with a narrower type which always has an ID column
       // @ts-expect-error : the type is too genrric but shape matches

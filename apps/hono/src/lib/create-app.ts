@@ -34,7 +34,7 @@ export function createApp() {
   app.use(requestId());
   app.use(pinoLogger());
   app.use(contextStorage());
-  app.use("/api/categories/*", (c,next)=>authenticateUserMiddleware(c,next));
+  // app.use("/api/categories/*", (c,next)=>authenticateUserMiddleware(c,next));
   app.use("/api/inventory/*", (c,next)=>authenticateUserMiddleware(c,next));
   app.use("/api/auditlogs/*", (c,next)=>authenticateUserMiddleware(c,next,"admin"));
   app.use(serveEmojiFavicon("📝"));
