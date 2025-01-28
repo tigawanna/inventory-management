@@ -48,10 +48,10 @@ export class UsersService extends BaseCrudService<
     const ctx = getContext<AppBindings>();
     const viewrRole = ctx.var.viewer.role;
     if (viewrRole !== "admin") {
-      const { role, lastLoginAt, password, refreshToken, refreshTokenVersion, verificationToken, isEmailVerified, ...data } = input;
+      const { role, lastLoginAt, password,email ,refreshToken, refreshTokenVersion, verificationToken, isEmailVerified, ...data } = input;
       return super.update(id, data);
     }
-    const { lastLoginAt, password, refreshToken, refreshTokenVersion, verificationToken, isEmailVerified, ...data } = input;
+    const { lastLoginAt, password, refreshToken, email,refreshTokenVersion, verificationToken, isEmailVerified, ...data } = input;
     return super.update(id, data);
   }
 }
