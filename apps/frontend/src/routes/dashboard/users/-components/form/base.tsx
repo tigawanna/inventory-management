@@ -10,6 +10,7 @@ import {
 import { z } from "zod";
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
 import { RoleSelect } from "./selects";
+import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 
 type FormFields = Partial<UserItem>;
 interface BaseUserFormProps<T extends FormFields> {
@@ -131,29 +132,36 @@ export function BaseUserForm<T extends FormFields>({
           }}
         />
       </div>
-    
-        <form.Field
-          name="role"
-          validatorAdapter={zodValidator()}
-          validators={{
-            onChange: z.string().url(),
-          }}
-          children={(field) => {
-            return (
-              <div className="w-full">
-                <label htmlFor={role} className="text-sm">
-                  Role
-                </label>
-                <RoleSelect
-                  role={field.state.value}
-                  setRole={(role) => field.handleChange(role)}
-                  disabled={role!=="admin"}
-                />
-              </div>
-            );
-          }}
-        />
 
+      <form.Field
+        name="role"
+        validatorAdapter={zodValidator()}
+        validators={{
+          onChange: z.string().url(),
+        }}
+        children={(field) => {
+          return (
+            <div className="w-full">
+              <label htmlFor={role} className="text-sm">
+                Role
+              </label>
+              <RoleSelect
+                role={field.state.value}
+                setRole={(role) => field.handleChange(role)}
+                disabled={role !== "admin"}
+              />
+            </div>
+          );
+        }}
+      />
+      <MutationButton
+        // onClick={() => {
+        //   console.log("== form values ===", form.state.values);
+        //   console.log("== form valid ===", form.state.isValid);
+        //   console.log("== form errors ===", form.state.errors);
+        // }}
+        mutation={mutation}
+      />
     </form>
   );
 }

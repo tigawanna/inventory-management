@@ -6,7 +6,7 @@ export const dashboard_routes = [
   { name: "auditlogs", href: "/dashboard/auditlogs", icon: <Wallet /> },
   {
     name: "team",
-    href: "/dashboard/team",
+    href: "/dashboard/users",
     icon: (
       <div className="flex">
         <Users />

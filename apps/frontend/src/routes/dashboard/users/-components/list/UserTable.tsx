@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
 } from "@/components/shadcn/ui/popover";
 import { Ban, Fullscreen } from "lucide-react";
+import { useViewer } from "@/lib/tanstack/query/use-viewer";
 interface UserTableExampleProps {
   items: never[] | UserItem[];
 }
@@ -25,6 +26,7 @@ export function UserTable({ items }: UserTableExampleProps) {
     { accessor: "role", label: "Role" },
     { label: "created", accessor: "created_at" },
   ] as const;
+  const { role, viewer } = useViewer();
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <table className="table table-zebra table-lg w-full">
@@ -37,7 +39,8 @@ export function UserTable({ items }: UserTableExampleProps) {
                 </th>
               );
             })}
-            <td>Edit</td>
+            
+            {<td>Edit</td>}
           </tr>
         </thead>
         <tbody>
@@ -83,18 +86,12 @@ export function UserTable({ items }: UserTableExampleProps) {
                     </td>
                   );
                 })}
-                <td>
-                  <UpdateUserform item={row} />
-                </td>
-                <td>
-                  {/* <Link
-                    to={`/dashboard/users/$user`}
-                    params={{ user: row.id }}
-                    className="flex w-full justify-between bg-primary p-2 text-primary-foreground"
-                  >
-                    <div>see details</div>
-                  </Link> */}
-                </td>
+                {(role !== "admin" ||
+                  (role !== "admin" && viewer?.id !== row.id)) ? (
+                  <td>
+                    <UpdateUserform item={row} />
+                  </td>
+                ):<td>-</td>}
               </tr>
             );
           })}

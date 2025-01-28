@@ -1,20 +1,17 @@
-
 import { Link } from "@tanstack/react-router";
 import { UpdateUserform } from "@/routes/dashboard/users/-components/form/update";
 import { UserItem } from "../types";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/shadcn/ui/popover";
+import { useViewer } from "@/lib/tanstack/query/use-viewer";
+
 interface UserListProps {
   items: never[] | UserItem[];
 }
 
-export function UserList({ items}: UserListProps) {
- return (
-    <div className="w-full h-full flex flex-col items-center justify-between ">
-      <ul className="w-[95%] min-h-[80vh] flex flex-wrap justify-center p-2 gap-2">
+export function UserList({ items }: UserListProps) {
+  const { role, viewer } = useViewer();
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-between">
+      <ul className="flex min-h-[80vh] w-[95%] flex-wrap justify-center gap-2 p-2">
         {items.map((item) => {
           return (
             <li
@@ -25,7 +22,10 @@ export function UserList({ items}: UserListProps) {
                 <div className="flex h-full w-full flex-col justify-between gap-2">
                   <div className="flex h-full w-full justify-between gap-2">
                     <h1 className="text-2xl font-bold">{item.name}</h1>
-                    <UpdateUserform item={item} />
+                    {(role !== "admin" ||
+                      (role !== "admin" && viewer?.id !== item.id)) && (
+                      <UpdateUserform item={item} />
+                    )}
                   </div>
 
                   <p>{item.email}</p>
@@ -40,13 +40,6 @@ export function UserList({ items}: UserListProps) {
                     /> */}
                   </div>
                 </div>
-                <Link
-                  to={`/dashboard/users/$user`}
-                  params={{ user: item.id }}
-                  className="flex w-full justify-between bg-primary p-2 text-primary-foreground"
-                >
-                  <div>see details</div>
-                </Link>
               </div>
             </li>
           );

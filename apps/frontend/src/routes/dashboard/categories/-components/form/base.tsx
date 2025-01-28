@@ -107,11 +107,11 @@ export function BaseCategoriesForm<T extends CategoryForm>({
         />
       </div>
       <MutationButton
-        onClick={() => {
-          console.log("== form values ===", form.state.values);
-          console.log("== form valid ===", form.state.isValid);
-          console.log("== form errors ===", form.state.errors);
-        }}
+        // onClick={() => {
+        //   console.log("== form values ===", form.state.values);
+        //   console.log("== form valid ===", form.state.isValid);
+        //   console.log("== form errors ===", form.state.errors);
+        // }}
         mutation={mutation}
       />
     </form>
