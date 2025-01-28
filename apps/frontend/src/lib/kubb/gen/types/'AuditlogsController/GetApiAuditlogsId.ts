@@ -113,7 +113,7 @@ export type GetApiAuditlogsId200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum57 = {
+export const errorCodeEnum55 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -123,7 +123,7 @@ export const errorCodeEnum57 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum57 = (typeof errorCodeEnum57)[keyof typeof errorCodeEnum57]
+export type ErrorCodeEnum55 = (typeof errorCodeEnum55)[keyof typeof errorCodeEnum55]
 
 /**
  * @description Inventpry by id validation error
@@ -141,7 +141,7 @@ export type GetApiAuditlogsId400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum57 | undefined
+    code?: ErrorCodeEnum55 | undefined
     /**
      * @type object | undefined
      */
@@ -162,7 +162,7 @@ export type GetApiAuditlogsId400 = {
   } | null
 }
 
-export const errorCodeEnum58 = {
+export const errorCodeEnum56 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -172,7 +172,7 @@ export const errorCodeEnum58 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum58 = (typeof errorCodeEnum58)[keyof typeof errorCodeEnum58]
+export type ErrorCodeEnum56 = (typeof errorCodeEnum56)[keyof typeof errorCodeEnum56]
 
 /**
  * @description Inventpry by id not found error
@@ -190,7 +190,7 @@ export type GetApiAuditlogsId404 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum58 | undefined
+    code?: ErrorCodeEnum56 | undefined
     /**
      * @type object | undefined
      */
@@ -211,7 +211,7 @@ export type GetApiAuditlogsId404 = {
   } | null
 }
 
-export const errorCodeEnum59 = {
+export const errorCodeEnum57 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -221,7 +221,7 @@ export const errorCodeEnum59 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum59 = (typeof errorCodeEnum59)[keyof typeof errorCodeEnum59]
+export type ErrorCodeEnum57 = (typeof errorCodeEnum57)[keyof typeof errorCodeEnum57]
 
 /**
  * @description Inventpry by id internal server error
@@ -239,7 +239,7 @@ export type GetApiAuditlogsId500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum59 | undefined
+    code?: ErrorCodeEnum57 | undefined
     /**
      * @type object | undefined
      */

@@ -6,12 +6,12 @@ export type PatchApiUsersHeaderParams = {
   Authorization?: string | undefined
 }
 
-export const resultRoleEnum6 = {
+export const resultRoleEnum5 = {
   admin: 'admin',
   user: 'user',
 } as const
 
-export type ResultRoleEnum6 = (typeof resultRoleEnum6)[keyof typeof resultRoleEnum6]
+export type ResultRoleEnum5 = (typeof resultRoleEnum5)[keyof typeof resultRoleEnum5]
 
 /**
  * @description Users update successful
@@ -52,7 +52,7 @@ export type PatchApiUsers200 = {
     /**
      * @type string
      */
-    role: ResultRoleEnum6 | null
+    role: ResultRoleEnum5 | null
     /**
      * @type string
      */
@@ -85,7 +85,7 @@ export type PatchApiUsers200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum35 = {
+export const errorCodeEnum33 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -95,7 +95,7 @@ export const errorCodeEnum35 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum35 = (typeof errorCodeEnum35)[keyof typeof errorCodeEnum35]
+export type ErrorCodeEnum33 = (typeof errorCodeEnum33)[keyof typeof errorCodeEnum33]
 
 /**
  * @description Users update validation error
@@ -113,7 +113,7 @@ export type PatchApiUsers400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum35 | undefined
+    code?: ErrorCodeEnum33 | undefined
     /**
      * @type object | undefined
      */
@@ -134,7 +134,7 @@ export type PatchApiUsers400 = {
   } | null
 }
 
-export const errorCodeEnum36 = {
+export const errorCodeEnum34 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -144,7 +144,7 @@ export const errorCodeEnum36 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum36 = (typeof errorCodeEnum36)[keyof typeof errorCodeEnum36]
+export type ErrorCodeEnum34 = (typeof errorCodeEnum34)[keyof typeof errorCodeEnum34]
 
 /**
  * @description Users update internal server error
@@ -162,7 +162,7 @@ export type PatchApiUsers500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum36 | undefined
+    code?: ErrorCodeEnum34 | undefined
     /**
      * @type object | undefined
      */

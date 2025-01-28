@@ -91,7 +91,7 @@ export type GetApiCategories200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum43 = {
+export const errorCodeEnum41 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -101,7 +101,7 @@ export const errorCodeEnum43 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum43 = (typeof errorCodeEnum43)[keyof typeof errorCodeEnum43]
+export type ErrorCodeEnum41 = (typeof errorCodeEnum41)[keyof typeof errorCodeEnum41]
 
 /**
  * @description Categories listing validation error
@@ -119,7 +119,7 @@ export type GetApiCategories400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum43 | undefined
+    code?: ErrorCodeEnum41 | undefined
     /**
      * @type object | undefined
      */
@@ -140,7 +140,7 @@ export type GetApiCategories400 = {
   } | null
 }
 
-export const errorCodeEnum44 = {
+export const errorCodeEnum42 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -150,7 +150,7 @@ export const errorCodeEnum44 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum44 = (typeof errorCodeEnum44)[keyof typeof errorCodeEnum44]
+export type ErrorCodeEnum42 = (typeof errorCodeEnum42)[keyof typeof errorCodeEnum42]
 
 /**
  * @description Categories listing internal server error
@@ -168,7 +168,7 @@ export type GetApiCategories500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum44 | undefined
+    code?: ErrorCodeEnum42 | undefined
     /**
      * @type object | undefined
      */

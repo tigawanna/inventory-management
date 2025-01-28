@@ -22,7 +22,7 @@ export type DeleteApiUsers200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum37 = {
+export const errorCodeEnum35 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -32,7 +32,7 @@ export const errorCodeEnum37 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum37 = (typeof errorCodeEnum37)[keyof typeof errorCodeEnum37]
+export type ErrorCodeEnum35 = (typeof errorCodeEnum35)[keyof typeof errorCodeEnum35]
 
 /**
  * @description Users deletion validation error
@@ -50,7 +50,7 @@ export type DeleteApiUsers400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum37 | undefined
+    code?: ErrorCodeEnum35 | undefined
     /**
      * @type object | undefined
      */
@@ -71,7 +71,7 @@ export type DeleteApiUsers400 = {
   } | null
 }
 
-export const errorCodeEnum38 = {
+export const errorCodeEnum36 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -81,7 +81,7 @@ export const errorCodeEnum38 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum38 = (typeof errorCodeEnum38)[keyof typeof errorCodeEnum38]
+export type ErrorCodeEnum36 = (typeof errorCodeEnum36)[keyof typeof errorCodeEnum36]
 
 /**
  * @description Users deletion not found error
@@ -99,7 +99,7 @@ export type DeleteApiUsers404 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum38 | undefined
+    code?: ErrorCodeEnum36 | undefined
     /**
      * @type object | undefined
      */
@@ -120,7 +120,7 @@ export type DeleteApiUsers404 = {
   } | null
 }
 
-export const errorCodeEnum39 = {
+export const errorCodeEnum37 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -130,7 +130,7 @@ export const errorCodeEnum39 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum39 = (typeof errorCodeEnum39)[keyof typeof errorCodeEnum39]
+export type ErrorCodeEnum37 = (typeof errorCodeEnum37)[keyof typeof errorCodeEnum37]
 
 /**
  * @description Users deletion internal server error
@@ -148,7 +148,7 @@ export type DeleteApiUsers500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum39 | undefined
+    code?: ErrorCodeEnum37 | undefined
     /**
      * @type object | undefined
      */

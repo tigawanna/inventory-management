@@ -30,11 +30,3 @@ export {
   patchApiUsersMutationRequestSchema,
   patchApiUsersMutationResponseSchema,
 } from './patchApiUsersSchema.ts'
-export {
-  postApiUsersHeaderParamsSchema,
-  postApiUsers200Schema,
-  postApiUsers400Schema,
-  postApiUsers500Schema,
-  postApiUsersMutationRequestSchema,
-  postApiUsersMutationResponseSchema,
-} from './postApiUsersSchema.ts'

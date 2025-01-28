@@ -186,11 +186,3 @@ export {
   patchApiUsersMutationRequestSchema,
   patchApiUsersMutationResponseSchema,
 } from './UsersSchemas/patchApiUsersSchema.ts'
-export {
-  postApiUsersHeaderParamsSchema,
-  postApiUsers200Schema,
-  postApiUsers400Schema,
-  postApiUsers500Schema,
-  postApiUsersMutationRequestSchema,
-  postApiUsersMutationResponseSchema,
-} from './UsersSchemas/postApiUsersSchema.ts'

@@ -32,5 +32,4 @@ export { getDeleteApiUsersUrlClient, deleteApiUsersClient } from './UsersService
 export { getGetApiUsersUrlClient, getApiUsersClient } from './UsersService/getApiUsersClient.ts'
 export { getGetApiUsersIdUrlClient, getApiUsersIdClient } from './UsersService/getApiUsersIdClient.ts'
 export { getPatchApiUsersUrlClient, patchApiUsersClient } from './UsersService/patchApiUsersClient.ts'
-export { getPostApiUsersUrlClient, postApiUsersClient } from './UsersService/postApiUsersClient.ts'
 export { usersService } from './UsersService/usersService.ts'

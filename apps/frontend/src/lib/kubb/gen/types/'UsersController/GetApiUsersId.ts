@@ -5,12 +5,12 @@ export type GetApiUsersIdPathParams = {
   id: string
 }
 
-export const resultRoleEnum7 = {
+export const resultRoleEnum6 = {
   admin: 'admin',
   user: 'user',
 } as const
 
-export type ResultRoleEnum7 = (typeof resultRoleEnum7)[keyof typeof resultRoleEnum7]
+export type ResultRoleEnum6 = (typeof resultRoleEnum6)[keyof typeof resultRoleEnum6]
 
 /**
  * @description User by id success
@@ -51,7 +51,7 @@ export type GetApiUsersId200 = {
     /**
      * @type string
      */
-    role: ResultRoleEnum7 | null
+    role: ResultRoleEnum6 | null
     /**
      * @type string
      */
@@ -84,7 +84,7 @@ export type GetApiUsersId200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum40 = {
+export const errorCodeEnum38 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -94,7 +94,7 @@ export const errorCodeEnum40 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum40 = (typeof errorCodeEnum40)[keyof typeof errorCodeEnum40]
+export type ErrorCodeEnum38 = (typeof errorCodeEnum38)[keyof typeof errorCodeEnum38]
 
 /**
  * @description User by id validation error
@@ -112,7 +112,7 @@ export type GetApiUsersId400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum40 | undefined
+    code?: ErrorCodeEnum38 | undefined
     /**
      * @type object | undefined
      */
@@ -133,7 +133,7 @@ export type GetApiUsersId400 = {
   } | null
 }
 
-export const errorCodeEnum41 = {
+export const errorCodeEnum39 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -143,7 +143,7 @@ export const errorCodeEnum41 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum41 = (typeof errorCodeEnum41)[keyof typeof errorCodeEnum41]
+export type ErrorCodeEnum39 = (typeof errorCodeEnum39)[keyof typeof errorCodeEnum39]
 
 /**
  * @description User by id not found error
@@ -161,7 +161,7 @@ export type GetApiUsersId404 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum41 | undefined
+    code?: ErrorCodeEnum39 | undefined
     /**
      * @type object | undefined
      */
@@ -182,7 +182,7 @@ export type GetApiUsersId404 = {
   } | null
 }
 
-export const errorCodeEnum42 = {
+export const errorCodeEnum40 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -192,7 +192,7 @@ export const errorCodeEnum42 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum42 = (typeof errorCodeEnum42)[keyof typeof errorCodeEnum42]
+export type ErrorCodeEnum40 = (typeof errorCodeEnum40)[keyof typeof errorCodeEnum40]
 
 /**
  * @description User by id internal server error
@@ -210,7 +210,7 @@ export type GetApiUsersId500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum42 | undefined
+    code?: ErrorCodeEnum40 | undefined
     /**
      * @type object | undefined
      */

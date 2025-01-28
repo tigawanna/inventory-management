@@ -22,7 +22,7 @@ export type DeleteApiCategories200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum49 = {
+export const errorCodeEnum47 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -32,7 +32,7 @@ export const errorCodeEnum49 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum49 = (typeof errorCodeEnum49)[keyof typeof errorCodeEnum49]
+export type ErrorCodeEnum47 = (typeof errorCodeEnum47)[keyof typeof errorCodeEnum47]
 
 /**
  * @description Categories deletion validation error
@@ -50,7 +50,7 @@ export type DeleteApiCategories400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum49 | undefined
+    code?: ErrorCodeEnum47 | undefined
     /**
      * @type object | undefined
      */
@@ -71,7 +71,7 @@ export type DeleteApiCategories400 = {
   } | null
 }
 
-export const errorCodeEnum50 = {
+export const errorCodeEnum48 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -81,7 +81,7 @@ export const errorCodeEnum50 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum50 = (typeof errorCodeEnum50)[keyof typeof errorCodeEnum50]
+export type ErrorCodeEnum48 = (typeof errorCodeEnum48)[keyof typeof errorCodeEnum48]
 
 /**
  * @description Categories deletion not found error
@@ -99,7 +99,7 @@ export type DeleteApiCategories404 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum50 | undefined
+    code?: ErrorCodeEnum48 | undefined
     /**
      * @type object | undefined
      */
@@ -120,7 +120,7 @@ export type DeleteApiCategories404 = {
   } | null
 }
 
-export const errorCodeEnum51 = {
+export const errorCodeEnum49 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -130,7 +130,7 @@ export const errorCodeEnum51 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum51 = (typeof errorCodeEnum51)[keyof typeof errorCodeEnum51]
+export type ErrorCodeEnum49 = (typeof errorCodeEnum49)[keyof typeof errorCodeEnum49]
 
 /**
  * @description Categories deletion internal server error
@@ -148,7 +148,7 @@ export type DeleteApiCategories500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum51 | undefined
+    code?: ErrorCodeEnum49 | undefined
     /**
      * @type object | undefined
      */

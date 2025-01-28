@@ -59,10 +59,6 @@ export const operations = {
     path: '/api/users',
     method: 'get',
   },
-  'post_api-users': {
-    path: '/api/users',
-    method: 'post',
-  },
   'patch_api-users': {
     path: '/api/users',
     method: 'patch',

@@ -14,7 +14,7 @@ export const getApiUsersQueryParamsSchema = z
     limit: z.number().default(10).nullable().nullish(),
     order: z.enum(['asc', 'desc']).default('desc'),
     search: z.string().optional(),
-    sort: z.enum(['created_at']).optional(),
+    sort: z.enum(['name', 'email']).optional(),
   })
   .optional() as unknown as ToZod<GetApiUsersQueryParams>
 

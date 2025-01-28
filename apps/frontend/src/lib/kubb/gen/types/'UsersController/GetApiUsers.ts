@@ -6,7 +6,8 @@ export const getApiUsersQueryParamsOrderEnum = {
 export type GetApiUsersQueryParamsOrderEnum = (typeof getApiUsersQueryParamsOrderEnum)[keyof typeof getApiUsersQueryParamsOrderEnum]
 
 export const getApiUsersQueryParamsSortEnum = {
-  created_at: 'created_at',
+  name: 'name',
+  email: 'email',
 } as const
 
 export type GetApiUsersQueryParamsSortEnum = (typeof getApiUsersQueryParamsSortEnum)[keyof typeof getApiUsersQueryParamsSortEnum]

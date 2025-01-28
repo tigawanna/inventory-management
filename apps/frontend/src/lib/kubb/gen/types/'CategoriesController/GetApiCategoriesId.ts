@@ -37,7 +37,7 @@ export type GetApiCategoriesId200 = {
   error?: unknown | undefined
 }
 
-export const errorCodeEnum52 = {
+export const errorCodeEnum50 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -47,7 +47,7 @@ export const errorCodeEnum52 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum52 = (typeof errorCodeEnum52)[keyof typeof errorCodeEnum52]
+export type ErrorCodeEnum50 = (typeof errorCodeEnum50)[keyof typeof errorCodeEnum50]
 
 /**
  * @description Category by id validation error
@@ -65,7 +65,7 @@ export type GetApiCategoriesId400 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum52 | undefined
+    code?: ErrorCodeEnum50 | undefined
     /**
      * @type object | undefined
      */
@@ -86,7 +86,7 @@ export type GetApiCategoriesId400 = {
   } | null
 }
 
-export const errorCodeEnum53 = {
+export const errorCodeEnum51 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -96,7 +96,7 @@ export const errorCodeEnum53 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum53 = (typeof errorCodeEnum53)[keyof typeof errorCodeEnum53]
+export type ErrorCodeEnum51 = (typeof errorCodeEnum51)[keyof typeof errorCodeEnum51]
 
 /**
  * @description Category by id not found error
@@ -114,7 +114,7 @@ export type GetApiCategoriesId404 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum53 | undefined
+    code?: ErrorCodeEnum51 | undefined
     /**
      * @type object | undefined
      */
@@ -135,7 +135,7 @@ export type GetApiCategoriesId404 = {
   } | null
 }
 
-export const errorCodeEnum54 = {
+export const errorCodeEnum52 = {
   'login-required': 'login-required',
   'admin-required': 'admin-required',
   'parameters-required': 'parameters-required',
@@ -145,7 +145,7 @@ export const errorCodeEnum54 = {
   'not-found': 'not-found',
 } as const
 
-export type ErrorCodeEnum54 = (typeof errorCodeEnum54)[keyof typeof errorCodeEnum54]
+export type ErrorCodeEnum52 = (typeof errorCodeEnum52)[keyof typeof errorCodeEnum52]
 
 /**
  * @description Category by id internal server error
@@ -163,7 +163,7 @@ export type GetApiCategoriesId500 = {
     /**
      * @type string | undefined
      */
-    code?: ErrorCodeEnum54 | undefined
+    code?: ErrorCodeEnum52 | undefined
     /**
      * @type object | undefined
      */
