@@ -46,7 +46,11 @@ export function UserTable({ items }: UserTableExampleProps) {
         <tbody>
           {items.map((row) => {
             return (
-              <tr key={row.id}>
+              <tr
+                key={row.id}
+                data-mine={row.id === viewer?.id}
+                className="data-[mine=true]:bg-accent"
+              >
                 {columns.map((column, idx) => {
                   if (column.accessor === "metadata") {
                     return (
@@ -86,12 +90,13 @@ export function UserTable({ items }: UserTableExampleProps) {
                     </td>
                   );
                 })}
-                {(role !== "admin" ||
-                  (role !== "admin" && viewer?.id !== row.id)) ? (
+                {viewer?.id === row.id || role === "admin" ? (
                   <td>
                     <UpdateUserform item={row} />
                   </td>
-                ):<td>-</td>}
+                ) : (
+                  <td>-</td>
+                )}
               </tr>
             );
           })}
