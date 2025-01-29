@@ -49,7 +49,7 @@ export function UserTable({ items }: UserTableExampleProps) {
               <tr
                 key={row.id}
                 data-mine={row.id === viewer?.id}
-                className="data-[mine=true]:bg-accent"
+                className="data-[mine=true]:text-accent"
               >
                 {columns.map((column, idx) => {
                   if (column.accessor === "metadata") {
