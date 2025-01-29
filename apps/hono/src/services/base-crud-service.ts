@@ -1,5 +1,6 @@
 import type { SQL } from "drizzle-orm";
 import type { PgTable, TableConfig } from "drizzle-orm/pg-core";
+import type { GetSelectTableSelection, SelectResultField, TableLike } from "drizzle-orm/query-builders/select.types";
 import type { Context } from "hono";
 
 import { asc, desc, eq, sql } from "drizzle-orm";
@@ -12,12 +13,21 @@ import { db } from "@/db/client";
 import type { EntityType } from "./audit-log.service";
 
 import { auditAction, AuditLogService } from "./audit-log.service";
+import { cacheService } from "./cach-service";
 
 export interface PaginatedQuery {
   page: number;
   limit: number;
   sort?: string;
   order?: "asc" | "desc";
+}
+
+interface FindAllretunType<T extends TableLike> {
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  items: { [K in keyof { [Key in keyof GetSelectTableSelection<T> & string]: SelectResultField<GetSelectTableSelection<T>[Key], true>; }]: { [Key in keyof GetSelectTableSelection<T> & string]: SelectResultField<GetSelectTableSelection<T>[Key], true>; }[K]; }[];
 }
 
 export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<string, any>, UpdateDTO extends Record<string, any>> {
@@ -31,9 +41,54 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     this.auditLogService = new AuditLogService();
   }
 
-  async findAll(query: PaginatedQuery, conditions?: SQL<unknown>) {
-    const { page, limit, sort, order } = query;
+  // async findAll(query: PaginatedQuery, conditions?: SQL<unknown>) {
+  //   const { page, limit, sort, order } = query;
 
+  //   // Get total count
+  //   const [{ count }] = await db
+  //     .select({ count: sql`count(*)`.mapWith(Number) })
+  //     .from(this.table)
+  //     .where(conditions);
+
+  //   // Build query
+  //   const dbQuery = db
+  //     .select()
+  //     .from(this.table)
+  //     .where(conditions)
+  //     .limit(Number(limit))
+  //     .offset((Number(page) - 1) * Number(limit));
+
+  //   // Add sorting
+  //   if (sort) {
+  //     dbQuery.orderBy(
+  //       // TODO : extend type PgTable with a narrower type which always has an ID column
+  //       // @ts-expect-error : the type is too genrric but shape matches
+  //       order === "desc" ? desc(this.table[sort]) : asc(this.table[sort]),
+  //     );
+  //   }
+
+  //   const items = await dbQuery;
+
+  //   return {
+  //     page: Number(page),
+  //     perPage: Number(limit),
+  //     totalItems: Number(count),
+  //     totalPages: Math.ceil(Number(count) / Number(limit)),
+  //     items,
+  //   };
+  // }
+
+  async findAll(query: PaginatedQuery, conditions?: SQL<unknown>):Promise<FindAllretunType<T>> {
+    const c = getContext<AppBindings>();
+    const { page, limit, sort, order } = query;
+    const cacheKey = `findAll:${JSON.stringify(query)}:${JSON.stringify(conditions)}`;
+    const cachedResult = await cacheService.get(cacheKey);
+
+    if (cachedResult) {
+      c.var.logger.info(`Cache hit for ${cacheKey}`);
+      return JSON.parse(cachedResult);
+    }
+     c.var.logger.warn(`Cache miss for ${cacheKey}`);
     // Get total count
     const [{ count }] = await db
       .select({ count: sql`count(*)`.mapWith(Number) })
@@ -52,23 +107,36 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     if (sort) {
       dbQuery.orderBy(
         // TODO : extend type PgTable with a narrower type which always has an ID column
-        // @ts-expect-error : the type is too genrric but shape matches
+        // @ts-expect-error : the type is too generic but shape matches
         order === "desc" ? desc(this.table[sort]) : asc(this.table[sort]),
       );
     }
 
     const items = await dbQuery;
 
-    return {
+    const result = {
       page: Number(page),
       perPage: Number(limit),
       totalItems: Number(count),
       totalPages: Math.ceil(Number(count) / Number(limit)),
       items,
     };
+
+    await cacheService.set(cacheKey, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
+    c.var.logger.info(`Cache set for ${cacheKey}`);
+    return result;
   }
 
   async findById(id: string) {
+    const c = getContext<AppBindings>();
+    const cacheKey = `findById:${id}`;
+    const cachedResult = await cacheService.get(cacheKey);
+
+    if (cachedResult) {
+      c.var.logger.info(`Cache hit for ${cacheKey}`);
+      return JSON.parse(cachedResult);
+    }
+     c.var.logger.warn(`Cache miss for ${cacheKey}`);
     const item = await db
       .select()
       .from(this.table)
@@ -76,8 +144,10 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table.id, id))
       .limit(1);
-
-    return item[0];
+    const result = item[0];
+    await cacheService.set(cacheKey, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
+    c.var.logger.info(`Cache set for ${cacheKey}`);
+    return result;
   }
 
   async create(data: CreateDTO) {
