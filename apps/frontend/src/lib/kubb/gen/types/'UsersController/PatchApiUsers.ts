@@ -9,6 +9,7 @@ export type PatchApiUsersHeaderParams = {
 export const resultRoleEnum5 = {
   admin: 'admin',
   user: 'user',
+  suspended: 'suspended',
 } as const
 
 export type ResultRoleEnum5 = (typeof resultRoleEnum5)[keyof typeof resultRoleEnum5]
@@ -186,6 +187,7 @@ export type PatchApiUsers500 = {
 export const patchApiUsersMutationRequestRoleEnum = {
   admin: 'admin',
   user: 'user',
+  suspended: 'suspended',
 } as const
 
 export type PatchApiUsersMutationRequestRoleEnum = (typeof patchApiUsersMutationRequestRoleEnum)[keyof typeof patchApiUsersMutationRequestRoleEnum]

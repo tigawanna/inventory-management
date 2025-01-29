@@ -28,6 +28,7 @@ export type ResultEntityTypeEnum = (typeof resultEntityTypeEnum)[keyof typeof re
 export const userRoleEnum2 = {
   admin: 'admin',
   user: 'user',
+  suspended: 'suspended',
 } as const
 
 export type UserRoleEnum2 = (typeof userRoleEnum2)[keyof typeof userRoleEnum2]

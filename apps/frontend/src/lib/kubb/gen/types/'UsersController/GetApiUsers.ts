@@ -41,6 +41,7 @@ export type GetApiUsersQueryParams = {
 export const itemsRoleEnum = {
   admin: 'admin',
   user: 'user',
+  suspended: 'suspended',
 } as const
 
 export type ItemsRoleEnum = (typeof itemsRoleEnum)[keyof typeof itemsRoleEnum]

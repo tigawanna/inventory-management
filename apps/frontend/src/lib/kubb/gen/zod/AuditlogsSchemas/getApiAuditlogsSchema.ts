@@ -46,7 +46,7 @@ export const getApiAuditlogs200Schema = z.object({
             name: z.string(),
             email: z.string(),
             avatarUrl: z.string().nullable(),
-            role: z.enum(['admin', 'user']).nullable(),
+            role: z.enum(['admin', 'user', 'suspended']).nullable(),
             id: z.string(),
           })
           .nullable(),

@@ -5,7 +5,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/shadcn/ui/select";
-type Role = "admin" | "user";
+import { ItemsRoleEnum } from "@/lib/kubb/gen";
+type Role = ItemsRoleEnum
 interface RoleSelectProps {
   role?: Role | null;
   setRole: (role: Role) => void;
@@ -21,6 +22,7 @@ export function RoleSelect({ role, setRole,disabled }: RoleSelectProps) {
       <SelectContent>
         <SelectItem value="admin">Admin</SelectItem>
         <SelectItem value="user">User</SelectItem>
+        <SelectItem value="suspended">Suspended</SelectItem>
       </SelectContent>
     </Select>
   );

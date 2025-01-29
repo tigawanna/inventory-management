@@ -11,6 +11,9 @@ import { z } from "zod";
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
 import { RoleSelect } from "./selects";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
+import { makeHotToast } from "@/components/toasters";
+import { i } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
+import { FieldInfo } from "@/lib/tanstack/form/components";
 
 type FormFields = Partial<UserItem>;
 interface BaseUserFormProps<T extends FormFields> {
@@ -138,6 +141,7 @@ export function BaseUserForm<T extends FormFields>({
         validatorAdapter={zodValidator()}
         validators={{
           onChange: z.string().url(),
+          onBlur: z.string().url(),
         }}
         children={(field) => {
           return (
@@ -150,16 +154,51 @@ export function BaseUserForm<T extends FormFields>({
                 setRole={(role) => field.handleChange(role)}
                 disabled={role !== "admin"}
               />
+              <FieldInfo field={field} />
             </div>
           );
         }}
       />
+      {/* <form.Subscribe children={(state) => (
+      <div className="flex w-full flex-col gap-1 bg-error/10 border-px border-error rounded-lg  text-error-content">
+        {Object.entries(state.fieldMeta).map(([key, value]) => {
+          if (!value.errors.length) return;
+          const issue = {
+            key,
+            error: value?.errors,
+          };
+          return (
+            <div
+              key={issue?.key}
+              className="flex w-full items-center gap-1 p-1"
+            >
+              <div className="">{issue?.key} :</div>
+              <div className="text-sm text-red-500">{issue?.error.join(" ,")}</div>
+            </div>
+          )
+        })}
+      </div>
+
+      )}/> */}
+
       <MutationButton
-        // onClick={() => {
-        //   console.log("== form values ===", form.state.values);
-        //   console.log("== form valid ===", form.state.isValid);
-        //   console.log("== form errors ===", form.state.errors);
-        // }}
+        onClick={() => {
+          Object.entries(form.state.fieldMeta).map(
+            ([key, value]) => {
+              if (!value.errors.length) return;
+              const issue = {
+                key,
+                error: value?.errors,
+              };
+              return makeHotToast({
+                title: "Validation issue on field: " + issue?.key,
+                description: issue?.error.join("\n"),
+                variant: "warning",
+                duration: 50000,
+              });
+            },
+          );
+        }}
         mutation={mutation}
       />
     </form>

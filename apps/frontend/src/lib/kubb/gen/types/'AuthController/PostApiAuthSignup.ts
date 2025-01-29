@@ -1,6 +1,7 @@
 export const resultRoleEnum = {
   admin: 'admin',
   user: 'user',
+  suspended: 'suspended',
 } as const
 
 export type ResultRoleEnum = (typeof resultRoleEnum)[keyof typeof resultRoleEnum]

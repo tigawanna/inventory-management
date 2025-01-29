@@ -13,7 +13,7 @@ export const getApiAuthMe200Schema = z.object({
     name: z.string(),
     email: z.string(),
     avatarUrl: z.string().nullable(),
-    role: z.enum(['admin', 'user']).nullable(),
+    role: z.enum(['admin', 'user', 'suspended']).nullable(),
     refreshTokenVersion: z.number().int().min(-2147483648).max(2147483647).nullable(),
     isEmailVerified: z.boolean().nullable(),
     lastLoginAt: z.string().nullable(),

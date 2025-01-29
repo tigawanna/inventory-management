@@ -88,6 +88,7 @@ export type ItemsEntityTypeEnum = (typeof itemsEntityTypeEnum)[keyof typeof item
 export const userRoleEnum = {
   admin: 'admin',
   user: 'user',
+  suspended: 'suspended',
 } as const
 
 export type UserRoleEnum = (typeof userRoleEnum)[keyof typeof userRoleEnum]

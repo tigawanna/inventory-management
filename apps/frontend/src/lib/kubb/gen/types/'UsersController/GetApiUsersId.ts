@@ -8,6 +8,7 @@ export type GetApiUsersIdPathParams = {
 export const resultRoleEnum6 = {
   admin: 'admin',
   user: 'user',
+  suspended: 'suspended',
 } as const
 
 export type ResultRoleEnum6 = (typeof resultRoleEnum6)[keyof typeof resultRoleEnum6]
