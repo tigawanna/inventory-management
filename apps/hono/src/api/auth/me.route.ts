@@ -67,6 +67,14 @@ export const currentUserHandler: AppRouteHandler<CurrentUserRoute> = async (c,
         },
       }, HttpStatusCodes.NOT_FOUND);
     }
+    if (newUser.role==="suspended") {
+      return c.json({
+        result: null,
+        error: {
+          message: "Suspended account",
+        },
+      }, HttpStatusCodes.NOT_FOUND);
+    }
     return c.json({
       result: newUser,
       error: null,

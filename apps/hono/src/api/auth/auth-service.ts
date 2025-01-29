@@ -37,11 +37,7 @@ export class AuthService {
     return filterUserJWTPayload(user);
   }
 
-  async currebtUser() {
-
-  }
-
-  async register(
+ async register(
     data: { email: string; password: string; name: string },
   ) {
     const hashedPassword = await hash(data.password, this.SALT_ROUNDS);
@@ -86,6 +82,9 @@ export class AuthService {
     const isValid = await compare(data.password, user.password);
     if (!isValid) {
       throw new MyAuthError("Invalid credentials");
+    }
+    if (user.role === "suspended") {
+      throw new MyAuthError("Suspended account");
     }
     await tokenService.generateUserAuthTokens(filterUserJWTPayload(user));
     await this.lastLogin(user.id);

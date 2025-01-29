@@ -2,7 +2,7 @@ import { boolean, integer, jsonb, pgEnum, pgTable, text, timestamp } from "drizz
 
 import { commonColumns } from "../helpers/columns";
 
-export const roles = ["admin", "user"] as const;
+export const roles = ["admin", "user","suspended"] as const;
 
 export const userRole = pgEnum("role", roles);
 export const usersTable = pgTable("users", {
