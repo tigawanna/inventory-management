@@ -8,7 +8,7 @@ interface OneUserDetailsProps {
 }
 
 export function OneUserDetails({}: OneUserDetailsProps) {
-  const { user } = useParams({ from: "/user/$user/" });
+  const { user } = useParams({ from: "/dashboard/users/$user/" });
   const query = useSuspenseQuery(oneUserQueryOptions({ user }));
   const data = query.data;
   const error = query.error;

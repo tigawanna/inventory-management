@@ -21,7 +21,7 @@ export function UserPage({}: UserPageProps) {
         searchBox={
           <SearchBox
             inputProps={{
-              placeholder: "Search by name",
+              placeholder: "Search by name or email",
             }}
             debouncedValue={debouncedValue}
             isDebouncing={isDebouncing}

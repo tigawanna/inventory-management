@@ -16,7 +16,7 @@ export const baseUserUpdateSchema = createUpdateSchema(usersTable);
 export const userUpdateSchema = baseUserUpdateSchema.omit({
   metadata: true
 }).extend({
-  metadata: z.record(z.string(), z.any()).nullable(),
+  metadata: z.record(z.string(), z.any()).optional(),
 })
 
 export const userJWTSchema = userSelectSchema.omit({

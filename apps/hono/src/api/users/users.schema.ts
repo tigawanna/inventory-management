@@ -9,14 +9,14 @@ export const baseUserSelectSchema = createSelectSchema(usersTable)
 export const usersSelectSchema = baseUserSelectSchema.omit({
   metadata: true
 }).extend({
-  metadata: z.record(z.string(), z.any()).optional(),
+  metadata: z.record(z.string(), z.any()).nullable(),
 })
 export const baseUsersInsertSchema = createInsertSchema(usersTable);
 export const baseUpdateSchema = createUpdateSchema(usersTable);
 export const usersInsertSchema = baseUsersInsertSchema.omit({
   metadata: true
 }).extend({
-  metadata: z.record(z.string(), z.any()).nullable(),
+  metadata: z.record(z.string(), z.any()).optional(),
 })
 export const usersUpdateSchema = baseUpdateSchema.omit({
   metadata: true
