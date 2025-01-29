@@ -2,6 +2,7 @@ import { InventoryItem } from "../types";
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
 import { UpdateInventoryform } from "../form/update";
 import { DeleteInventoryForm } from "../form/delete";
+import { Trash2 } from "lucide-react";
 
 interface InventoryTableProps {
   items: never[] | InventoryItem[];
@@ -68,10 +69,10 @@ export function InventoryTable({ items }: InventoryTableProps) {
                   </td>
                 )}
                 <td key={"delete" + row.id}>
-                  <div className="flex gap-2">
+                  <div data-active={row.isActive ?? "false"} className="flex justify-center flex-wrap gap-1">
                     <DeleteInventoryForm id={row.id} />
                     {!row.isActive && (
-                      <div className="badge badge-primary">soft deleted</div>
+                      <div className="text-xs text-error">hard delete</div>
                     )}
                   </div>
                 </td>

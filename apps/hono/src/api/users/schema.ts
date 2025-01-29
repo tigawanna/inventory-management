@@ -12,7 +12,12 @@ export const userSelectSchema = baseUserSelectSchema.omit({
   metadata: z.record(z.string(), z.any()).nullable(),
 })
 export const userInsertSchema = createInsertSchema(usersTable);
-export const userUpdateSchema = createUpdateSchema(usersTable);
+export const baseUserUpdateSchema = createUpdateSchema(usersTable);
+export const userUpdateSchema = baseUserUpdateSchema.omit({
+  metadata: true
+}).extend({
+  metadata: z.record(z.string(), z.any()).nullable(),
+})
 
 export const userJWTSchema = userSelectSchema.omit({
   password: true,

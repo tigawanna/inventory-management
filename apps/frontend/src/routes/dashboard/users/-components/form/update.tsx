@@ -20,7 +20,7 @@ export function UpdateUserform({ item }: UpdateUserformInterface) {
       if (data.type === "error") {
         makeHotToast({
           title: "Something went wrong",
-          description: data?.data?.error.message,
+          description: JSON.stringify(data?.data?.error.data, null, 2),
           variant: "error",
         });
         return;
@@ -40,7 +40,7 @@ export function UpdateUserform({ item }: UpdateUserformInterface) {
       });
     },
     meta: {
-      invalidates: ["user"],
+      invalidates: ["users"],
     },
   });
   return (

@@ -46,7 +46,7 @@ export class UsersService extends BaseCrudService<
 
   override async update(id: string, input: Partial<z.infer<typeof usersUpdateSchema>>) {
     const ctx = getContext<AppBindings>();
-    const viewrRole = ctx.var.viewer.role;
+    const viewrRole = ctx?.var?.viewer?.role;
     if (viewrRole !== "admin") {
       const { role, lastLoginAt, password,email ,refreshToken, refreshTokenVersion, verificationToken, isEmailVerified, ...data } = input;
       return super.update(id, data);

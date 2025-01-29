@@ -4,7 +4,6 @@ import { useForm } from "@tanstack/react-form";
 import { useEffect } from "react";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import {
-  TextAreaFormField,
   TextFormField,
 } from "@/lib/tanstack/form/TextFields";
 import { z } from "zod";
@@ -12,8 +11,8 @@ import { useViewer } from "@/lib/tanstack/query/use-viewer";
 import { RoleSelect } from "./selects";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { makeHotToast } from "@/components/toasters";
-import { i } from "node_modules/vite/dist/node/types.d-aGj9QkWt";
 import { FieldInfo } from "@/lib/tanstack/form/components";
+import { patchApiUsersMutationRequestSchema } from "@/lib/kubb/gen";
 
 type FormFields = Partial<UserItem>;
 interface BaseUserFormProps<T extends FormFields> {
@@ -44,6 +43,7 @@ export function BaseUserForm<T extends FormFields>({
     string,
     { code: string; message: string }
   >;
+  // console.log({mutationError});
   useEffect(() => {
     if (mutationError) {
       const fieldErrors = Object?.entries(mutationError);
@@ -61,6 +61,9 @@ export function BaseUserForm<T extends FormFields>({
       }
     }
   }, [mutationError]);
+  // Extract the role enum values from the schema
+  const roleEnumSchema = patchApiUsersMutationRequestSchema?.shape?.role;
+
   return (
     <form
       onSubmit={(e) => {
@@ -119,7 +122,7 @@ export function BaseUserForm<T extends FormFields>({
           name="avatarUrl"
           validatorAdapter={zodValidator()}
           validators={{
-            onChange: z.string().url(),
+            onChange: patchApiUsersMutationRequestSchema?.shape?.avatarUrl,
           }}
           children={(field) => {
             return (
@@ -140,8 +143,8 @@ export function BaseUserForm<T extends FormFields>({
         name="role"
         validatorAdapter={zodValidator()}
         validators={{
-          onChange: z.string().url(),
-          onBlur: z.string().url(),
+          onChange: roleEnumSchema,
+          onBlur: roleEnumSchema,
         }}
         children={(field) => {
           return (
@@ -162,7 +165,7 @@ export function BaseUserForm<T extends FormFields>({
       {/* <form.Subscribe children={(state) => (
       <div className="flex w-full flex-col gap-1 bg-error/10 border-px border-error rounded-lg  text-error-content">
         {Object.entries(state.fieldMeta).map(([key, value]) => {
-          if (!value.errors.length) return;
+          if (!value?.errors?.length) return;
           const issue = {
             key,
             error: value?.errors,
@@ -178,26 +181,24 @@ export function BaseUserForm<T extends FormFields>({
           )
         })}
       </div>
-
       )}/> */}
 
       <MutationButton
+      disabled={mutation.isPending||!form.state.canSubmit}
         onClick={() => {
-          Object.entries(form.state.fieldMeta).map(
-            ([key, value]) => {
-              if (!value.errors.length) return;
-              const issue = {
-                key,
-                error: value?.errors,
-              };
-              return makeHotToast({
-                title: "Validation issue on field: " + issue?.key,
-                description: issue?.error.join("\n"),
-                variant: "warning",
-                duration: 50000,
-              });
-            },
-          );
+          Object.entries(form.state.fieldMeta).map(([key, value]) => {
+            if (!value?.errors?.length) return;
+            const issue = {
+              key,
+              error: value?.errors,
+            };
+            return makeHotToast({
+              title: "Validation issue on field: " + issue?.key,
+              description: issue?.error.join("\n"),
+              variant: "warning",
+              duration: 50000,
+            });
+          });
         }}
         mutation={mutation}
       />

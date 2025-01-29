@@ -40,8 +40,18 @@ export function UserList({ items }: UserListProps) {
 
                   <p>{item.email}</p>
                   <div className="flex flex-wrap justify-between gap-2">
-                    <div>Price: {item.role}</div>
-                    <div>Quantity: {item.lastLoginAt}</div>
+                    <div
+                      data-role={item.role}
+                      className="data-[role=admin]:badge-secondary badge badge-primary badge-outline data-[role=admin]:badge-outline"
+                    >
+                      {item.role}
+                    </div>
+                    {item?.lastLoginAt && (
+                      <div>
+                        last logged in:{" "}
+                        {new Date(item?.lastLoginAt).toLocaleDateString()}
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-wrap justify-between gap-2 text-sm">
                     {/* <DeleteUserForm

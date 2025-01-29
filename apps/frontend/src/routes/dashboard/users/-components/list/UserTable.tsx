@@ -75,12 +75,25 @@ export function UserTable({ items }: UserTableExampleProps) {
                   }
                   if (
                     column.accessor === "created_at" ||
-                    column.accessor === "updated_at"
+                    column.accessor === "updated_at" ||
+                    column.accessor === "lastLoginAt"
                   ) {
                     return (
                       <td key={column.accessor + row.id + idx}>
                         {/* @ts-expect-error : this will be a date */}
                         {new Date(row?.[column?.accessor]).toLocaleDateString()}
+                      </td>
+                    );
+                  }
+                  if(column.accessor === "role"){
+                    return (
+                      <td key={column.accessor + row.id + idx}>
+                        <div
+                          data-role={row.role}
+                          className="data-[role=suspended]:badge-outline badge badge-primary badge-outline data-[role=admin]:badge-secondary data-[role=suspended]:badge-error data-[role=admin]:badge-outline"
+                        >
+                          {row.role}
+                        </div>
                       </td>
                     );
                   }
