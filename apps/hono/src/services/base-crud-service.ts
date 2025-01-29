@@ -1,7 +1,6 @@
 import type { SQL } from "drizzle-orm";
-import type { PgTable, TableConfig } from "drizzle-orm/pg-core";
+import type { PgTable } from "drizzle-orm/pg-core";
 import type { GetSelectTableSelection, SelectResultField, TableLike } from "drizzle-orm/query-builders/select.types";
-import type { Context } from "hono";
 
 import { asc, desc, eq, sql } from "drizzle-orm";
 import { getContext } from "hono/context-storage";
@@ -28,6 +27,9 @@ interface FindAllretunType<T extends TableLike> {
   totalItems: number;
   totalPages: number;
   items: { [K in keyof { [Key in keyof GetSelectTableSelection<T> & string]: SelectResultField<GetSelectTableSelection<T>[Key], true>; }]: { [Key in keyof GetSelectTableSelection<T> & string]: SelectResultField<GetSelectTableSelection<T>[Key], true>; }[K]; }[];
+}
+interface FindOneReturnType<T extends TableLike> {
+  item: { [K in keyof { [Key in keyof GetSelectTableSelection<T> & string]: SelectResultField<GetSelectTableSelection<T>[Key], true>; }]: { [Key in keyof GetSelectTableSelection<T> & string]: SelectResultField<GetSelectTableSelection<T>[Key], true>; }[K]; };
 }
 
 export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<string, any>, UpdateDTO extends Record<string, any>> {
@@ -78,7 +80,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   //   };
   // }
 
-  async findAll(query: PaginatedQuery, conditions?: SQL<unknown>):Promise<FindAllretunType<T>> {
+  async findAll(query: PaginatedQuery, conditions?: SQL<unknown>): Promise<FindAllretunType<T>> {
     const c = getContext<AppBindings>();
     const { page, limit, sort, order } = query;
     const cacheKey = `findAll:${JSON.stringify(query)}:${JSON.stringify(conditions)}`;
@@ -88,7 +90,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       c.var.logger.info(`Cache hit for ${cacheKey}`);
       return JSON.parse(cachedResult);
     }
-     c.var.logger.warn(`Cache miss for ${cacheKey}`);
+    c.var.logger.warn(`Cache miss for ${cacheKey}`);
     // Get total count
     const [{ count }] = await db
       .select({ count: sql`count(*)`.mapWith(Number) })
@@ -127,7 +129,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     return result;
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<FindOneReturnType<T>["item"]> {
     const c = getContext<AppBindings>();
     const cacheKey = `findById:${id}`;
     const cachedResult = await cacheService.get(cacheKey);
@@ -136,7 +138,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       c.var.logger.info(`Cache hit for ${cacheKey}`);
       return JSON.parse(cachedResult);
     }
-     c.var.logger.warn(`Cache miss for ${cacheKey}`);
+    c.var.logger.warn(`Cache miss for ${cacheKey}`);
     const item = await db
       .select()
       .from(this.table)
