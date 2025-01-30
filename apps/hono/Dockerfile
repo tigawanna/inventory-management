@@ -16,6 +16,7 @@ FROM base AS pruner
 ARG PROJECT
 
 WORKDIR /app
+
 COPY . .
 RUN turbo prune --scope=${PROJECT} --docker
 
@@ -61,4 +62,4 @@ ENV PORT=${PORT}
 ENV NODE_ENV=production
 EXPOSE ${PORT}
 
-CMD ["node", "dist//srcindex.js"]
+CMD ["node", "dist/src/index.js"]

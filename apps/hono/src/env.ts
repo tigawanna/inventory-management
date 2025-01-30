@@ -24,18 +24,18 @@ const EnvSchema = z
     BREVO_API_KEY: z.string(),
     BREVO_USER: z.string(),
     EMAIL_FROM: z.string(),
-  })
-  .superRefine((input, ctx) => {
-    if (input.NODE_ENV === "production" && !input.DATABASE_AUTH_TOKEN) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.invalid_type,
-        expected: "string",
-        received: "undefined",
-        path: ["DATABASE_AUTH_TOKEN"],
-        message: "Must be set when NODE_ENV is 'production'",
-      });
-    }
   });
+  // .superRefine((input, ctx) => {
+  //   if (input.NODE_ENV === "production" && !input.DATABASE_AUTH_TOKEN) {
+  //     ctx.addIssue({
+  //       code: z.ZodIssueCode.invalid_type,
+  //       expected: "string",
+  //       received: "undefined",
+  //       path: ["DATABASE_AUTH_TOKEN"],
+  //       message: "Must be set when NODE_ENV is 'production'",
+  //     });
+  //   }
+  // });
 
 export type env = z.infer<typeof EnvSchema>;
 

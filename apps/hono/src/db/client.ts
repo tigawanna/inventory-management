@@ -61,23 +61,31 @@ export async function createDB() {
     const pool = await createLocalPool();
     return pgDrizzle({
       client: pool,
-      schema: { ...auditLogSchema ,...inventorySchema, ...usersSchema},
+      schema: { ...auditLogSchema, ...inventorySchema, ...usersSchema },
       logger: envVariables.LOG_LEVEL === "debug" && new MyLogger(),
     });
   }
 
   return drizzle({
     client: neon(envVariables.DATABASE_URL),
-      schema: { ...auditLogSchema ,...inventorySchema, ...usersSchema},
+    schema: { ...auditLogSchema, ...inventorySchema, ...usersSchema },
   });
 }
 
-export const db = await createDB().catch((error) => {
-  console.error("Failed to initialize database:", error);
-  process.exit(1);
-});
+// export const db = await createDB().catch((error) => {
+//   console.error("Failed to initialize database:", error);
+//   process.exit(1);
+// });
 
 // export const db = drizzle({
 //   client: neon(envVariables.DATABASE_URL),
 //   schema: { ...inventorySchema, ...usersSchema },
 // });
+
+//  run only use for local
+const pool = await createLocalPool();
+export const db = pgDrizzle({
+  client: pool,
+  schema: { ...auditLogSchema, ...inventorySchema, ...usersSchema },
+  logger: envVariables.LOG_LEVEL === "debug" && new MyLogger(),
+});
