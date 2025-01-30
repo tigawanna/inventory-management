@@ -1,7 +1,7 @@
 
 ARG NODE_VERSION=23
 ARG PROJECT="frontend"
-ARG PORT=5000
+ARG PORT=3000
 
 # Alpine image
 FROM node:${NODE_VERSION}-alpine AS base
@@ -41,45 +41,50 @@ RUN turbo build --filter=${PROJECT}
 RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm prune --prod --no-optional
 RUN rm -rf ./**/*/src
 
+
+
 # Final image
-# FROM node:${NODE_VERSION}-alpine AS runner
-# ARG PROJECT
-# ARG PORT
+FROM nginx:alpine AS runner
+ARG PORT=80
 
-# # Install only needed dependencies
-# RUN apk add --no-cache gcompat
+# Copy the built application from the builder stage
+COPY --from=builder /app/apps/frontend/dist /usr/share/nginx/html
 
-# # Create non-root user
-# RUN addgroup --system --gid 1001 nodejs
-# RUN adduser --system --uid 1001 nodejs
-# USER nodejs
+# Add custom nginx config to handle SPA routing
+RUN echo $'\
+server { \n\
+    listen 80; \n\
+    location / { \n\
+        root /usr/share/nginx/html; \n\
+        index index.html index.htm; \n\
+        try_files $uri $uri/ /index.html; \n\
+    } \n\
+}' > /etc/nginx/conf.d/default.conf
 
-# WORKDIR /app
-# COPY --from=builder --chown=nodejs:nodejs /app .
-# WORKDIR /app/apps/${PROJECT}
+EXPOSE ${PORT}
 
-# ENV PORT=${PORT}
-# ENV NODE_ENV=production
-# EXPOSE ${PORT}
+CMD ["nginx", "-g", "daemon off;"]
 
-# CMD ["node", "dist//srcindex.js"]
+# build command from the root directory of the monorepo
 
+# 1. Build the image (current command)
+# sudo docker build -t inventory-ui -f apps/frontend/Dockerfile .
 
-# # Use an official Nginx image to serve the built application
-# FROM nginx:alpine
+# 2. Run the container
+# sudo docker run -d \
+#   --name inventory-frontend \
+#   -p 3000:80 \
+#   inventory-ui
 
-# # Copy the built application from the build stage
-# COPY --from=build /app/dist /usr/share/nginx/html
+# 3. Verify container is running
+# sudo docker ps
 
-# # Copy custom Nginx configuration if needed
-# # COPY nginx.conf /etc/nginx/nginx.conf
+# 4. Check logs if needed
+# sudo docker logs inventory-frontend
 
-# # Expose port 80
-# EXPOSE 80
+# 5. Access the application
+# Open browser at http://localhost:3000
 
-# # Start Nginx server
-# CMD ["nginx", "-g", "daemon off;"]
-
-
-# sudo docker build --no-cache --progress=plain -t inventory-api -f apps/backend/Dockerfile .
-# sudo docker build --no-cache --progress=plain -t inventory-ui -f apps/frontend/Dockerfile .
+# 6. Stop and remove the container
+# sudo docker stop inventory-frontend
+# sudo docker rm inventory-frontend
