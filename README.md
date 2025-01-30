@@ -13,14 +13,6 @@ http://localhost:5000/doc
 open api reference UI is on
 http://localhost:5000/reference
 
-Uses
-- honojs (router)
-- drizzle + postgress
-- redis for caching
-
-
-
-
 To run the frontend
 ```sh
 cd apps/frontend
