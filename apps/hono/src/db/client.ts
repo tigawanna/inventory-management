@@ -25,15 +25,17 @@ class MyLogger implements Logger {
   }
 }
 
-const RETRY_ATTEMPTS = 3;
-const RETRY_DELAY = 2000;
+const RETRY_ATTEMPTS = 5;
+const RETRY_DELAY = 10_000;
 
 async function createLocalPool() {
+  // console.log("Creating local database pool");
+  // console.log(" =========== Database URL================= :", envVariables.DATABASE_URL);
   const { Pool } = pg;
   const pool = new Pool({
     max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 5000,
+    idleTimeoutMillis: 50_000,
+    connectionTimeoutMillis: 5_000,
     connectionString: envVariables.DATABASE_URL,
   });
 

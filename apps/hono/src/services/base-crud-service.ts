@@ -12,7 +12,7 @@ import { db } from "@/db/client";
 import type { EntityType } from "./audit-log.service";
 
 import { auditAction, AuditLogService } from "./audit-log.service";
-import { cacheService } from "./cach-service";
+import { cacheService } from "./cache-service";
 
 export interface PaginatedQuery {
   page: number;
