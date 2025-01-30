@@ -12,7 +12,7 @@ import {
 interface CategorySortSelectProps {}
 
 export function CategorySortSelect({}: CategorySortSelectProps) {
-  const navigate = useNavigate({ from: "/dashboard/categories/" });
+  const navigate = useNavigate({ from: "/dashboard/categories" });
   const { sort, ...rest } = useSearch({ from: "/dashboard/categories/" });
   const paymentTypes = ["name", "quantity", "price", "default"] as const;
   return (
@@ -48,7 +48,7 @@ export function CategorySortSelect({}: CategorySortSelectProps) {
 }
 export function CategoryOrderSelect({}: CategorySortSelectProps) {
   const { order, ...rest } = useSearch({ from: "/dashboard/categories/" });
-  const navigate = useNavigate({ from: "/dashboard/categories/" });
+  const navigate = useNavigate({ from: "/dashboard/categories" });
   const paymentTypes = ["desc", "asc"] as const;
   return (
     <Select

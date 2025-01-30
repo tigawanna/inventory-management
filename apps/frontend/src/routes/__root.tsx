@@ -8,9 +8,9 @@ import "../components/pagination/pagination.css";
 import "daisyui-devtools/style.css"
 import "./styles.css";
 import { QueryClient } from "@tanstack/react-query";
-import { PocketbaseViewerType } from "@/lib/tanstack/query/use-viewer";
 import { RootComponent } from "./-components/RootComponent";
 import { z } from "zod";
+import { ViewerType } from "@/lib/tanstack/query/auth-gaurd";
 
 const searchparams = z.object({
   globalPage: z.number().optional(),
@@ -21,7 +21,7 @@ const searchparams = z.object({
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
-  viewer?: PocketbaseViewerType;
+  viewer?: ViewerType;
 }>()({
   component: RootComponent,
   validateSearch: (search) => searchparams.parse(search),

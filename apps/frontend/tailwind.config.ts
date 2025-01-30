@@ -5,13 +5,15 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      screens: {
-        print: {
-          raw: "print",
+      keyframes: {
+        "border-spin": {
+          "100%": {
+            transform: "rotate(-360deg)",
+          },
         },
-        screen: {
-          raw: "screen",
-        },
+      },
+      animation: {
+        "border-spin": "border-spin 7s linear infinite",
       },
       colors: {
         sidebar: {

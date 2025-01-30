@@ -23,11 +23,11 @@ export interface ListCategoryQueryParams extends ListQueryParams {
 export class CategoryApi extends BaseCrudApi<CategoryItem, CreateCategoryItem, ListCategoryQueryParams> {
   constructor() {
     super(import.meta.env.VITE_API_URL, {
-      list: "/api/v1/categories",
-      create: "/api/v1/categories",
-      view: (id) => `/api/v1/categories/${id}`,
-      update: (id) => `/api/v1/categories/${id}`,
-      delete: (id) => `/api/v1/categories/${id}`,
+      list: "/api/categories",
+      create: "/api/categories",
+      view: (id) => `/api/categories/${id}`,
+      update: (id) => `/api/categories/${id}`,
+      delete: (id) => `/api/categories/${id}`,
     });
   }
 }

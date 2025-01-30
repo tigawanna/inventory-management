@@ -29,7 +29,7 @@ export function DashboardSidebarLinks({}: DashboardSidebarLinksProps) {
         {dashboard_routes.map((item) => {
           if (
             !(viewer?.role && viewer?.role === "admin") &&
-            (item.name === "team" || item.name === "auditlogs")
+            ( item.name === "auditlogs")
           ) {
             return;
           }

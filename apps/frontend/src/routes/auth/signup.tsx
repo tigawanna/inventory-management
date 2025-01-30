@@ -14,7 +14,7 @@ export const Route = createFileRoute("/auth/signup")({
     const viewer = ctx.context?.viewer;
     const returnTo = ctx.search?.returnTo ?? "/";
     if (viewer?.record) {
-      throw redirect({ to: returnTo });
+      throw redirect({ to: returnTo,replace: true });
     }
   },
 });

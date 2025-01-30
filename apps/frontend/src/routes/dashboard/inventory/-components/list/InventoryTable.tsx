@@ -1,7 +1,8 @@
-import { InventoryItem } from "@/lib/api/inventory";
+import { InventoryItem } from "../types";
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
 import { UpdateInventoryform } from "../form/update";
 import { DeleteInventoryForm } from "../form/delete";
+import { Trash2 } from "lucide-react";
 
 interface InventoryTableProps {
   items: never[] | InventoryItem[];
@@ -24,9 +25,9 @@ export function InventoryTable({ items }: InventoryTableProps) {
       accessor: "description",
     },
     { label: "SKU", accessor: "sku" },
-    { label: "Year", accessor: "price" },
+    { label: "qty", accessor: "quantity" },
     { label: "price", accessor: "price" },
-    { label: "Category", accessor: "categoryId" },
+    { label: "Cat", accessor: "categoryId" },
     { label: "Created", accessor: "created_at" },
   ];
   const { viewer } = useViewer();
@@ -50,7 +51,11 @@ export function InventoryTable({ items }: InventoryTableProps) {
         <tbody>
           {items.map((row) => {
             return (
-              <tr key={row.id}>
+              <tr
+                key={row.id}
+                data-active={row.isActive ?? "false"}
+                className="data-[active=false]:brightness-75"
+              >
                 {columns.map((column, idx) => {
                   return (
                     <td key={column.accessor + row.id + idx}>
@@ -64,7 +69,12 @@ export function InventoryTable({ items }: InventoryTableProps) {
                   </td>
                 )}
                 <td key={"delete" + row.id}>
-                  <DeleteInventoryForm id={row.id} />
+                  <div data-active={row.isActive ?? "false"} className="flex justify-center flex-wrap gap-1">
+                    <DeleteInventoryForm id={row.id} />
+                    {!row.isActive && (
+                      <div className="text-xs text-error">hard delete</div>
+                    )}
+                  </div>
                 </td>
               </tr>
             );

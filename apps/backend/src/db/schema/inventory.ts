@@ -1,4 +1,4 @@
-import { pgTable, integer, decimal, boolean, text } from "drizzle-orm/pg-core";
+import { pgTable, integer, decimal, boolean, text, type PgColumnBuilder, PgTable } from "drizzle-orm/pg-core";
 import { uuidv7 } from "uuidv7";
 import { commonColumns } from "../helpers/columns.ts";
 
@@ -18,4 +18,5 @@ export const inventoryTable = pgTable("inventory", {
   sku: text("sku").unique().$defaultFn(()=>uuidv7()),
   isActive: boolean("is_active").default(true),
 });
+
 

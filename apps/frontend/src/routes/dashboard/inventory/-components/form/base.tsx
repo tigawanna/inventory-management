@@ -9,7 +9,9 @@ import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
 import { InventoryCategoriesSelect } from "../list/InventorySortSelect";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { SearchCategoryInput } from "@/routes/dashboard/categories/-components/form/search";
+import { CategoryItem } from "@/lib/api/category";
 interface BaseInventoryFormProps<T extends InventoryItem> {
   mutation: UseMutationResult<any, Error, T, unknown>;
   row: T;
@@ -23,6 +25,8 @@ export function BaseInventoryForm<T extends InventoryItem>({
 }: BaseInventoryFormProps<T>) {
   const form = useForm<InventoryForm>({
     defaultValues: {
+      id: row?.id ?? "",
+      // sku: row?.sku ?? "",
       name: row?.name ?? "",
       description: row?.description ?? "",
       quantity: row?.quantity ?? 50,
@@ -52,6 +56,7 @@ const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<string
         },
       );
   }, [mutationError]);
+
   return (
     <form
       onSubmit={(e) => {
@@ -145,23 +150,32 @@ const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<string
               );
             }}
           />
-          <form.Field
-            name="categoryId"
-            validatorAdapter={zodValidator()}
-            validators={{
-              onChange: z.string(),
-            }}
-            children={(field) => {
-              return (
-                <div>
-                  <label htmlFor={"category"} className="text-sm">
-                    category
-                  </label>
-                  <InventoryCategoriesSelect/>
-                </div>
-              );
-            }}
-          />
+        </div>
+        <div className="w-full">
+        <form.Field
+          name="categoryId"
+          validatorAdapter={zodValidator()}
+          validators={{
+            onChange: z.string(),
+          }}
+          children={(field) => {
+            return (
+              <div className="w-full">
+                <label htmlFor={"category"} className="text-sm">
+                  category id
+                </label>
+                <SearchCategoryInput
+                  trigger={<div className="w-full bg-base-300 border rounded p-2 flex gap-2  items-center">
+                    {field.state.value ? field.state.value : "Select category"}</div>}
+                  setCategory={(cats) => {
+                    if (cats?.[0]) field.handleChange(cats?.[0].id);
+                  }}
+                />
+              </div>
+            );
+          }}
+        />
+
         </div>
       </div>
       <MutationButton mutation={mutation} />

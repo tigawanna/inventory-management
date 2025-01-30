@@ -2,21 +2,23 @@ import { db } from "@/db/client.ts";
 import { auditLogsTable } from "@/db/schema/users.ts";
 import { eq,and,desc } from "drizzle-orm";
 import type { Request } from "express";
-export enum AuditAction {
-  CREATE = "CREATE",
-  UPDATE = "UPDATE",
-  DELETE = "DELETE",
-  LOGIN = "LOGIN",
-  LOGOUT = "LOGOUT",
-  PASSWORD_RESET = "PASSWORD_RESET",
-  EMAIL_VERIFY = "EMAIL_VERIFY"
-}
 
-export enum EntityType {
-  USER = "USER",
-  INVENTORY = "INVENTORY",
-  CATEGORY = "CATEGORY"
-}
+export const auditAction = {
+  CREATE: "CREATE",
+  UPDATE: "UPDATE",
+  DELETE: "DELETE",
+  LOGIN: "LOGIN",
+  LOGOUT: "LOGOUT",
+  PASSWORD_RESET: "PASSWORD_RESET",
+  EMAIL_VERIFY: "EMAIL_VERIFY",
+} as const;
+export type AuditAction = keyof typeof auditAction;
+export const entityType = {
+  USER: "USER",
+  INVENTORY: "INVENTORY",
+  CATEGORY: "CATEGORY",
+} as const;
+export type EntityType = keyof typeof entityType;
 
 interface AuditLogData {
   userId: string;
@@ -68,7 +70,7 @@ export class AuditLogService {
     return this.create(
       {
         userId,
-        action: AuditAction.UPDATE,
+        action: auditAction.UPDATE,
         entityType,
         entityId,
         oldData,
@@ -80,12 +82,12 @@ export class AuditLogService {
   }
 
   async logLogin(userId: string, req: Request) {
-    const ipAddress = req.headers?.["x-forwarded-for"]?.[0] ?? "";
+    const ipAddress = req.clientIp ?? "";
     return this.create(
       {
         userId,
-        action: AuditAction.LOGIN,
-        entityType: EntityType.USER,
+        action: auditAction.LOGIN,
+        entityType: entityType.USER,
         entityId: userId,
         ipAddress,
       },
@@ -94,12 +96,12 @@ export class AuditLogService {
   }
 
   async logLogout(userId: string, req: Request) {
-    const ipAddress = req.headers?.["x-forwarded-for"]?.[0] ?? "";
+    const ipAddress = req.clientIp ?? "";
     return this.create(
       {
         userId,
-        action: AuditAction.LOGOUT,
-        entityType: EntityType.USER,
+        action: auditAction.LOGOUT,
+        entityType: entityType.USER,
         entityId: userId,
         ipAddress,
       },

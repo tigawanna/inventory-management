@@ -9,7 +9,7 @@ import cookieParser from "cookie-parser";
 import type { UserJWTPayload } from "./schemas/user-schema.ts";
 import { allowedOrigins, corsHeaders } from "./middleware/cors-stuff.ts";
 import { rateLimitMiddleware } from "./middleware/rate-limit.ts";
-
+import requestIp from "request-ip"
 
 declare global {
   namespace Express {
@@ -23,6 +23,7 @@ declare global {
 const app = express();
 
 app.use(morgan("dev"));
+app.use(requestIp.mw());
 app.use(cookieParser());
 app.use(
   helmet({

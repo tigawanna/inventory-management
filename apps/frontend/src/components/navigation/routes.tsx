@@ -1,12 +1,12 @@
-import { Home, ShieldCheck, Store, Users, Wallet } from "lucide-react";
+import { ChartColumnBig, FileClock, Group, Home, ShieldCheck, Store, Users, Wallet } from "lucide-react";
 
 export const dashboard_routes = [
-  { name: "inventory", href: "/dashboard/inventory", icon: <Users /> },
-  { name: "categories", href: "/dashboard/categories", icon: <Wallet /> },
-  { name: "auditlogs", href: "/dashboard/auditlogs", icon: <Wallet /> },
+  { name: "inventory", href: "/dashboard/inventory", icon: <ChartColumnBig /> },
+  { name: "categories", href: "/dashboard/categories", icon: <Group /> },
+  { name: "auditlogs", href: "/dashboard/auditlogs", icon: <FileClock /> },
   {
     name: "team",
-    href: "/dashboard/team",
+    href: "/dashboard/users",
     icon: (
       <div className="flex">
         <Users />

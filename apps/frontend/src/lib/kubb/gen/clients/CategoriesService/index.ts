@@ -1,0 +1,6 @@
+export { categoriesService } from './categoriesService.ts'
+export { getDeleteApiCategoriesUrlClient, deleteApiCategoriesClient } from './deleteApiCategoriesClient.ts'
+export { getGetApiCategoriesUrlClient, getApiCategoriesClient } from './getApiCategoriesClient.ts'
+export { getGetApiCategoriesIdUrlClient, getApiCategoriesIdClient } from './getApiCategoriesIdClient.ts'
+export { getPatchApiCategoriesUrlClient, patchApiCategoriesClient } from './patchApiCategoriesClient.ts'
+export { getPostApiCategoriesUrlClient, postApiCategoriesClient } from './postApiCategoriesClient.ts'

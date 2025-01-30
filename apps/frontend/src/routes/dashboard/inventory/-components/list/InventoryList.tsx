@@ -1,7 +1,8 @@
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
 import { DeleteInventoryForm } from "../form/delete";
 import { UpdateInventoryform } from "../form/update";
-import { InventoryItem } from "@/lib/api/inventory";
+import { InventoryItem } from "../types";
+
 
 interface InventoryListProps {
   items: never[] | InventoryItem[];

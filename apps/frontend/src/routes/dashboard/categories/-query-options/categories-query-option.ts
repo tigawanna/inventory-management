@@ -1,42 +1,44 @@
-import { makeHotToast } from "@/components/toasters";
-import { categoryApi, ListCategoryQueryParams } from "@/lib/api/category";
+import { categoriesService, GetApiCategoriesQueryParams } from "@/lib/kubb/gen";
 import { queryOptions } from "@tanstack/react-query";
+import { makeHotToast } from "@/components/toasters";
+import { DEFAULT_PAGE_SIZE } from "@/utils/constnants";
 
-interface categoriesQueryOptionPropss extends ListCategoryQueryParams {
+
+interface categoriesQueryOptionPropss extends GetApiCategoriesQueryParams {
   keyword: string;
 }
 export function categoriesListQueryOptions({
   keyword,
-  page = "1",
-  limit = "10",
+  page,
+  limit=DEFAULT_PAGE_SIZE,
   order = "desc",
   sort = "name",
 }: categoriesQueryOptionPropss) {
   return queryOptions({
-    queryKey: ["categories_list", keyword, page, limit, order, sort],
+    queryKey: ["categories", keyword, page, limit, order, sort],
     queryFn: async () => {
-      const { record, error } = await categoryApi.list({
-        limit: "10",
+      const response = await categoriesService().getApiCategoriesClient({
+        limit,
         page,
-        order: "desc",
+        order,
         search: keyword,
-        sort: "name",
+        sort,
       });
-      if (error) {
+      if(response.type === "error"){
         makeHotToast({
-          title: "something went wrong fetching categories",
-          description: error.message,
+          title: "Error fetching records",
+          description: response.statusText,
           variant: "error",
         })
         return {
           page,
-          perPage: 10,
+          perPage: 0,
           totaleItems: 0,
           totalPages: 0,
           items: [],
-        };
+        }
       }
-      return record;
+      return response.data.result;
     },
     staleTime: 1000,
   });

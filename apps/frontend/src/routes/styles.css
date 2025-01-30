@@ -55,7 +55,7 @@ video,
 canvas,
 svg {
   display: block;
-  max-width: 100%;
+  max-width: 99%;
 }
 /*
   6. Remove built-in form typography styles
@@ -91,6 +91,11 @@ h6 {
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(var(--p)) "transparent";
+  scrollbar-track-color: oklch(var(--pc)) ;
 }
 
 /* Track */
@@ -229,10 +234,7 @@ h6 {
 
 @media print {
   html,
-  body {
-    width: 216mm;
-    /* height: 279mm; */
-  }
+
   .page {
     margin: 0;
     border: initial;
@@ -295,7 +297,7 @@ h6 {
   display: flex;
   position: relative;
   justify-content: center;
-  width: 100%;
+  width: 99%;
   height: 50%;
   overflow: hidden;
   border: 1px solid theme('colors.primary');
@@ -335,7 +337,7 @@ h6 {
   justify-content: center;
   position: absolute;
   left: 0;
-  width: 100%;
+  width: 99%;
   height: 50%;
   overflow: hidden;
   backface-visibility: hidden;
@@ -417,4 +419,24 @@ h6 {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+
+
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradientAnimation 10s ease infinite;
 }

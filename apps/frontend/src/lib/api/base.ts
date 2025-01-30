@@ -58,7 +58,8 @@ export class BaseCrudApi<T extends BaseEntity, CreateDTO = Omit<T, "id">,ListSer
           error: await this.parseError(res),
         };
       }
-      return { record: await res.json(), error: null };
+        const response = (await res.json()) as {result:ListResponse<T>}
+        return { record: response.result, error: null };
     } catch (error: any) {
       return { record: null, error: error.message };
     }
@@ -76,7 +77,8 @@ export class BaseCrudApi<T extends BaseEntity, CreateDTO = Omit<T, "id">,ListSer
           error: await this.parseError(res),
         };
       }
-      return { record: await res.json(), error: null };
+        const response = (await res.json()) as {result:T}
+        return { record: response.result, error: null };
     } catch (error: any) {
       return { record: null, error: error.message };
     }
@@ -97,7 +99,8 @@ export class BaseCrudApi<T extends BaseEntity, CreateDTO = Omit<T, "id">,ListSer
           error: await this.parseError(res),
         };
       }
-      return { record: await res.json(), error: null };
+        const response = (await res.json()) as {result:T}
+        return { record: response.result, error: null };
     } catch (error: any) {
       return { record: null, error: error.message };
     }
@@ -118,7 +121,8 @@ export class BaseCrudApi<T extends BaseEntity, CreateDTO = Omit<T, "id">,ListSer
           error: await this.parseError(res),
         };
       }
-      return { record: await res.json(), error: null };
+        const response = (await res.json()) as {result:T}
+        return { record: response.result, error: null };
     } catch (error: any) {
       return { record: null, error: error.message };
     }

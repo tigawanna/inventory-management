@@ -1,44 +1,64 @@
- 
+import { makeHotToast } from "@/components/toasters";
+import { auditlogsService } from "@/lib/kubb/gen";
+import { DEFAULT_PAGE_SIZE } from "@/utils/constnants";
 import { queryOptions } from "@tanstack/react-query";
 
 
-interface auditlogsQueryOptionPropss {
-  keyword: string;
-    page?: number;
-}
-export function auditlogsListQueryOptions({ keyword, page=1 }: auditlogsQueryOptionPropss) {
+  export type QueryVariables = {
+    readonly basekey: "auditlogs_list";
+    readonly page: any;
+    readonly action:
+      | "CREATE"
+      | "UPDATE"
+      | "DELETE"
+      | "LOGIN"
+      | "LOGOUT"
+      | "PASSWORD_RESET"
+      | "EMAIL_VERIFY"
+      | undefined;
+    readonly entity: "USER" | "INVENTORY" | "CATEGORY" | undefined;
+  };
+
+
+export function auditlogsListQueryOptions(
+  { basekey, action, entity, page = 1 }: QueryVariables,
+) {
+  // console.log(" query key in query function == ", [basekey, page, action, entity]);
   return queryOptions({
-    queryKey: ["auditlogs_list", keyword,page],
-    queryFn: () => {
-      return new Promise<{
-          page: number;
-          perPage: number;
-          totaleItems: number;
-          totalPages: number;
-        items: Array<Record<string, any> & { id: string }>;
-      }>((res) => {
-        setTimeout(() => {
-          const resArray = Array.from({ length: 30 }, (_, i) => ({
-            id: "auditlogs_id_"+i,
-          }));
-          res({
-            page,
-            perPage: 10,
-            totaleItems: 30,
-            totalPages: 3,
-             items: resArray
-            .slice((page - 1) * 10, page * 10)
-            .filter((item) =>item.id.includes(keyword))
-          });
-        }, 1000);
+    queryKey: [basekey, page, action, entity],
+    queryFn: async () => {
+    const response = await auditlogsService().getApiAuditlogsClient({
+        limit:DEFAULT_PAGE_SIZE,
+        page,
+        order: "desc",
+        sort: "created_at",
+        action,
+        entity,
       });
+       if(response.type === "error"){
+         makeHotToast({
+           title: "Error fetching records",
+           description: response.statusText,
+           variant: "error",
+         })
+         return {
+           page,
+           perPage: 0,
+           totaleItems: 0,
+           totalPages: 0,
+           items: [],
+         }
+       }
+       return response.data.result;
     },
   });
 }
 interface oneAuditlogsQueryOptionPropss {
   auditlogs: string;
 }
-export function oneAuditlogsQueryOptions({ auditlogs }: oneAuditlogsQueryOptionPropss) {
+export function oneAuditlogsQueryOptions(
+  { auditlogs }: oneAuditlogsQueryOptionPropss,
+) {
   return queryOptions({
     queryKey: ["one_auditlogs", auditlogs],
     queryFn: () => {
@@ -52,4 +72,3 @@ export function oneAuditlogsQueryOptions({ auditlogs }: oneAuditlogsQueryOptionP
     },
   });
 }
-  

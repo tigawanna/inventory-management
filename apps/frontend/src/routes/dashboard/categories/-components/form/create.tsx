@@ -6,22 +6,28 @@ import { Plus } from "lucide-react";
 import { makeHotToast } from "@/components/toasters";
 import { BaseCategoriesForm } from "./base";
 import { useMutation } from "@tanstack/react-query";
+import { CategoryItem } from "../types";
+import { categoriesService } from "@/lib/kubb/gen";
 
 export function CreateCategoriesForm() {
   const [open, setOpen] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: (value: {}) => {
-      return new Promise<{}>((resolve) => {
-        setTimeout(() => {
-          resolve(value);
-        }, 2000);
-      });
+    mutationFn: (value:CategoryItem) => {
+      const {id, ...rest} = value
+      return categoriesService().postApiCategoriesClient(rest);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if(data.type==="error"){
+        return makeHotToast({
+          title: "Something went wrong",
+          description: data.data.error.message,
+          variant: "error",
+        });
+      }
       makeHotToast({
-        title: "Categories added",
-        description: "Categories has been added successfully",
+        title: "Success",
+        description: "Category has been added successfully",
         variant: "success",
       });
       setOpen(false);
@@ -50,8 +56,8 @@ export function CreateCategoriesForm() {
         </button>
       }
     >
-      <div className="flex h-full max-h-[80vh] w-fit flex-col gap-2 overflow-auto">
-        <BaseCategoriesForm mutation={mutation} row={{}} />
+      <div className="flex h-full max-h-[80vh] w-full flex-col gap-2 overflow-auto">
+        <BaseCategoriesForm mutation={mutation} row={undefined} />
       </div>
     </DiaDrawer>
   );

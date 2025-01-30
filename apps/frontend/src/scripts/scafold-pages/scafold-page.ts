@@ -2,12 +2,16 @@ import { resolve } from "node:path";
 import { writeFile, access, mkdir } from "node:fs/promises";
 import {
   rootPageComponentTemplate,
+  rootPageContainerComponentsTemplate,
   rootPageListComponentsTemplate,
+  rootPageTableComponentsTemplate,
   rootPageTemplate,
+  rootPageTypeTemplate,
 } from "./base-templates";
 import {
   rootPageBaseFormComponentsTemplate,
   rootPageCreateFormComponentsTemplate,
+  rootPageDeleteFormComponentsTemplate,
   rootPageUpdateFormComponentsTemplate,
 } from "./form-templates";
 import {
@@ -43,9 +47,21 @@ export async function scaffoldPage(pagename: string, path: string) {
     path: `${rootPath}/-components/${capitalpagename}Page.tsx`,
     component: rootPageComponentTemplate(pagename, rootPath),
   };
+  const indexPageTypes = {
+    path: `${rootPath}/-components/types.ts`,
+    component: rootPageTypeTemplate(pagename, rootPath),
+  };
+  const indexPageContainerComponent = {
+    path: `${rootPath}/-components/list/${capitalpagename}sContainer.tsx`,
+    component: rootPageContainerComponentsTemplate(pagename, rootPath),
+  };
   const indexPageListComponent = {
     path: `${rootPath}/-components/list/${capitalpagename}List.tsx`,
     component: rootPageListComponentsTemplate(pagename, rootPath),
+  };
+  const indexPageTableComponent = {
+    path: `${rootPath}/-components/list/${capitalpagename}Table.tsx`,
+    component: rootPageTableComponentsTemplate(pagename, rootPath),
   };
 
   const baseForm = {
@@ -59,6 +75,10 @@ export async function scaffoldPage(pagename: string, path: string) {
   const updateForm = {
     path: `${rootPath}/-components/form/update.tsx`,
     component: rootPageUpdateFormComponentsTemplate(pagename),
+  };
+  const deleteForm = {
+    path: `${rootPath}/-components/form/delete.tsx`,
+    component: rootPageDeleteFormComponentsTemplate(pagename),
   };
 
   // const listComponent = {
@@ -85,6 +105,7 @@ export async function scaffoldPage(pagename: string, path: string) {
   const allPaths = [
     indexPage,
     indexPageComponent,
+    indexPageTypes,
     baseForm,
     createForm,
     updateForm,
@@ -92,6 +113,8 @@ export async function scaffoldPage(pagename: string, path: string) {
     onePageComponent,
     onepageComponent,
     onepageDetailsComponent,
+    indexPageContainerComponent,
+    indexPageTableComponent,
     queryOptions,
   ];
 
@@ -106,6 +129,7 @@ async function ensurePathExistsOrCreate(path: string, component: string) {
   const component_path = resolve("./src/routes", path);
   try {
     await access(component_path);
+    await writeFile(component_path, component);
   } catch (err: unknown) {
     if (err instanceof Error) {
       if (err.message.includes("no such file or directory")) {

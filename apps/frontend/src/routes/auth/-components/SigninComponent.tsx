@@ -12,6 +12,7 @@ import { signInUser } from "@/lib/api/users";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 import { RequestPasswordReset } from "./RequestPasswordReset";
 
+
 interface SigninComponentProps {}
 
 interface UsersigninFields {
@@ -45,7 +46,7 @@ export function SigninComponent({}: SigninComponentProps) {
         });
         return;
       }
-      const user = data.record?.data?.user;
+      const user = data.record
       if(!user){
         makeHotToast({
           title: "Something went wrong",
@@ -68,7 +69,7 @@ export function SigninComponent({}: SigninComponentProps) {
         });
       }
       qc.invalidateQueries(viewerqueryOptions());
-      navigate({ to: "/dashboard" });
+      navigate({ to:returnTo??"/" });
       // qc.setQueryData(["viewer"], () => data.record);
       if (typeof window !== "undefined") {
         location.reload();
@@ -92,9 +93,10 @@ export function SigninComponent({}: SigninComponentProps) {
       });
     },
   });
-  const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<
+// console.log(" == mutation data  === ", mutation?.data?.error);
+  const mutationError = mutation?.data?.error?.data as Record<
     string,
-    Array<string>
+    { message: string; code:string }
   >;
   useEffect(() => {
     mutationError &&
@@ -103,7 +105,7 @@ export function SigninComponent({}: SigninComponentProps) {
           return {
             ...prev,
             errorMap: {
-              onChange: value?.join(", "),
+              onChange: value?.message,
             },
           };
         });
@@ -130,7 +132,7 @@ export function SigninComponent({}: SigninComponentProps) {
             name="email"
             validatorAdapter={zodValidator()}
             validators={{
-              onChange: z.string(),
+              // onChange: z.string(),
             }}
             children={(field) => {
               return (

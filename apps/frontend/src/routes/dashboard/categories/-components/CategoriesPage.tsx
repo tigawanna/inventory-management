@@ -5,8 +5,6 @@ import { ListPageHeader } from "@/components/wrappers/ListPageHeader";
 import { Helmet } from "@/components/wrappers/custom-helmet";
 import { usePageSearchQuery } from "@/hooks/use-page-searchquery";
 import { CreateCategoriesForm } from "./form/create";
-import { CategoriesList } from "./list/CategoriesList";
-import { CardsListSuspenseFallback } from "@/components/wrappers/GenericDataCardsListSuspenseFallback copy";
 import { CategoriesContainer } from "./list/CategoriesContainer";
 import { ResponsiveSuspenseFallbacks } from "@/components/wrappers/ResponsiveSuspenseFallbacks";
 
@@ -17,10 +15,10 @@ export function CategoriesPage({}: CategoriesPageProps) {
   const { debouncedValue, isDebouncing, keyword, setKeyword } =
     usePageSearchQuery("/dashboard/categories");
   return (
-    <div className="flex h-full min-h-screen w-full flex-col items-center gap-5">
+    <div className="flex h-full min-h-screen w-full flex-col gap-5">
       <Helmet
-        title="Collabs | categories"
-        description="The list of Collabs | categories"
+        title="Inventory | categories"
+        description="The list of Inventory | categories"
       />
       <ListPageHeader
         title="Categories"
@@ -38,9 +36,9 @@ export function CategoriesPage({}: CategoriesPageProps) {
         }
       />
 
-      <div className="m-3 flex h-full w-full items-center justify-center p-5">
+      <div className="m-3 flex h-full w-full  p-5">
         <Suspense fallback={<ResponsiveSuspenseFallbacks />}>
-          <CategoriesContainer keyword={keyword} />
+          <CategoriesContainer keyword={debouncedValue} />
         </Suspense>
       </div>
     </div>

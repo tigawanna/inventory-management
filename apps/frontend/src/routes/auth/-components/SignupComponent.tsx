@@ -77,22 +77,23 @@ export function SignupComponent({}: SignupComponentProps) {
       });
     },
   });
-  const mutationError = mutation?.data?.error?.error?.fieldErrors as Record<string, Array<string>>
-    useEffect(() => {
-      mutationError &&
-        Object?.entries((mutationError))?.forEach(
-          ([key, value]) => {
-            form.setFieldMeta(key as any, (prev) => {
-              return {
-                ...prev,
-                errorMap: {
-                  onChange: value?.join(", "),
-                },
-              };
-            });
-          },
-        );
-    }, [mutationError]);
+  const mutationError = mutation?.data?.error?.data as Record<
+    string,
+    { message: string; code: string }
+  >;
+  useEffect(() => {
+    mutationError &&
+      Object?.entries(mutationError)?.forEach(([key, value]) => {
+        form.setFieldMeta(key as any, (prev) => {
+          return {
+            ...prev,
+            errorMap: {
+              onChange: value?.message,
+            },
+          };
+        });
+      });
+  }, [mutationError]);
 
   return (
     <div className="flex h-full w-full items-center justify-evenly gap-2 p-5">

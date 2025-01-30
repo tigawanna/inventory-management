@@ -4,7 +4,7 @@ import { type PgTable } from "drizzle-orm/pg-core";
 import { type Request } from "express";
 import {
   type EntityType,
-  AuditAction,
+  auditAction,
   AuditLogService,
 } from "./audit-log.service.ts";
 
@@ -82,7 +82,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
     await this.auditLogService.create(
       {
         userId: req.user.id,
-        action: AuditAction.CREATE,
+        action: auditAction.CREATE,
         entityType: this.entityType,
         entityId: item[0].id,
         // @ts-expect-error
@@ -132,7 +132,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO, UpdateDTO> {
     await this.auditLogService.create(
       {
         userId: req.user.id,
-        action: AuditAction.DELETE,
+        action: auditAction.DELETE,
         entityType: this.entityType,
         entityId: id,
         oldData: oldItem,

@@ -34,11 +34,11 @@ export interface ListInventoryParams {
 }
 
 const inventoryEndpoints = {
-  list: "/api/v1/items",
-  create: "/api/v1/items",
-  view: (id: string) => `/api/v1/items/${id}`,
-  update: (id: string) => `/api/v1/items/${id}`,
-  delete: (id: string) => `/api/v1/items/${id}`,
+  list: "/api/inventory",
+  create: "/api/inventory",
+  view: (id: string) => `/api/inventory/${id}`,
+  update: (id: string) => `/api/inventory/${id}`,
+  delete: (id: string) => `/api/inventory/${id}`,
 } as const;
 
 const baseUrl = import.meta.env.VITE_API_URL;
@@ -58,13 +58,15 @@ export async function listInventory(params: ListInventoryParams) {
         record: null,
         error: await res
           .json()
-          .then((res) => res)
+          .then((res) => res.error)
           .catch(() => {
             return { message: res.statusText };
           }),
       };
     }
-    return { record: (await res.json()) as ListInventoryResponse, error: null };
+    const response = (await res.json()) as {result:ListInventoryResponse}
+    console.log("listInventory response  ====",response);
+    return { record: response.result , error: null };
   } catch (error:any) {
     return {
       record: null,
@@ -89,7 +91,8 @@ export async function getInventoryItem(id: string) {
           }),
       };
     }
-    return { record: (await res.json()) as InventoryItem, error: null };
+    const response = (await res.json()) as {result:InventoryItem}
+    return { record: response.result, error: null };
   } catch (error:any) {
     return {
       record: null,
@@ -117,7 +120,9 @@ export async function createInventoryItem(item: CreateInventoryItem) {
           }),
       };
     }
-    return { record: (await res.json()) as InventoryItem, error: null };
+    const response = (await res.json()) as {result:InventoryItem}
+    return { record: response.result, error: null };
+
   } catch (error:any) {
     return {
       record: null,
@@ -148,7 +153,8 @@ export async function updateInventoryItem(
           }),
       };
     }
-    return { record: (await res.json()) as InventoryItem, error: null };
+    const response = (await res.json()) as {result:InventoryItem}
+    return { record: response.result, error: null };
   } catch (error:any) {
     return {
       record: null,

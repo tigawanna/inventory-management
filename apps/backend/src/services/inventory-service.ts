@@ -6,7 +6,7 @@ import type {
   inventoryUpdateSchema,
   listInventoryQueryParamsSchema,
 } from "@/schemas/inventory-schema.ts";
-import { EntityType } from "./audit-log.service.ts";
+import { entityType } from "./audit-log.service.ts";
 import { and,  ilike } from "drizzle-orm";
 
 export class InventoryService extends BaseCrudService<
@@ -15,7 +15,7 @@ export class InventoryService extends BaseCrudService<
   z.infer<typeof inventoryUpdateSchema>
 > {
   constructor() {
-    super(inventoryTable, EntityType.INVENTORY);
+    super(inventoryTable, entityType.INVENTORY);
   }
 
   // Override or add custom methods

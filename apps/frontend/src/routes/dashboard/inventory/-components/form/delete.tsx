@@ -3,7 +3,7 @@ import { DiaDrawer } from "@/components/wrappers/DiaDrawer";
 import { Trash } from "lucide-react";
 import { makeHotToast } from "@/components/toasters";
 import { useMutation } from "@tanstack/react-query";
-import { deleteInventoryItem } from "@/lib/api/inventory";
+import { inventoryService } from "@/lib/kubb/gen";
 
 export function DeleteInventoryForm({
   id,
@@ -16,13 +16,13 @@ export function DeleteInventoryForm({
 
   const mutation = useMutation({
     mutationFn: (value: string) => {
-      return deleteInventoryItem(value);
+      return  inventoryService().deleteApiInventoryClient({id: value});
     },
     onSuccess: (data) => {
-      if (data.error) {
+      if (data.type === "error") {
         makeHotToast({
           title: "Something went wrong",
-          description: data.error.message,
+          description: data.data.error.message,
           variant: "error",
         });
         return;

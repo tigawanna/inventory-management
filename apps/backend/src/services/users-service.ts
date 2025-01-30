@@ -1,11 +1,6 @@
 import type { z } from "zod";
-import { BaseCrudService } from "./generic-crud-service.ts";
-// import type {
-//   inventoryInsertSchema,
-//   inventoryUpdateSchema,
-//   listInventoryQueryParamsSchema,
-// } from "@/schemas/inventory-schema.ts";
-import { EntityType } from "./audit-log.service.ts";
+import { BaseCrudService } from "./generic-crud-service.ts";;
+import { entityType } from "./audit-log.service.ts";
 import { and, ilike, or } from "drizzle-orm";
 import { usersTable } from "@/db/schema/users.ts";
 import type {
@@ -20,7 +15,7 @@ export class UsersService extends BaseCrudService<
   z.infer<typeof userUpdateSchema>
 > {
   constructor() {
-    super(usersTable, EntityType.INVENTORY);
+    super(usersTable, entityType.INVENTORY);
   }
 
   // Override or add custom methods

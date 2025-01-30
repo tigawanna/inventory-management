@@ -9,17 +9,18 @@ import {
   DrawerTrigger,
 } from "@/components/shadcn/ui/drawer";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/shadcn/ui/dialog";
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/shadcn/ui/alert-dialog";
 import { Button } from "../shadcn/ui/button";
 import { X } from "lucide-react";
 import { useMediaQuery } from "@/utils/hooks/use-media-query";
-import { useState } from "react";
+
 interface DiaDrawerProps {
   title: string;
   description: string;
@@ -41,18 +42,25 @@ export function DiaDrawer({
 
   if (matches) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
+      <AlertDialog open={open} onOpenChange={setOpen}>
+        <AlertDialogTrigger asChild>
           {trigger ?? <Button variant="outline">Open </Button>}
-        </DialogTrigger>
-        <DialogContent className="max:w-[70vw] ">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">{title}</DialogTitle>
-            <DialogDescription className="">{description}</DialogDescription>
-          </DialogHeader>
+        </AlertDialogTrigger>
+        <AlertDialogContent className="max:w-[70vw]">
+          <AlertDialogHeader>
+            <div className="flex gap-2 justify-between">
+            <div className="flex flex-col gap-2 justify-between">
+            <AlertDialogTitle className="text-2xl">{title}</AlertDialogTitle>
+            <AlertDialogDescription className="">
+              {description}
+            </AlertDialogDescription>
+            </div>
+            <AlertDialogCancel><X className="size-7" /></AlertDialogCancel>
+            </div>
+          </AlertDialogHeader>
           {children}
-        </DialogContent>
-      </Dialog>
+        </AlertDialogContent>
+      </AlertDialog>
     );
   }
   return (
