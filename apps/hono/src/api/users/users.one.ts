@@ -1,4 +1,3 @@
-
 import { createRoute } from "@hono/zod-openapi";
 import { jsonContent } from "stoker/openapi/helpers";
 import { z, ZodError } from "zod";
@@ -58,7 +57,7 @@ const usersService = new UsersService();
 export const usersGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
   try {
     const oneItem = await usersService.findById(c.req.valid("param").id);
-    
+
     if (!oneItem) {
       return c.json({
         result: null,
@@ -104,5 +103,3 @@ export const usersGetOneHandler: AppRouteHandler <GetOneRoute> = async (c) => {
     }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
-
-    

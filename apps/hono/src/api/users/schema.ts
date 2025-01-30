@@ -4,25 +4,24 @@ import { z } from "zod";
 import { usersTable } from "@/db/schema/users";
 import { genericQueryParamsSchema } from "@/schemas/shared-schema";
 
-
 export const baseUserSelectSchema = createSelectSchema(usersTable);
 export const userSelectSchema = baseUserSelectSchema.omit({
-  metadata: true
+  metadata: true,
 }).extend({
   metadata: z.record(z.string(), z.any()).nullable(),
-})
+});
 export const userInsertSchema = createInsertSchema(usersTable);
 export const baseUserUpdateSchema = createUpdateSchema(usersTable);
 export const userUpdateSchema = baseUserUpdateSchema.omit({
-  metadata: true
+  metadata: true,
 }).extend({
   metadata: z.record(z.string(), z.any()).optional(),
-})
+});
 
 export const userJWTSchema = userSelectSchema.omit({
   password: true,
   verificationToken: true,
-  refreshToken: true
+  refreshToken: true,
 });
 
 export const createNewUserSchema = userInsertSchema.pick({

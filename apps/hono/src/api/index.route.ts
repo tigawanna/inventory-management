@@ -14,7 +14,7 @@ const router = createRouter().openapi(
     responses: {
       [HttpStatusCodes.OK]: jsonContent(
         baseResponseSchema.extend({
-          result:z.object({
+          result: z.object({
             message: z.string(),
           }),
           error: z.null().optional(),
@@ -27,9 +27,9 @@ const router = createRouter().openapi(
     return c.json(
       {
         error: null,
-        result:{
+        result: {
           message: "Welcome to the Inventory API",
-        }
+        },
       },
       HttpStatusCodes.OK,
     );

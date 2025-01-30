@@ -29,16 +29,16 @@ export async function authenticateUserMiddleware(
       });
     }
     if (refreshTokenPresent.result) {
-     if(refreshTokenPresent?.result?.refreshTokenPayload?.role ==="suspended"){
-      return c.json({
-        result: null,
-        error: {
-          error: "Unauthorized",
-          message: "Suspended account",
-          code: 401,
-        },
-      }, HttpStatusCodes.UNAUTHORIZED);
-     } 
+      if (refreshTokenPresent?.result?.refreshTokenPayload?.role === "suspended") {
+        return c.json({
+          result: null,
+          error: {
+            error: "Unauthorized",
+            message: "Suspended account",
+            code: 401,
+          },
+        }, HttpStatusCodes.UNAUTHORIZED);
+      }
       const { ACCESS_TOKEN_SECRET } = envVariables;
       const newAccessToken = await sign(
         refreshTokenPresent.result.refreshTokenPayload,

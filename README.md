@@ -2,17 +2,33 @@
 APIS are Aostly complete 
 
 to run 
+
+```sh
+cd apps/backend (honojs)
+npm run dev
 ```
-cd apps/backend
+open api documnetation is on 
+http://localhost:5000/doc
+
+open api reference UI is on
+http://localhost:5000/reference
+
+Uses
+- honojs (router)
+- drizzle + postgress
+- redis for caching
+
+
+
+
+To run the frontend
+```sh
+cd apps/frontend
+npm run dev
+```
+```sh
+cd apps/backend (express)
 npm run dev
 ```
 documnetation is on 
 http://localhost:5000/api/v1/ui
-
-
-To run the frontend
-
-```
-cd apps/frontend
-npm run dev
-```

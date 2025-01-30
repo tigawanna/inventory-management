@@ -12,7 +12,7 @@ export type CategoriesItem = z.infer<typeof categoriesSelectSchema>;
 export type updateCategories = z.infer<typeof categoriesUpdateSchema>;
 export type createCategories = z.infer<typeof categoriesInsertSchema>;
 
-const sortBy = ["created_at","name"] as const satisfies Array<keyof CategoriesItem>;
+const sortBy = ["created_at", "name"] as const satisfies Array<keyof CategoriesItem>;
 
 export const listCategoriesQueryParamsSchema = genericQueryParamsSchema.extend({
   sort: z.enum(sortBy).optional(),

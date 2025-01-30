@@ -43,43 +43,6 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     this.auditLogService = new AuditLogService();
   }
 
-  // async findAll(query: PaginatedQuery, conditions?: SQL<unknown>) {
-  //   const { page, limit, sort, order } = query;
-
-  //   // Get total count
-  //   const [{ count }] = await db
-  //     .select({ count: sql`count(*)`.mapWith(Number) })
-  //     .from(this.table)
-  //     .where(conditions);
-
-  //   // Build query
-  //   const dbQuery = db
-  //     .select()
-  //     .from(this.table)
-  //     .where(conditions)
-  //     .limit(Number(limit))
-  //     .offset((Number(page) - 1) * Number(limit));
-
-  //   // Add sorting
-  //   if (sort) {
-  //     dbQuery.orderBy(
-  //       // TODO : extend type PgTable with a narrower type which always has an ID column
-  //       // @ts-expect-error : the type is too genrric but shape matches
-  //       order === "desc" ? desc(this.table[sort]) : asc(this.table[sort]),
-  //     );
-  //   }
-
-  //   const items = await dbQuery;
-
-  //   return {
-  //     page: Number(page),
-  //     perPage: Number(limit),
-  //     totalItems: Number(count),
-  //     totalPages: Math.ceil(Number(count) / Number(limit)),
-  //     items,
-  //   };
-  // }
-
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>): Promise<FindAllretunType<T>> {
     const c = getContext<AppBindings>();
     const { page, limit, sort, order } = query;

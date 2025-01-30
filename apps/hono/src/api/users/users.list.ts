@@ -59,7 +59,8 @@ export const usersListHandler: AppRouteHandler<ListRoute> = async (c) => {
       result: users,
       error: null,
     }, HttpStatusCodes.OK);
-  } catch (error) {
+  }
+  catch (error) {
     if (error instanceof ZodError) {
       c.var.logger.error("Users listing error:", error.message);
       return c.json({

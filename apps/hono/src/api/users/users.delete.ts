@@ -1,4 +1,3 @@
-
 import { createRoute } from "@hono/zod-openapi";
 import { DrizzleError } from "drizzle-orm";
 import { jsonContent } from "stoker/openapi/helpers";
@@ -128,6 +127,3 @@ export const usersDeleteHandler: AppRouteHandler<DeleteUsersRoute>
       }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
     }
   };
-
-
-  

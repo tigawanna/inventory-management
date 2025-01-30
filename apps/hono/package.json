@@ -11,6 +11,7 @@
     "test": "cross-env NODE_ENV=test vitest",
     "drizzle:gen": "drizzle-kit generate",
     "drizzle:push": "drizzle-kit push ",
+    "drizzle:studio": "drizzle-kit studio",
     "drizzle:migrate": "drizzle-kit migrate ",
     "build": "tsc && tsc-alias",
     "route": "tsx src/cmd/bootstrap/cli.ts"

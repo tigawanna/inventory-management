@@ -1,6 +1,5 @@
 import { ANSIColors } from "@/shared/utils/text";
 
-
 export function formatSqlQuery(query: string): string {
   const keywords = [
     "SELECT",
@@ -32,8 +31,7 @@ export function formatSqlQuery(query: string): string {
   ];
   const firstKeywords = keywords.slice(0, 4);
 
-  
-    // Remove extra spaces and trim the query
+  // Remove extra spaces and trim the query
   let formattedQuery = query.replace(/\s+/g, " ").trim();
 
   // Replace spaces inside double quotes with a placeholder
@@ -54,10 +52,10 @@ export function formatSqlQuery(query: string): string {
   keywords.forEach((keyword) => {
     const regex = new RegExp(`\\b${keyword}\\b`, "gi");
     if (!firstKeywords.includes(keyword)) {
-    formattedQuery = formattedQuery.replace(
-      regex,
-      `\n${ANSIColors.FgYellow}${keyword}${ANSIColors.Reset}\n`,
-    );
+      formattedQuery = formattedQuery.replace(
+        regex,
+        `\n${ANSIColors.FgYellow}${keyword}${ANSIColors.Reset}\n`,
+      );
     }
   });
 
@@ -72,7 +70,6 @@ export function formatSqlQuery(query: string): string {
   formattedQuery = lines
     .map((line) => {
       line = line.trim();
-   
 
       // Decrease indent level if the line starts with a closing parenthesis
       if (line.startsWith(")")) {
