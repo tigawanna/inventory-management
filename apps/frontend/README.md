@@ -31,9 +31,18 @@ src/routes/dashboard/inventory/...
 
 None admin users can't see the audit logs or do hard deletes
 
-responsiveness is handled by having data lists as tabeles on lagers screen and as cards on smaller screen 
-![table iew](https://raw.github.com/tigawanna/inventory-management/blob/main/apps/frontend/docs/table-view.png)
-![card view](https://raw.github.com/tigawanna/inventory-management/blob/main/apps/frontend/docs/card-view.png)
-while the dialogs are modals on larger screesn and drawers on smaller screens 
-![modal view](https://raw.github.com/tigawanna/inventory-management/blob/main/apps/frontend/docs/modal-view.png)
-![drawer view](https://raw.github.com/tigawanna/inventory-management/blob/main/apps/frontend/docs/drawer-view.png)
+responsiveness is handled by having data lists as tables on larger screens
+
+![table iew](https://github.com/tigawanna/inventory-management/raw/main/apps/frontend/docs/table-view.png)
+
+and as cards on smaller screen 
+
+![card view](https://github.com/tigawanna/inventory-management/raw/90bca8bce59d617925526ea2e7c3224518f22be4/apps/frontend/docs/cards-view.png)
+
+Ahile the dialogs are modals on larger screesn
+
+![modal view](https://github.com/tigawanna/inventory-management/raw/main/apps/frontend/docs/modal-view.png)
+
+And drawers on smaller screens 
+
+![drawer view](https://github.com/tigawanna/inventory-management/raw/main/apps/frontend/docs/drawer-view.png)
