@@ -10,10 +10,10 @@ import type { AppBindings } from "@/lib/types";
 import { db } from "@/db/client";
 
 import type { EntityType } from "./audit-log.service";
-import type { CacheStore } from "./cache-store-service";
+import type { CacheStore } from "./cache/cache-store-service";
 
 import { auditAction, AuditLogService } from "./audit-log.service";
-import { createCacheStore } from "./cache-store-service";
+import { createCacheStore } from "./cache/cache-store-service";
 
 export interface PaginatedQuery {
   page: number;
@@ -48,14 +48,14 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>): Promise<FindAllretunType<T>> {
     const c = getContext<AppBindings>();
     const { page, limit, sort, order } = query;
-    const cacheKey = `findAll:${JSON.stringify(query)}:${JSON.stringify(conditions)}`;
-    const cachedResult = await this.cacheStore.get(cacheKey);
-
+    const cacheKeys = ["findAll", this.table._.name, query, conditions];
+    // const cacheKey = `findAll:${JSON.stringify(query)}:${JSON.stringify(conditions)}`;
+    const cachedResult = await this.cacheStore.get(cacheKeys);
     if (cachedResult) {
-      c.var.logger.info(`Cache hit for ${cacheKey}`);
+      c.var.logger.info(`Cache hit for ${cacheKeys}`);
       return JSON.parse(cachedResult);
     }
-    c.var.logger.warn(`Cache miss for ${cacheKey}`);
+    c.var.logger.warn(`Cache miss for ${cacheKeys}`);
     // Get total count
     const [{ count }] = await db
       .select({ count: sql`count(*)`.mapWith(Number) })
@@ -89,21 +89,22 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       items,
     };
 
-    await this.cacheStore.set(cacheKey, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
-    c.var.logger.info(`Cache set for ${cacheKey}`);
+    await this.cacheStore.set(cacheKeys, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
+    c.var.logger.info(`Cache set for ${cacheKeys}`);
     return result;
   }
 
   async findById(id: string): Promise<FindOneReturnType<T>["item"]> {
     const c = getContext<AppBindings>();
     const cacheKey = `findById:${id}`;
-    const cachedResult = await this.cacheStore.get(cacheKey);
+    const cacheKeys = ["findById", this.table._.name, id];
+    const cachedResult = await this.cacheStore.get(cacheKeys);
 
     if (cachedResult) {
-      c.var.logger.info(`Cache hit for ${cacheKey}`);
+      c.var.logger.info(`Cache hit for ${cacheKeys}`);
       return JSON.parse(cachedResult);
     }
-    c.var.logger.warn(`Cache miss for ${cacheKey}`);
+    c.var.logger.warn(`Cache miss for ${cacheKeys}`);
     const item = await db
       .select()
       .from(this.table)
@@ -112,7 +113,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       .where(eq(this.table.id, id))
       .limit(1);
     const result = item[0];
-    await this.cacheStore.set(cacheKey, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
+    await this.cacheStore.set(cacheKeys, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
     c.var.logger.info(`Cache set for ${cacheKey}`);
     return result;
   }
