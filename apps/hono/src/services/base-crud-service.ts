@@ -10,9 +10,10 @@ import type { AppBindings } from "@/lib/types";
 import { db } from "@/db/client";
 
 import type { EntityType } from "./audit-log.service";
+import type { CacheStore } from "./cache-store-service";
 
 import { auditAction, AuditLogService } from "./audit-log.service";
-import { cacheService } from "./cache-service";
+import { createCacheStore } from "./cache-store-service";
 
 export interface PaginatedQuery {
   page: number;
@@ -36,18 +37,19 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   protected table: T;
   protected entityType: EntityType;
   private auditLogService: AuditLogService;
-
+  private cacheStore: CacheStore;
   constructor(table: T, entityType: EntityType) {
     this.table = table;
     this.entityType = entityType;
     this.auditLogService = new AuditLogService();
+    this.cacheStore = createCacheStore();
   }
 
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>): Promise<FindAllretunType<T>> {
     const c = getContext<AppBindings>();
     const { page, limit, sort, order } = query;
     const cacheKey = `findAll:${JSON.stringify(query)}:${JSON.stringify(conditions)}`;
-    const cachedResult = await cacheService.get(cacheKey);
+    const cachedResult = await this.cacheStore.get(cacheKey);
 
     if (cachedResult) {
       c.var.logger.info(`Cache hit for ${cacheKey}`);
@@ -87,7 +89,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       items,
     };
 
-    await cacheService.set(cacheKey, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
+    await this.cacheStore.set(cacheKey, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
     c.var.logger.info(`Cache set for ${cacheKey}`);
     return result;
   }
@@ -95,7 +97,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   async findById(id: string): Promise<FindOneReturnType<T>["item"]> {
     const c = getContext<AppBindings>();
     const cacheKey = `findById:${id}`;
-    const cachedResult = await cacheService.get(cacheKey);
+    const cachedResult = await this.cacheStore.get(cacheKey);
 
     if (cachedResult) {
       c.var.logger.info(`Cache hit for ${cacheKey}`);
@@ -110,7 +112,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       .where(eq(this.table.id, id))
       .limit(1);
     const result = item[0];
-    await cacheService.set(cacheKey, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
+    await this.cacheStore.set(cacheKey, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
     c.var.logger.info(`Cache set for ${cacheKey}`);
     return result;
   }

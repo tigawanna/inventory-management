@@ -17,7 +17,7 @@ const EnvSchema = z
     LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]),
     DATABASE_URL: z.string().url(),
     DATABASE_AUTH_TOKEN: z.string().optional(),
-    REDIS_PORT: z.string(),
+    REDIS_PORT: z.string().optional(),
     API_URL: z.string(),
     FRONTEND_URL: z.string(),
     ACCESS_TOKEN_SECRET: z.string(),

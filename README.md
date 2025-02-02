@@ -2,10 +2,10 @@
 APIS are Aostly complete 
 
 to run 
+ensure you have redis and postgres running one default ports
 
 ```sh
-cd apps/backend (honojs)
-npm run dev
+pnpm dev
 ```
 open api documnetation is on 
 http://localhost:5000/doc
@@ -13,14 +13,9 @@ http://localhost:5000/doc
 open api reference UI is on
 http://localhost:5000/reference
 
-To run the frontend
-```sh
-cd apps/frontend
-npm run dev
-```
-```sh
-cd apps/backend (express)
-npm run dev
-```
-documnetation is on 
-http://localhost:5000/api/v1/ui
+forntend is on
+http://localhost:3000
+
+[frontend docs](apps/frontend/README.md)
+
+[hono api docs](apps/hono/README.md)
