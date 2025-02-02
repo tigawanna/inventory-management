@@ -50,7 +50,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.16.2",
     "typescript": "^5.7.2",
-    "vite": "^5.4.4",
+    "vite": "^5.4.12",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.1.8"
   },
