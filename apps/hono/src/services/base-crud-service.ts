@@ -2,7 +2,7 @@ import type { SQL } from "drizzle-orm";
 import type { PgTable } from "drizzle-orm/pg-core";
 import type { GetSelectTableSelection, SelectResultField, TableLike } from "drizzle-orm/query-builders/select.types";
 
-import { asc, desc, eq, sql } from "drizzle-orm";
+import { asc, desc, eq, getTableName, sql } from "drizzle-orm";
 import { getContext } from "hono/context-storage";
 
 import type { AppBindings } from "@/lib/types";
@@ -48,8 +48,8 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>): Promise<FindAllretunType<T>> {
     const c = getContext<AppBindings>();
     const { page, limit, sort, order } = query;
-    const cacheKeys = ["findAll", this.table._.name, query, conditions];
-    // const cacheKey = `findAll:${JSON.stringify(query)}:${JSON.stringify(conditions)}`;
+    const tableName = getTableName(this.table) as string;
+    const cacheKeys = [tableName, "findAll", query, conditions];
     const cachedResult = await this.cacheStore.get(cacheKeys);
     if (cachedResult) {
       c.var.logger.info(`Cache hit for ${cacheKeys}`);
@@ -96,8 +96,8 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
 
   async findById(id: string): Promise<FindOneReturnType<T>["item"]> {
     const c = getContext<AppBindings>();
-    const cacheKey = `findById:${id}`;
-    const cacheKeys = ["findById", this.table._.name, id];
+    const tableName = getTableName(this.table) as string;
+    const cacheKeys = [tableName, "findById", id];
     const cachedResult = await this.cacheStore.get(cacheKeys);
 
     if (cachedResult) {
@@ -114,7 +114,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       .limit(1);
     const result = item[0];
     await this.cacheStore.set(cacheKeys, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
-    c.var.logger.info(`Cache set for ${cacheKey}`);
+    c.var.logger.info(`Cache set for ${cacheKeys}`);
     return result;
   }
 
@@ -125,7 +125,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       .insert(this.table)
       .values(data as any)
       .returning();
-
+    await this.cacheStore.del([getTableName(this.table)]);
     await this.auditLogService.create(
       {
         userId,
@@ -151,7 +151,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table?.id, id))
       .returning();
-
+    await this.cacheStore.del([getTableName(this.table)]);
     await this.auditLogService.createChangeLog(
       {
         userId,
@@ -174,7 +174,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       // @ts-expect-error the type is too genrric but shape matches
       .where(eq(this.table.id, id))
       .returning();
-
+    await this.cacheStore.del([getTableName(this.table), id]);
     await this.auditLogService.create(
       {
         userId,
