@@ -2,7 +2,7 @@ import { boolean, integer, jsonb, pgEnum, pgTable, text, timestamp } from "drizz
 
 import { commonColumns } from "../helpers/columns";
 
-export const roles = ["admin", "user","suspended"] as const;
+export const roles = ["admin", "user", "suspended"] as const;
 
 export const userRole = pgEnum("role", roles);
 export const usersTable = pgTable("users", {
@@ -19,8 +19,6 @@ export const usersTable = pgTable("users", {
   metadata: jsonb("metadata").$type<Record<string, any>>().default({}),
   lastLoginAt: timestamp("last_login_at").defaultNow(),
 });
-
-
 
 export const passwordResets = pgTable("password_resets", {
   ...commonColumns,

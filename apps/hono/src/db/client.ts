@@ -79,15 +79,15 @@ export async function createDB() {
 //   process.exit(1);
 // });
 
-// export const db = drizzle({
-//   client: neon(envVariables.DATABASE_URL),
-//   schema: { ...inventorySchema, ...usersSchema },
-// });
+export const db = drizzle({
+  client: neon(envVariables.DATABASE_URL),
+  schema: { ...inventorySchema, ...usersSchema },
+});
 
 //  run only use for local
-const pool = await createLocalPool();
-export const db = pgDrizzle({
-  client: pool,
-  schema: { ...auditLogSchema, ...inventorySchema, ...usersSchema },
-  logger: envVariables.LOG_LEVEL === "debug" && new MyLogger(),
-});
+// const pool = await createLocalPool();
+// export const db = pgDrizzle({
+//   client: pool,
+//   schema: { ...auditLogSchema, ...inventorySchema, ...usersSchema },
+//   logger: envVariables.LOG_LEVEL === "debug" && new MyLogger(),
+// });
