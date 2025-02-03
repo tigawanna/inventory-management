@@ -81,7 +81,7 @@ export async function createDB() {
 
 export const db = drizzle({
   client: neon(envVariables.DATABASE_URL),
-  schema: { ...inventorySchema, ...usersSchema },
+    schema: { ...auditLogSchema, ...inventorySchema, ...usersSchema },
 });
 
 //  run only use for local

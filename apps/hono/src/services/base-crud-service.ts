@@ -41,14 +41,15 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     this.table = table;
     this.entityType = entityType;
     this.auditLogService = new AuditLogService();
+    
     this.queryClient = new QueryClient({
       defaultOptions: {
         queries: {
           staleTime: 1000 * 60 * 15, // 15 minutes
         },
       },
-
     });
+    
   }
 
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>): Promise<FindAllretunType<T>> {
