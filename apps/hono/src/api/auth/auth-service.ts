@@ -1,5 +1,5 @@
 import { compare, hash } from "bcrypt";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import { randomBytes } from "node:crypto";
 
 import { db } from "@/db/client";
@@ -40,6 +40,12 @@ export class AuthService {
  async register(
     data: { email: string; password: string; name: string },
   ) {
+    const existingUser = await db.query.usersTable.findFirst({
+      where: or(eq(usersTable.email, data.email), eq(usersTable.name, data.name)),
+    });
+    if (existingUser) {
+      throw new MyAuthError("User already exists");
+    }
     const hashedPassword = await hash(data.password, this.SALT_ROUNDS);
     const verificationToken = randomBytes(3).toString("hex");
     const newUser = await db

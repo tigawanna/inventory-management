@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { makeHotToast } from "@/components/toasters";
-import { requestPasswordReset } from "@/lib/api/users";
+import { authService } from "@/lib/kubb/gen";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { formOptions, useForm } from "@tanstack/react-form";
@@ -17,14 +17,17 @@ import { zodValidator } from "@tanstack/zod-form-adapter";
 import { useState } from "react";
 import { z } from "zod";
 interface RequestEmailVerificationProps {
-    returnTo:string;
-    email:string
+  returnTo: string;
+  email: string;
 }
 interface RequestEmailVerificationFields {
   email: string;
 }
-export function RequestEmailVerification({returnTo,email}: RequestEmailVerificationProps) {
-  const [open,setOpen]=useState(true)
+export function RequestEmailVerification({
+  returnTo,
+  email,
+}: RequestEmailVerificationProps) {
+  const [open, setOpen] = useState(false);
   const formOpts = formOptions<RequestEmailVerificationFields>({
     defaultValues: {
       email,
@@ -33,13 +36,15 @@ export function RequestEmailVerification({returnTo,email}: RequestEmailVerificat
   const navigate = useNavigate({ from: "/auth" });
   const mutation = useMutation({
     mutationFn: async ({ body }: { body: RequestEmailVerificationFields }) => {
-      return requestPasswordReset(body.email);
+      return await authService().postApiAuthRequestEmailVerificationClient({
+        email: body.email,
+      });
     },
     onSuccess(data) {
-      if (data.error) {
+      if (data.type === "error") {
         makeHotToast({
           title: "Something went wrong",
-          description: data.error.message,
+          description: data.data.error.message,
           variant: "error",
           duration: 2000,
         });
@@ -50,11 +55,11 @@ export function RequestEmailVerification({returnTo,email}: RequestEmailVerificat
         variant: "success",
         duration: 1000,
       });
-      setOpen(false)
+      setOpen(false);
       // navigate({ to: "/auth/forgort-password",search:{returnTo} });
-    //   if (typeof window !== "undefined") {
-    //     location.reload();
-    //   }
+      //   if (typeof window !== "undefined") {
+      //     location.reload();
+      //   }
     },
     onError(error) {
       makeHotToast({
@@ -76,13 +81,15 @@ export function RequestEmailVerification({returnTo,email}: RequestEmailVerificat
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="btn btn-sm btn-ghost">forgot password? </button>
+        <button className="btn btn-primary btn-sm ">
+          Send email verification againg
+        </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Request password reset</DialogTitle>
+          <DialogTitle>Request email verification</DialogTitle>
           <DialogDescription>
-            Enter your email address below to request a password reset.
+            Enter your email address below to request verification.
           </DialogDescription>
         </DialogHeader>
         <form

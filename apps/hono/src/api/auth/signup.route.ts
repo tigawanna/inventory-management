@@ -10,7 +10,8 @@ import { returnValidationData } from "@/lib/zod";
 import { userSignupSchema } from "@/schemas/auth.schema";
 import { baseResponseSchema } from "@/schemas/shared-schema";
 
-import { userJWTSchema, userSelectSchema } from "../users/schema";
+import { userJWTSchema } from "../users/schema";
+import { MyAuthError } from "./auth-errors";
 import { AuthService } from "./auth-service";
 
 const tags = ["Auth"];
@@ -57,7 +58,7 @@ const authService = new AuthService();
 export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
   try {
     const newUser = await authService.register(c.req.valid("json"));
-    if(!newUser) {
+    if (!newUser) {
       return c.json({
         result: null,
         error: {
@@ -72,6 +73,16 @@ export const signupUserHandler: AppRouteHandler<SignupRoute> = async (c) => {
     }, HttpStatusCodes.OK);
   }
   catch (error) {
+    if (error instanceof MyAuthError) {
+      c.var.logger.error("User signup internal error:", error.name);
+      return c.json({
+        result: null,
+        error: {
+          code: "internal-server-error",
+          message: error.message,
+        } as const,
+      }, HttpStatusCodes.INTERNAL_SERVER_ERROR);
+    }
     if (error instanceof ZodError) {
       c.var.logger.error("User signup error:", error.message);
       return c.json({

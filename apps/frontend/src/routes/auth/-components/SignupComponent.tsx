@@ -9,6 +9,7 @@ import { makeHotToast } from "@/components/toasters";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 import { signUpUser } from "@/lib/api/users";
+import { authService } from "@/lib/kubb/gen";
 
 interface SignupComponentProps {}
 
@@ -38,17 +39,23 @@ export function SignupComponent({}: SignupComponentProps) {
 
   const mutation = useMutation({
     mutationFn: async ({ body }: { body: CreateuserFields }) => {
-      return signUpUser({ ...body, role: "user" });
+      return await authService().postApiAuthSignupClient({
+        email: body.email,
+        name: body.name,
+        password: body.password
+      })
     },
     onSuccess(data) {
-      if (data.error) {
+      if(data.type === "error"){
         return makeHotToast({
           title: "Something went wrong",
-          description: `${data.error.message}`,
+          description: `${data.data.error.message}`,
           duration: 10000,
           variant: "error",
         });
+
       }
+
       makeHotToast({
         title: "signed up",
         description: `Welcome`,
@@ -77,6 +84,7 @@ export function SignupComponent({}: SignupComponentProps) {
       });
     },
   });
+  // @ts-expect-error
   const mutationError = mutation?.data?.error?.data as Record<
     string,
     { message: string; code: string }

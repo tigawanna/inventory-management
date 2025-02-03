@@ -1,5 +1,6 @@
 import { makeHotToast } from "@/components/toasters";
 import { resetPassword, verifyEmail } from "@/lib/api/users";
+import { authService } from "@/lib/kubb/gen";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
@@ -29,13 +30,17 @@ export function ForgortPassword({}:ForgortPasswordProps){
      const navigate = useNavigate({ from: "/auth/forgort-password" });
      const mutation = useMutation({
        mutationFn: async ({ body }: { body: VerifyUserEmailFields }) => {
-      return resetPassword(body.token, body.newPassword);
+      // return resetPassword(body.token, body.newPassword);
+      return await authService().postApiAuthResetPasswordClient({
+        token: body.token,
+        newPassword: body.newPassword
+      })
        },
        onSuccess(data) {
-         if (data.error) {
+         if (data.type === "error") {
            makeHotToast({
              title: "Something went wrong",
-             description: data.error.message,
+             description: data.data.error.message,
              variant: "error",
              duration: 2000,
            });

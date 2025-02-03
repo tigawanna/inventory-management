@@ -8,9 +8,9 @@ import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { useEffect, useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
-import { signInUser } from "@/lib/api/users";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 import { RequestPasswordReset } from "./RequestPasswordReset";
+import { authService } from "@/lib/kubb/gen";
 
 
 interface SigninComponentProps {}
@@ -34,23 +34,27 @@ export function SigninComponent({}: SigninComponentProps) {
 
   const mutation = useMutation({
     mutationFn: async ({ body }: { body: UsersigninFields }) => {
-      return signInUser(body);
+      // return signInUser(body);
+      return authService().postApiAuthSigninClient({
+        email: body.email,
+        password: body.password
+      })
     },
     onSuccess(data) {
-      if (data.error) {
+      if (data.type === "error") {
         makeHotToast({
           title: "Something went wrong",
-          description: data.error.message,
+          description: data.data.error.message,
           variant: "error",
           duration: 10000,
         });
         return;
       }
-      const user = data.record
+      const user = data.data.result
       if(!user){
         makeHotToast({
           title: "Something went wrong",
-          description: data.error.message,
+          description: "User not found",
           variant: "error",
           duration: 10000,
         });
@@ -62,6 +66,7 @@ export function SigninComponent({}: SigninComponentProps) {
         variant: "success",
         duration: 2000,
       });
+
       if (!user.isEmailVerified) {
         return navigate({
           to: "/auth/verify-email",
@@ -94,6 +99,7 @@ export function SigninComponent({}: SigninComponentProps) {
     },
   });
 // console.log(" == mutation data  === ", mutation?.data?.error);
+// @ts-expect-error
   const mutationError = mutation?.data?.error?.data as Record<
     string,
     { message: string; code:string }

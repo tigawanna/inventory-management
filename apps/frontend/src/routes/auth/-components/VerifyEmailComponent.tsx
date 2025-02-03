@@ -8,6 +8,8 @@ import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { verifyEmail } from "@/lib/api/users";
 import { RequestEmailVerification } from "./RequestEmailVerification";
+import { authService } from "@/lib/kubb/gen";
+
 
 interface VerifyEmailComponentProps {}
 
@@ -27,13 +29,16 @@ export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
   const navigate = useNavigate({ from: "/auth/verify-email" });
   const mutation = useMutation( {
     mutationFn: async ({ body }: { body: VerifyUserEmailFields }) => {
-      return verifyEmail(body.token);
+      // return verifyEmail(body.token);
+      return authService().postApiAuthVerifyEmailClient({
+        token: body.token
+      })
     },
     onSuccess(data) {
-      if(data.error){
+      if(data.type ==="error"){
         makeHotToast({
           title: "Something went wrong",
-          description: data.error.message,
+          description: data.data.error.message,
           variant: "error",
           duration: 2000,
         });
@@ -107,13 +112,14 @@ export function VerifyEmailComponent({}: VerifyEmailComponentProps) {
               );
             }}
           />
-          <RequestEmailVerification returnTo={returnTo} email={email??""} />
         </div>
+
         <MutationButton
-          label="Sign in"
+          label="Verify email"
           className="btn btn-primary"
           mutation={mutation}
         />
+        <RequestEmailVerification returnTo={returnTo} email={email ?? ""} />
         <div className="flex flex-col items-center justify-center gap-2">
           Don&apos;t have an account?
           <Link

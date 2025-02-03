@@ -8,6 +8,7 @@ import {
 } from "@/components/shadcn/ui/dialog";
 import { makeHotToast } from "@/components/toasters";
 import { requestPasswordReset } from "@/lib/api/users";
+import { authService } from "@/lib/kubb/gen";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { ValidRoutes } from "@/lib/tanstack/router/router-types";
@@ -33,13 +34,16 @@ export function RequestPasswordReset({returnTo}: RequestPasswordResetProps) {
   const navigate = useNavigate({ from: "/auth" });
   const mutation = useMutation({
     mutationFn: async ({ body }: { body: RequestPasswordresetFields }) => {
-      return requestPasswordReset(body.email);
+      // return requestPasswordReset(body.email);
+      return authService().postApiAuthRequestPasswordResetClient({
+        email: body.email
+      })
     },
     onSuccess(data) {
-      if (data.error) {
+      if (data.type ==="error") {
         makeHotToast({
           title: "Something went wrong",
-          description: data.error.message,
+          description: data.data.error.message,
           variant: "error",
           duration: 2000,
         });
