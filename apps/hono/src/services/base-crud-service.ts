@@ -2,6 +2,7 @@ import type { SQL } from "drizzle-orm";
 import type { PgTable } from "drizzle-orm/pg-core";
 import type { GetSelectTableSelection, SelectResultField, TableLike } from "drizzle-orm/query-builders/select.types";
 
+import { QueryClient } from "@tanstack/query-core";
 import { asc, desc, eq, getTableName, sql } from "drizzle-orm";
 import { getContext } from "hono/context-storage";
 
@@ -10,10 +11,8 @@ import type { AppBindings } from "@/lib/types";
 import { db } from "@/db/client";
 
 import type { EntityType } from "./audit-log.service";
-import type { CacheStore } from "./cache/cache-store-service";
 
 import { auditAction, AuditLogService } from "./audit-log.service";
-import { createCacheStore } from "./cache/cache-store-service";
 
 export interface PaginatedQuery {
   page: number;
@@ -37,12 +36,19 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   protected table: T;
   protected entityType: EntityType;
   private auditLogService: AuditLogService;
-  private cacheStore: CacheStore;
+  private queryClient: QueryClient;
   constructor(table: T, entityType: EntityType) {
     this.table = table;
     this.entityType = entityType;
     this.auditLogService = new AuditLogService();
-    this.cacheStore = createCacheStore();
+    this.queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          staleTime: 1000 * 60 * 15, // 15 minutes
+        },
+      },
+
+    });
   }
 
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>): Promise<FindAllretunType<T>> {
@@ -50,17 +56,6 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
     const { page, limit, sort, order } = query;
     const tableName = getTableName(this.table) as string;
     const cacheKeys = [tableName, "findAll", query, conditions];
-    const cachedResult = await this.cacheStore.get(cacheKeys);
-    if (cachedResult) {
-      c.var.logger.info(`Cache hit for ${cacheKeys}`);
-      return JSON.parse(cachedResult);
-    }
-    c.var.logger.warn(`Cache miss for ${cacheKeys}`);
-    // Get total count
-    const [{ count }] = await db
-      .select({ count: sql`count(*)`.mapWith(Number) })
-      .from(this.table)
-      .where(conditions);
 
     // Build query
     const dbQuery = db
@@ -78,44 +73,47 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
         order === "desc" ? desc(this.table[sort]) : asc(this.table[sort]),
       );
     }
-
-    const items = await dbQuery;
-
-    const result = {
-      page: Number(page),
-      perPage: Number(limit),
-      totalItems: Number(count),
-      totalPages: Math.ceil(Number(count) / Number(limit)),
-      items,
-    };
-
-    await this.cacheStore.set(cacheKeys, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
-    c.var.logger.info(`Cache set for ${cacheKeys}`);
-    return result;
+    const tsqData = await this.queryClient.fetchQuery({
+      queryKey: cacheKeys,
+      queryFn: async () => {
+        // Get total count
+        const [{ count }] = await db
+          .select({ count: sql`count(*)`.mapWith(Number) })
+          .from(this.table)
+          .where(conditions);
+        const items = await dbQuery;
+        return {
+          page: Number(page),
+          perPage: Number(limit),
+          totalItems: Number(count),
+          totalPages: Math.ceil(Number(count) / Number(limit)),
+          items,
+        }; ;
+      },
+    });
+    c.var.logger.info(`query ${cacheKeys} success `);
+    return tsqData;
   }
 
   async findById(id: string): Promise<FindOneReturnType<T>["item"]> {
     const c = getContext<AppBindings>();
     const tableName = getTableName(this.table) as string;
     const cacheKeys = [tableName, "findById", id];
-    const cachedResult = await this.cacheStore.get(cacheKeys);
-
-    if (cachedResult) {
-      c.var.logger.info(`Cache hit for ${cacheKeys}`);
-      return JSON.parse(cachedResult);
-    }
-    c.var.logger.warn(`Cache miss for ${cacheKeys}`);
-    const item = await db
-      .select()
-      .from(this.table)
-    // TODO : extend type PgTable with a narrower type which always has an ID column
-      // @ts-expect-error : the type is too genrric but shape matches
-      .where(eq(this.table.id, id))
-      .limit(1);
-    const result = item[0];
-    await this.cacheStore.set(cacheKeys, JSON.stringify(result), 60 * 5); // Cache for 5 minutes
-    c.var.logger.info(`Cache set for ${cacheKeys}`);
-    return result;
+    const tsqData = await this.queryClient.fetchQuery({
+      queryKey: cacheKeys,
+      queryFn: async () => {
+        const item = await db
+          .select()
+          .from(this.table)
+        // TODO : extend type PgTable with a narrower type which always has an ID column
+        // @ts-expect-error : the type is too genrric but shape matches
+          .where(eq(this.table.id, id))
+          .limit(1);
+        return item[0];
+      },
+    });
+    c.var.logger.info(`query ${cacheKeys} success `);
+    return tsqData;
   }
 
   async create(data: CreateDTO) {
@@ -125,7 +123,9 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       .insert(this.table)
       .values(data as any)
       .returning();
-    await this.cacheStore.del([getTableName(this.table)]);
+    this.queryClient.invalidateQueries({
+      queryKey: [getTableName(this.table)],
+    });
     await this.auditLogService.create(
       {
         userId,
@@ -151,7 +151,9 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       // @ts-expect-error : the type is too genrric but shape matches
       .where(eq(this.table?.id, id))
       .returning();
-    await this.cacheStore.del([getTableName(this.table)]);
+    this.queryClient.invalidateQueries({
+      queryKey: [getTableName(this.table)],
+    });
     await this.auditLogService.createChangeLog(
       {
         userId,
@@ -174,7 +176,9 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
       // @ts-expect-error the type is too genrric but shape matches
       .where(eq(this.table.id, id))
       .returning();
-    await this.cacheStore.del([getTableName(this.table), id]);
+    this.queryClient.invalidateQueries({
+      queryKey: [getTableName(this.table)],
+    });
     await this.auditLogService.create(
       {
         userId,
@@ -189,6 +193,9 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   }
 
   async softDelete(id: string) {
+    this.queryClient.invalidateQueries({
+      queryKey: [getTableName(this.table)],
+    });
     return this.update(id, { isActive: false } as any);
   }
 
