@@ -1,4 +1,3 @@
-import { InventoryItem } from "@/lib/api/inventory";
 import {
   TextAreaFormField,
   TextFormField,
@@ -7,11 +6,10 @@ import { useForm } from "@tanstack/react-form";
 import { UseMutationResult } from "@tanstack/react-query";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
-import { InventoryCategoriesSelect } from "../list/InventorySortSelect";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SearchCategoryInput } from "@/routes/dashboard/categories/-components/form/search";
-import { CategoryItem } from "@/lib/api/category";
+import { InventoryItem } from "../types";
 interface BaseInventoryFormProps<T extends InventoryItem> {
   mutation: UseMutationResult<any, Error, T, unknown>;
   row: T;
@@ -34,7 +32,6 @@ export function BaseInventoryForm<T extends InventoryItem>({
       categoryId: row?.categoryId ?? "",
     },
     onSubmit: async ({ value }) => {
-      console.log({ value });
       // @ts-expect-error
       mutation.mutate(value);
       afterSave?.();

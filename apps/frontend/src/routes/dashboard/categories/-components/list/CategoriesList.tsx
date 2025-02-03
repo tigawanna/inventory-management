@@ -1,7 +1,7 @@
 import { UpdateCategoriesform } from "@/routes/dashboard/categories/-components/form/update";
-import { CategoryItem } from "@/lib/api/category";
 import { DeleteCategoryForm } from "../form/delete";
 import { makeHotToast } from "@/components/toasters";
+import { CategoryItem } from "../types";
 
 interface CategoriesListProps {
   items: never[] | CategoryItem[];

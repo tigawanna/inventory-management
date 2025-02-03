@@ -1,5 +1,4 @@
 import { makeHotToast } from "@/components/toasters";
-import { listInventory, ListInventoryParams } from "@/lib/api/inventory";
 import { inventoryService } from "@/lib/kubb/gen";
 import { DEFAULT_PAGE_SIZE } from "@/utils/constnants";
 import { queryOptions } from "@tanstack/react-query";
