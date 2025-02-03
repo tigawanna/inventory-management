@@ -39,14 +39,14 @@ export function DashboardSidebarUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton size="lg" className="">
               <Avatar className="h-8 w-8 rounded-full bg-base-content hover:bg-base-300">
-                <AvatarImage src={avatarUrl} alt={viewer.name} />
+                <AvatarImage src={avatarUrl} alt={viewer?.result?.name} />
                 <AvatarFallback className="rounded-lg">
-                  {viewer.name?.slice(0, 2)}
+                  {viewer?.result?.name?.slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{viewer.name}</span>
-                <span className="truncate text-xs">{viewer.email}</span>
+                <span className="truncate font-semibold">{viewer?.result?.name}</span>
+                <span className="truncate text-xs">{viewer?.result?.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -60,19 +60,19 @@ export function DashboardSidebarUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={avatarUrl} alt={viewer.name} />
+                  <AvatarImage src={avatarUrl} alt={viewer?.result?.name} />
                   <AvatarFallback className="rounded-lg">
-                    {viewer.name?.slice(0, 2)}
+                    {viewer?.result?.name?.slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="flex items-center gap-1 truncate font-semibold">
-                    {viewer.name}{" "}
+                    {viewer?.result?.name}{" "}
                     {role === "admin" && (
                       <ShieldCheck className="size-3 text-accent" />
                     )}
                   </span>
-                  <span className="truncate text-xs">{viewer.email}</span>
+                  <span className="truncate text-xs">{viewer?.result?.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

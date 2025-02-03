@@ -149,6 +149,7 @@ export function BaseUserForm<T extends FormFields>({
         children={(field) => {
           return (
             <div className="w-full">
+              {/* @ts-expect-error */}
               <label htmlFor={role} className="text-sm">
                 Role
               </label>

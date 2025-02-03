@@ -7,11 +7,9 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/ui/dialog";
 import { makeHotToast } from "@/components/toasters";
-import { requestPasswordReset } from "@/lib/api/users";
 import { authService } from "@/lib/kubb/gen";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
-import { ValidRoutes } from "@/lib/tanstack/router/router-types";
 import { formOptions, useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";

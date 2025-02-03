@@ -20,7 +20,7 @@ export function UserList({ items }: UserListProps) {
           return (
             <li
               key={item.id}
-              data-mine={item.id === viewer?.id}
+              data-mine={item.id === viewer?.result?.id}
               className="animate-gradient flex h-56 w-[95%] items-center justify-center gap-2 rounded-xl bg-base-300 p-4 data-[mine=true]:bg-base-200 data-[mine=true]:bg-gradient-to-r data-[mine=true]:from-accent data-[mine=true]:via-transparent data-[mine=true]:to-primary data-[mine=true]:bg-[length:200%_200%] sm:w-[45%] lg:w-[30%]"
             >
               <div className="flex h-full w-full flex-col justify-between gap-2">
@@ -28,12 +28,12 @@ export function UserList({ items }: UserListProps) {
                   <div className="relative flex h-full w-full justify-between gap-2">
                     <h1 className="text-2xl font-bold">{item.name}</h1>
                     <div
-                      data-mine={item.id === viewer?.id}
+                      data-mine={item.id === viewer?.result?.id}
                       className="abosolute badge badge-success badge-outline left-0 top-0 hidden flex-col justify-between gap-2 data-[mine=true]:flex"
                     >
                       Me <Check />
                     </div>
-                    {(viewer?.id === item.id || role === "admin") && (
+                    {(viewer?.result?.id === item.id || role === "admin") && (
                       <UpdateUserform item={item} />
                     )}
                   </div>

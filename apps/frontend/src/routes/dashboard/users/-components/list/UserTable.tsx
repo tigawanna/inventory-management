@@ -48,7 +48,7 @@ export function UserTable({ items }: UserTableExampleProps) {
             return (
               <tr
                 key={row.id}
-                data-mine={row.id === viewer?.id}
+                data-mine={row.id === viewer?.result?.id}
                 className="data-[mine=true]:text-accent"
               >
                 {columns.map((column, idx) => {
@@ -103,7 +103,7 @@ export function UserTable({ items }: UserTableExampleProps) {
                     </td>
                   );
                 })}
-                {viewer?.id === row.id || role === "admin" ? (
+                {viewer?.result?.id === row.id || role === "admin" ? (
                   <td>
                     <UpdateUserform item={row} />
                   </td>

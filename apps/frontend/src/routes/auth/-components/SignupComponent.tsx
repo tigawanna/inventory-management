@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { makeHotToast } from "@/components/toasters";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
-import { signUpUser } from "@/lib/api/users";
 import { authService } from "@/lib/kubb/gen";
 
 interface SignupComponentProps {}

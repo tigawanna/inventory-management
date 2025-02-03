@@ -1,11 +1,9 @@
 import { makeHotToast } from "@/components/toasters";
-import { resetPassword, verifyEmail } from "@/lib/api/users";
 import { authService } from "@/lib/kubb/gen";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
-import { viewerqueryOptions } from "@/lib/tanstack/query/use-viewer";
 import { formOptions, useForm } from "@tanstack/react-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";

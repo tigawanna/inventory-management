@@ -12,7 +12,7 @@ export function DashboardPage({}: DashboardPageProps) {
       <ul className="grid h-full w-full grid-cols-1 justify-center gap-2 p-[5%] md:grid-cols-2 lg:grid-cols-2">
         {dashboard_routes.map((link) => {
           if (
-            !(viewer?.role && viewer?.role === "admin") &&
+            !(viewer?.result?.role && viewer?.result?.role === "admin") &&
             (link.name === "team" || link.name === "auditlogs")
           ) {
             return;

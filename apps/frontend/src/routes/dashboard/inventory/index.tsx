@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { InventoryPage } from './-components/InventoryPage'
 import { z } from 'zod'
 

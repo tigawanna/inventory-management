@@ -28,7 +28,7 @@ export function DashboardSidebarLinks({}: DashboardSidebarLinksProps) {
       <SidebarMenu className="gap-5">
         {dashboard_routes.map((item) => {
           if (
-            !(viewer?.role && viewer?.role === "admin") &&
+            !(viewer?.result?.role && viewer?.result?.role === "admin") &&
             ( item.name === "auditlogs")
           ) {
             return;

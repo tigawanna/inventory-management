@@ -10,7 +10,7 @@ import "./styles.css";
 import { QueryClient } from "@tanstack/react-query";
 import { RootComponent } from "./-components/RootComponent";
 import { z } from "zod";
-import { ViewerType } from "@/lib/tanstack/query/auth-gaurd";
+import { ViewerType } from "@/lib/tanstack/query/auth-guard";
 
 const searchparams = z.object({
   globalPage: z.number().optional(),

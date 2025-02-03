@@ -6,7 +6,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MutationButton } from "@/lib/tanstack/query/MutationButton";
 import { makeHotToast } from "@/components/toasters";
 import { TextFormField } from "@/lib/tanstack/form/TextFields";
-import { verifyEmail } from "@/lib/api/users";
 import { RequestEmailVerification } from "./RequestEmailVerification";
 import { authService } from "@/lib/kubb/gen";
 

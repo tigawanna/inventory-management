@@ -1,5 +1,5 @@
-import { InventoryUser } from "@/lib/api/users";
 import { useViewer } from "@/lib/tanstack/query/use-viewer";
+import { InventoryUser } from "@/utils/types/data";
 import { useNavigate } from "@tanstack/react-router";
 import { UserCheck } from "lucide-react";
 interface LoggedInUserProps {

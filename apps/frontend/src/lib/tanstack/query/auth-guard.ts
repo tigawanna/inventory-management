@@ -1,14 +1,17 @@
-import { InventoryUser } from "@/lib/api/users";
+import { GetApiAuthMe200 } from "@/lib/kubb/gen";
 import { QueryClient } from "@tanstack/react-query";
 import { AnyContext, BeforeLoadContextOptions, redirect, RootRoute } from "@tanstack/react-router";
 
+
+type InventoryUser= GetApiAuthMe200["result"]
+
 export type ViewerType =
   | {
-      record: null;
+      result: null;
       error: any;
     }
   | {
-      record: InventoryUser;
+      result: InventoryUser;
       error: null;
     };
 
@@ -42,22 +45,23 @@ interface AuthGuardProps {
 export async function authGuard({ ctx, role, reverse }: AuthGuardProps) {
   const returnTo = ctx.search?.returnTo ?? "/";
   const user = ctx.context?.viewer;
-  if (!user?.record) {
-    throw redirect({
-      to: "/auth",
-      search: {
-        returnTo: ctx.location.pathname,
-      },
-    });
-  }
-  if (!(role && user?.record && user?.record?.role !== role)) {
-    throw redirect({
-      to: "..",
-      search: {
-        returnTo: ctx.location.pathname,
-      },
-    });
-  }
+  console.log("user === ", user);
+  // if (!user?.result) {
+  //   throw redirect({
+  //     to: "/auth",
+  //     search: {
+  //       returnTo: ctx.location.pathname,
+  //     },
+  //   });
+  // }
+  // if (!(role && user?.result && user?.result?.role !== role)) {
+  //   throw redirect({
+  //     to: "..",
+  //     search: {
+  //       returnTo: ctx.location.pathname,
+  //     },
+  //   });
+  // }
 
   if (reverse) {
     throw redirect({

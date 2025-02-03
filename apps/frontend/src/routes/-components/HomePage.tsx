@@ -28,7 +28,7 @@ export function HomePage() {
               data-test="homepage-section-welcome"
               className="break-all text-7xl font-bold text-primary"
             >
-              welcome {viewer?.name}
+              welcome {viewer?.result?.name}
             </h1>
             <FlipClock />
             {/* {viewer && <ProfileLinkCard viewer={viewer} />} */}
@@ -56,7 +56,7 @@ export function HomePage() {
                 </Link>
               )}
             </div>
-            <LoggedInUser viewer={viewer} />
+            <LoggedInUser viewer={viewer.result} />
           </div>
           <div className="h-24 w-full -z-10 " />
         </div>

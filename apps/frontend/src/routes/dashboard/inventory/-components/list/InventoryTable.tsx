@@ -31,7 +31,7 @@ export function InventoryTable({ items }: InventoryTableProps) {
     { label: "Created", accessor: "created_at" },
   ];
   const { viewer } = useViewer();
-  const role = viewer?.role;
+  const role = viewer?.result?.role;
   return (
     <div className="flex w-full flex-col gap-5 overflow-x-auto">
       <table className="table table-zebra table-lg w-full">

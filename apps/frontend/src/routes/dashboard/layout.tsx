@@ -3,7 +3,7 @@ import { DashboardLayout } from './-components/dashoboard-sidebar/DashboardLayou
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: ({ context }) => {
-    if (!context?.viewer?.record?.id) {
+    if (!context?.viewer?.result?.id) {
       throw redirect({ to: "/auth", search: { returnTo: "/dashboard/inventory" } });
     }
   },

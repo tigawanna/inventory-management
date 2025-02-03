@@ -9,8 +9,7 @@ interface InventoryListProps {
 }
 
 export function InventoryList({ items }: InventoryListProps) {
-    const { viewer } = useViewer();
-    const role = viewer?.role;
+    // const { viewer } = useViewer();
   return (
     <div className="flex h-full w-full flex-col items-center justify-between">
       <ul className="flex min-h-[80vh] w-[98%] flex-wrap justify-center gap-2 p-2">
