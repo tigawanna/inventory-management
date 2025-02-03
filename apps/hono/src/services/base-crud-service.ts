@@ -52,7 +52,7 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
   }
 
   async findAll(query: PaginatedQuery, conditions?: SQL<unknown>): Promise<FindAllretunType<T>> {
-    const c = getContext<AppBindings>();
+    // const c = getContext<AppBindings>();
     const { page, limit, sort, order } = query;
     const tableName = getTableName(this.table) as string;
     const cacheKeys = [tableName, "findAll", query, conditions];
@@ -91,12 +91,10 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
         }; ;
       },
     });
-    c.var.logger.info(`query ${cacheKeys} success `);
     return tsqData;
   }
 
   async findById(id: string): Promise<FindOneReturnType<T>["item"]> {
-    const c = getContext<AppBindings>();
     const tableName = getTableName(this.table) as string;
     const cacheKeys = [tableName, "findById", id];
     const tsqData = await this.queryClient.fetchQuery({
@@ -112,7 +110,6 @@ export class BaseCrudService<T extends PgTable<any>, CreateDTO extends Record<st
         return item[0];
       },
     });
-    c.var.logger.info(`query ${cacheKeys} success `);
     return tsqData;
   }
 
