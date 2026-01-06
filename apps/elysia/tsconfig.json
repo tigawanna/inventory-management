@@ -9,7 +9,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "noUnusedLocals": false,
     "resolveJsonModule": true,
     "noErrorTruncation": true,
@@ -20,5 +19,5 @@
   },
   "tsc-alias": {
     "resolveFullPaths": true
-  }
+  },
 }

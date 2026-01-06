@@ -36,8 +36,11 @@ importers:
         specifier: ^0.34.46
         version: 0.34.46
       dotenv:
-        specifier: ^16.4.5
+        specifier: ^16.4.7
         version: 16.4.7
+      dotenv-expand:
+        specifier: ^12.0.1
+        version: 12.0.1
       drizzle-orm:
         specifier: ^0.38.3
         version: 0.38.3(@neondatabase/serverless@0.10.4)(@types/pg@8.11.10)(@types/react@18.3.18)(pg@8.13.1)(react@19.0.0)
@@ -50,6 +53,9 @@ importers:
       pg:
         specifier: ^8.13.1
         version: 8.13.1
+      zod:
+        specifier: ^3.23.8
+        version: 3.24.1
     devDependencies:
       '@types/node':
         specifier: '*'
