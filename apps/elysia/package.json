@@ -17,14 +17,15 @@
   },
   "dependencies": {
     "@elysiajs/node": "^1.4.3",
+    "@elysiajs/openapi": "^1.4.13",
     "@sinclair/typebox": "^0.34.46",
     "elysia": "^1.4.21",
     "openapi-types": "^12.1.3"
   },
   "devDependencies": {
     "@types/node": "*",
+    "tsc-alias": "*",
     "tsx": "*",
-    "typescript": "*",
-    "tsc-alias": "*"
+    "typescript": "*"
   }
 }
