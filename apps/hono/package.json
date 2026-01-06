@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev-": "tsx watch src/index.ts",
     "start": "node ./dist/src/index.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
@@ -51,6 +51,7 @@
     "prettier": "^3.4.2",
     "tsc-alias": "*",
     "tsx": "^4.7.1",
+    "typescript": "5.7.3",
     "vitest": "^2.1.8"
   }
 }

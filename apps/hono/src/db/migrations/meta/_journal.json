@@ -8,6 +8,20 @@
       "when": 1737007175411,
       "tag": "0000_lying_sunfire",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1767721052536,
+      "tag": "0001_flippant_sphinx",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767721084207,
+      "tag": "0002_mighty_darkhawk",
+      "breakpoints": true
     }
   ]
 }
