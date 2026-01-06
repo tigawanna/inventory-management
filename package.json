@@ -9,10 +9,11 @@
   },
   "devDependencies": {
     "@types/node": "^25.0.3",
-    "prettier": "^3.2.5",
+    "prettier": "^3.7.4",
     "tsx": "^4.21.0",
-    "turbo": "^2.3.3",
-    "typescript": "5.5.4"
+    "turbo": "^2.7.3",
+    "typescript": "5.9.3",
+        "tsc-alias": "^1.8.16"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
