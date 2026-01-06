@@ -1,0 +1,24 @@
+{
+  "name": "elysia",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc src/index.ts --outDir dist",
+    "start": "NODE_ENV=production node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint --fix",
+    "test": "cross-env NODE_ENV=test vitest",
+    "drizzle:gen": "drizzle-kit generate",
+    "drizzle:push": "drizzle-kit push ",
+    "drizzle:studio": "drizzle-kit studio",
+    "drizzle:migrate": "drizzle-kit migrate "
+  },
+  "dependencies": {
+    "@elysiajs/node": "^1.4.3",
+    "@sinclair/typebox": "^0.34.46",
+    "elysia": "^1.4.21",
+    "openapi-types": "^12.1.3"
+  }
+}
