@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1767729576598,
-      "tag": "0000_brave_metal_master",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1767729846762,
-      "tag": "0001_silly_screwball",
+      "when": 1767734458295,
+      "tag": "0000_smooth_the_leader",
       "breakpoints": true
     }
   ]

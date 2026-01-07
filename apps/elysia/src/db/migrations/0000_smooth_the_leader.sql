@@ -3,33 +3,33 @@ CREATE TYPE "public"."audit_action" AS ENUM('CREATE', 'UPDATE', 'DELETE', 'LOGIN
 CREATE TYPE "public"."entity_type" AS ENUM('USER', 'PRODUCT', 'CATEGORY', 'SUPPLIER', 'WAREHOUSE', 'TRANSACTION', 'STOCK', 'SETTINGS');--> statement-breakpoint
 CREATE TYPE "public"."transaction_type" AS ENUM('PURCHASE', 'SALE', 'TRANSFER', 'ADJUSTMENT');--> statement-breakpoint
 CREATE TABLE "activities" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "activities_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
 	"type" "activity_type" NOT NULL,
 	"message" varchar(255) NOT NULL,
-	"user_id" integer,
+	"user_id" uuid,
 	"entity_type" varchar(64),
-	"entity_id" integer,
+	"entity_id" uuid,
 	"metadata" jsonb,
 	"occurred_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "audit_logs" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "audit_logs_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
-	"user_id" integer,
+	"user_id" uuid,
 	"action" "audit_action" NOT NULL,
 	"entity_type" "entity_type" NOT NULL,
-	"entity_id" integer NOT NULL,
+	"entity_id" uuid NOT NULL,
 	"old_data" jsonb,
 	"new_data" jsonb,
 	"ip_address" varchar(64)
 );
 --> statement-breakpoint
 CREATE TABLE "categories" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "categories_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
 	"name" varchar(128) NOT NULL,
@@ -38,30 +38,30 @@ CREATE TABLE "categories" (
 );
 --> statement-breakpoint
 CREATE TABLE "inventory_transactions" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "inventory_transactions_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
 	"type" "transaction_type" NOT NULL,
-	"product_id" integer NOT NULL,
+	"product_id" uuid NOT NULL,
 	"quantity" integer NOT NULL,
 	"unit_price" numeric(10, 2),
-	"source_warehouse_id" integer,
-	"target_warehouse_id" integer,
+	"source_warehouse_id" uuid,
+	"target_warehouse_id" uuid,
 	"reference_id" varchar(128),
 	"note" varchar(255),
-	"performed_by_user_id" integer,
+	"performed_by_user_id" uuid,
 	"performed_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "products" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "products_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
 	"name" varchar(255) NOT NULL,
 	"description" varchar(255),
 	"sku" varchar(64) NOT NULL,
-	"category_id" integer,
-	"supplier_id" integer,
+	"category_id" uuid,
+	"supplier_id" uuid,
 	"price" numeric(10, 2) NOT NULL,
 	"reorder_level" integer DEFAULT 0,
 	"is_active" boolean DEFAULT true,
@@ -69,10 +69,10 @@ CREATE TABLE "products" (
 );
 --> statement-breakpoint
 CREATE TABLE "refresh_tokens" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "refresh_tokens_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
-	"user_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
 	"token" varchar(512) NOT NULL,
 	"expires_at" timestamp NOT NULL,
 	"revoked_at" timestamp,
@@ -80,7 +80,7 @@ CREATE TABLE "refresh_tokens" (
 );
 --> statement-breakpoint
 CREATE TABLE "roles" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "roles_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
 	"name" varchar(64) NOT NULL,
@@ -89,25 +89,25 @@ CREATE TABLE "roles" (
 );
 --> statement-breakpoint
 CREATE TABLE "user_roles" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "user_roles_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
-	"user_id" integer NOT NULL,
-	"role_id" integer NOT NULL
+	"user_id" uuid NOT NULL,
+	"role_id" uuid NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "stock_levels" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "stock_levels_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
-	"product_id" integer NOT NULL,
-	"warehouse_id" integer NOT NULL,
+	"product_id" uuid NOT NULL,
+	"warehouse_id" uuid NOT NULL,
 	"quantity" integer DEFAULT 0 NOT NULL,
 	"reserved" integer DEFAULT 0 NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "suppliers" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "suppliers_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
 	"name" varchar(255) NOT NULL,
@@ -120,18 +120,18 @@ CREATE TABLE "suppliers" (
 );
 --> statement-breakpoint
 CREATE TABLE "system_settings" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "system_settings_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	"key" varchar(128) NOT NULL,
 	"value" jsonb NOT NULL,
 	"description" varchar(255),
-	"updated_by_user_id" integer,
+	"updated_by_user_id" uuid,
 	CONSTRAINT "system_settings_key_unique" UNIQUE("key")
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "users_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
 	"name" varchar(255) NOT NULL,
@@ -145,7 +145,7 @@ CREATE TABLE "users" (
 );
 --> statement-breakpoint
 CREATE TABLE "warehouses" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "warehouses_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"id" uuid PRIMARY KEY DEFAULT uuidv7() NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
 	"name" varchar(255) NOT NULL,
@@ -170,4 +170,6 @@ ALTER TABLE "stock_levels" ADD CONSTRAINT "stock_levels_product_id_products_id_f
 ALTER TABLE "stock_levels" ADD CONSTRAINT "stock_levels_warehouse_id_warehouses_id_fk" FOREIGN KEY ("warehouse_id") REFERENCES "public"."warehouses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "system_settings" ADD CONSTRAINT "system_settings_updated_by_user_id_users_id_fk" FOREIGN KEY ("updated_by_user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "user_roles_user_role_idx" ON "user_roles" USING btree ("user_id","role_id");--> statement-breakpoint
-CREATE INDEX "stock_levels_product_warehouse_idx" ON "stock_levels" USING btree ("product_id","warehouse_id");
+CREATE UNIQUE INDEX "stock_levels_product_warehouse_unique" ON "stock_levels" USING btree ("product_id","warehouse_id");--> statement-breakpoint
+CREATE INDEX "stock_levels_product_idx" ON "stock_levels" USING btree ("product_id");--> statement-breakpoint
+CREATE INDEX "stock_levels_warehouse_idx" ON "stock_levels" USING btree ("warehouse_id");
